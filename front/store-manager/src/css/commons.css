@@ -1,0 +1,53 @@
+.title-primary-text{
+  font-size: 2.5rem;
+  font-weight: bold;
+}
+
+.btn-limit-width{
+  max-width: 50vw;
+}
+
+.title-last-text{
+  font-size: 0.8rem;
+}
+
+.full-screen-height{
+  height: 100vh;
+}
+
+.carousel-limit-height{
+  height: 55vh;
+}
+
+.btn i{
+  margin-right: 1rem;
+  margin-left: auto;
+}
+
+.btn-icon{
+  flex : 0.15;
+}
+
+.btn-label{
+  flex: 0.85;
+  text-align: center;
+}
+
+.btn-labeled{
+  width: 250px;
+}
+
+.preview-img{
+  max-width: 100%;
+  object-fit: cover;
+}
+
+.product-price{
+  color: green;
+  font-weight: bold;
+}
+
+.product-price-old{
+  color: gray;
+  font-size: 0.9rem;
+}
