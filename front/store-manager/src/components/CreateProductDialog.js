@@ -25,6 +25,7 @@ class CreateProductDialog extends React.Component{
       productPrice : 0,
       productCost : 0,
       productStock : 0,
+      stockAlert : 0,
       img : "/vectors/image-solid.svg",
       file : undefined,
       parentsOptions : [],
@@ -140,6 +141,16 @@ class CreateProductDialog extends React.Component{
                 <span className="form-text">Las unidades que tienes disponibles</span>
               </div>
             </div>
+            <div className="col-12">
+              <div className="form-floating mb-3">
+                <input type="number" placeholder="Unidades disponibles" value={this.state.stockAlert}
+                className="form-control"
+                onChange={(e)=>{this.updateField("stockAlert", e.target.value)}}/>
+                <label>Alerta de Stock</label>
+                <span className="form-text">Cantidad de productos, con la que consideras se te están
+                acabando y debes solicitar más a tu proveedor</span>
+              </div>
+            </div>
           </div>
           :
           <>
@@ -217,6 +228,7 @@ class CreateProductDialog extends React.Component{
       productPrice : 0,
       productCost : 0,
       productStock : 0,
+      stockAlert : 0,
       img : "/vectors/image-solid.svg" 
     });
   }
@@ -253,9 +265,10 @@ class CreateProductDialog extends React.Component{
     axios(config).then((resp)=>{
       let imgSrc = resp.data.data;
       const {productName, productDescription, productBrand, idCategory, productCode, 
-        productPrice, productCost, productStock, idStore, mongoId} = this.state;
+        productPrice, productCost, productStock, idStore, mongoId, stockAlert} = this.state;
 
       let tmp = undefined;
+      console.log("Stock alert:", stockAlert);
       if(idCategory){
         tmp = parseInt(idCategory);
       }
@@ -270,6 +283,7 @@ class CreateProductDialog extends React.Component{
           productPrice : parseInt(productPrice),
           productCost : parseInt(productCost),
           productStock : parseInt(productStock),
+          stockAlert : parseInt(stockAlert),
           off : 0,
           productCode,
           idStore : parseInt(idStore),
@@ -278,13 +292,16 @@ class CreateProductDialog extends React.Component{
           imgSrc
         }
       }
-      
+
       let config = {
         url : PROTOCOL+"://"+BASE_URL+":"+PORT+"/api/v1/product/create",
         method : "post",
         data : body,
         headers: { 'Authorization' : 'Bearer '+this.state.authToken }
       }
+
+      console.log(config);
+
       this.createProduct(config);
     }).catch((err)=>{
       console.log(err);

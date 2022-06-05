@@ -22,10 +22,11 @@ createProduct = (payload) => {
       let idCategory = payload.idCategory;
       let mongoId = payload.mongoId;
       let imgSrc = payload.imgSrc;
+      let stockAlert = payload.stockAlert;
 
       conn.query(sql_constants.SQL_SP_INSERT, [productName, productLine,
         productDescription, productBrand, quantity, productPrice, productCost,
-      productStock, off, productCode, idStore, idCategory, mongoId, imgSrc], (err, result)=>{
+      productStock, off, productCode, idStore, idCategory, mongoId, imgSrc, stockAlert], (err, result)=>{
         conn.end();
         if(err){
           reject({
@@ -69,14 +70,18 @@ updateProduct = (idStore, idProduct, payload) => {
       let productCode = payload.productCode;
       let idCategory = payload.idCategory;
       let imgSrc = payload.imgSrc;
+      let stockAlert = payload.stockAlert;
       
+      console.log('stockAlert:', stockAlert);
+
       conn.query(sql_constants.SQL_SP_UPDATE, [idProduct, productName, productLine, productDescription,
-        productBrand, quantity, productPrice, productCost, productStock, off, productCode, idCategory, imgSrc], (err, result)=>{
+        productBrand, quantity, productPrice, productCost, productStock, off, 
+        productCode, idCategory, imgSrc, stockAlert], (err, result)=>{
           conn.end();
           if(err){
             resolve({
               result : constants.ERROR,
-              message : "Error while calling "+sql_constants.SQL_SP_INSERT,
+              message : "Error while calling "+sql_constants.SQL_SP_UPDATE,
               err
             });
           } else{

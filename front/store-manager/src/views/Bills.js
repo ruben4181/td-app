@@ -138,7 +138,7 @@ class Bills extends React.Component{
           <a href={'/bills/'+idStore+'/3'} className="me-3" key={"page-3"}>3</a>
         )
         items.push(
-          <a href={'#'} key={"page-dots"} className="me-3">...</a>
+          <a href={'/nowhere'} key={"page-dots"} className="me-3">...</a>
         )
         items.push(
           <a href={'/bills/'+idStore+'/'+lastPage} className="me-3" key={"page-"+lastPage}>{lastPage}</a>
@@ -150,7 +150,7 @@ class Bills extends React.Component{
             <a href={'/bills/'+idStore+'/1'} className="me-3" key={"page-1"}>1</a>
           )
           items.push(
-            <a href={'#'} key={"page-dots"} className="me-3">...</a>
+            <a href={'/nowhere'} key={"page-dots"} className="me-3">...</a>
           )
         }
 
@@ -166,7 +166,7 @@ class Bills extends React.Component{
         }
         if(page+1<lastPage){
           items.push(
-            <a href={'#'} key={"page-dots-2"} className="me-3">...</a>
+            <a href={'/nowhere'} key={"page-dots-2"} className="me-3">...</a>
           )
           items.push(
             <a href={'/bills/'+idStore+'/'+parseInt(lastPage)} className={selectedClass} key={"page-"+lastPage}>{lastPage}</a>
@@ -179,7 +179,7 @@ class Bills extends React.Component{
         )
 
         items.push(
-          <a href={'#'} key={"page-dots-2"} className="me-3">...</a>
+          <a href={'/nowhere'} key={"page-dots-2"} className="me-3">...</a>
         )
 
         items.push(

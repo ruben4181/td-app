@@ -194,6 +194,18 @@ class ProductDialog extends React.Component{
                 <label>Stock</label>
               </div>
               <div className="form-floating mb-3">
+                <input type="number" className="form-control" value={this.state.product.STOCK_ALERT}
+                onChange={
+                  (e)=>{
+                    const {product} = this.state;
+                    product.STOCK_ALERT = parseInt(e.target.value);
+                    this.setState({product});
+                  }
+                }
+                  disabled={this.state.disabled}/>
+                <label>Alerta de Stock</label>
+              </div>
+              <div className="form-floating mb-3">
                 <input type="number" className="form-control" value={this.state.product.PRODUCT_OFF}
                 onChange={
                   (e)=>{
@@ -245,12 +257,14 @@ class ProductDialog extends React.Component{
   modifyProduct(){
     const { product } = this.state;
     let payload = {
+      productName : product.PRODUCT_NAME,
       idProduct : product.ID_PRODUCT,
       productDescription : product.PRODUCT_DESCRIPTION,
       idCategory : this.state.selectedCategory?this.state.selectedCategory.value:undefined,
       productCode : product.PRODUCT_CODE,
       productPrice : product.PRODUCT_PRICE,
       productStock : product.PRODUCT_STOCK,
+      stockAlert : product.STOCK_ALERT,
       off : product.PRODUCT_OFF,
       idStore : parseInt(this.state.idStore),
       imgSrc : product.IMG_SRC

@@ -116,7 +116,6 @@ PromiseQueue.prototype.then = function(){
 
 let saveProducts = (authToken, idBill, products)=>{
   const len = products.length;
-  var counter = 0;
   return new Promise((resolve, reject)=>{
     const promises = [];
     for(let i=0; i<len; i++){
@@ -209,8 +208,9 @@ let saveBill = (authToken, customerInfo, products, status)=>{
         let code = resp.data.code;
         saveProducts(authToken, idBill, products).then((resp)=>{
           if(resp.result==="OK"){
-            if(status!=9){
+            if(status!==9){
               updateBillStatus(authToken, idBill, status).then((resp) => {
+                console.log(resp.data);
                 if(resp.result==="OK"){
                   resolve({
                     result : "OK",
@@ -303,7 +303,10 @@ let getBillDetail = (authToken, idStore, idBill) => {
 }
 
 let toCurrency = (price) => {
-  return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  if(price){
+    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  } 
+  return '0'
 }
 
 let toExport = {

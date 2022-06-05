@@ -6,6 +6,7 @@ import Products from "../par/Products";
 import CreateBillDialog from "../components/CreateBillDialog";
 import BasicDialog from "../components/BasicDialog";
 import Bills from "../par/Bills";
+import BarcodeReader from 'react-barcode-reader';
 
 class POS extends React.Component{
   constructor(props){
@@ -46,6 +47,7 @@ class POS extends React.Component{
     this.cancelBillChangesClicked = this.cancelBillChangesClicked.bind(this);
     this.saveBillChangesClicked = this.saveBillChangesClicked.bind(this);
     this.closeBill = this.closeBill.bind(this);
+    this.handleScan = this.handleScan.bind(this);
   }
 
   componentDidMount(){
@@ -61,10 +63,28 @@ class POS extends React.Component{
     });
   }
 
+  handleScan(data){
+    let idCategory = undefined;
+    Products.findProducts(this.state.idStore, idCategory, data).then((resp) => {
+      this.setState({
+        productsSuggested : this.updatePrices(resp.data)
+      }, ()=>{
+        if(this.state.productsSuggested.length>0)
+        this.addProductToBill(this.state.productsSuggested[0]);
+      });
+    });
+  }
+
+  handleError(err){
+    //console.log(err);
+  }
+
   render(){
     const {products} = this.state;
     return(
       <>
+        <BarcodeReader onError={this.handleError}
+              onScan={this.handleScan}/>
         <BasicDialog isOpen={this.state.showNotProducts} config={{
             title : "No hay productos",
             body : "Debes tener por lo menos un producto en la orden para finalizar o guardar",
@@ -98,7 +118,8 @@ class POS extends React.Component{
                       <span className="input-group-text h-100"><i className="fa-solid fa-magnifying-glass"></i></span>
                     </div>
                     <input type="text" className="form-control" placeholder="Buscar producto por codigo de o nombre"
-                    onChange={this.searchProducts} value={this.state.searchProducts} onKeyUp={this.keyUpFindProducts}/>
+                    onChange={this.searchProducts} value={this.state.searchProducts} onKeyUp={this.keyUpFindProducts}
+                    />
                   </div>
                   <div className="d-flex flex-column w-100 bg-white" 
                     style={{position : "absolute", top : "100%", left : "0", paddingLeft : "12px", paddingRight : "12px"}}>
@@ -249,7 +270,6 @@ class POS extends React.Component{
   }
 
   checkDifference(p, p2){
-    var flag = false;
     if(p.idProduct === p2.ID_PRODUCT){
       if(p.units !== p2.UNITS || p.off !== p2.OFF){
         console.log("checkDifference", p, p2);
@@ -437,7 +457,7 @@ class POS extends React.Component{
     products = [...products];
     for(let i=0; i<products.length; i++){
       let p = products[i];
-      if(p.idProduct == idProduct){
+      if(p.idProduct === idProduct){
         p[field] = value;
         p.ammount = p.units * (p.price*(1-p.off/100));
         products[i] = p;
@@ -524,13 +544,28 @@ class POS extends React.Component{
   }
 
   keyUpFindProducts(e){
+    console.log("On KeyUpFindProducts triggered", e.keyCode, e.key);
     const {productsSuggested} = this.state;
     if ((e.key === 'Enter' || e.keyCode === 13) && productsSuggested.length > 0){
+      console.log("Agregando producto", productsSuggested);
       this.addProductToBill(productsSuggested[0]);
+    } else{
+      if((e.key === 'Enter' || e.keyCode === 13) && this.state.searchProducts.length>4){
+        let idCategory = undefined;
+        Products.findProducts(this.state.idStore, idCategory, this.state.searchProducts).then((resp) => {
+          this.setState({
+            productsSuggested : this.updatePrices(resp.data)
+          }, ()=>{
+            if(this.state.productsSuggested.length>0)
+            this.addProductToBill(this.state.productsSuggested[0]);
+          });
+        });
+      }
     }
   }
 
   searchProducts(e){
+    console.log("onChangeEvent triggered");
     this.setState({searchProducts : e.target.value});
     if(e.target.value.length > 4){
       let idCategory = undefined;

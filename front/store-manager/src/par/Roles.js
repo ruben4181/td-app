@@ -36,7 +36,7 @@ let checkRoles = (roles, allowedIn)=>{
   return false;
 }
 
-export default {
+let toExport = {
   balanceAllowed : ["site_owner", "contability", "sales_chief"],
   inventoryAllowed : ["site_owner", "inventory_chief", "inventory_manager"],
   deliveryAllowed : ["site_owner"],
@@ -47,3 +47,5 @@ export default {
   checkRoles,
   fetchRoles
 }
+
+export default toExport;
