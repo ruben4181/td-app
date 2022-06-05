@@ -1,0 +1,23 @@
+{
+  "storeName" : {
+    "len" : [1, 100],
+    "type" : "string",
+    "regex" : "^([A-zÀ-ú0-9.&¿?]+ ?\\?*)*[^\\s\\W]*[A-zÀ-ú0-9?]$"
+  },
+  "url" : {
+    "len" : [15, 300],
+    "type" : "string",
+    "regex" : "^https?:\/\/(([A-z]){2,100})+(.[A-z]{2,100})*$"
+  },
+  "mongoId" : {
+    "len" : [24, 24],
+    "type" : "string",
+    "regex" : "^[a-f\\d]{24}$"
+  },
+  "userId" : {
+    "len" : [1, 100],
+    "type" : "number",
+    "regex" : "^-?\\d*$",
+    "min" : 1
+  }
+}

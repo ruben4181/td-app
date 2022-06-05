@@ -1,0 +1,85 @@
+{
+  "productName" : {
+    "len" : [1, 200],
+    "type" : "string",
+    "regex" : "^([A-zÀ-ú0-9.&¿?]+ ?\\?*)*[^\\s\\W]*([A-zÀ-ú0-9&¿?%]+ ?\\?*)*"
+  },
+  "productLine" : {
+    "len" : [0, 100],
+    "type" : "string",
+    "regex" : "^([A-zÀ-ú0-9.&¿?]+ ?\\?*)*[^\\s\\W]*([A-zÀ-ú0-9&¿?%]+ ?\\?*)*"
+  },
+  "productDescription" : {
+    "len" : [0, 5000],
+    "type" : "string",
+    "regex" : "^([A-zÀ-ú0-9.&¿?]+ ?\\?*)*[^\\s\\W]*([A-zÀ-ú0-9&¿?%]+ ?\\?*)*"
+  },
+  "productBrand" : {
+    "len" : [0, 200],
+    "type" : "string",
+    "regex" : "^([A-zÀ-ú0-9.&¿?]+ ?\\?*)*[^\\s\\W]*([A-zÀ-ú0-9&¿?%]+ ?\\?*)*"
+  },
+  "quantity" : {
+    "len" : [1, 100],
+    "type" : "number",
+    "regex" : "^-?\\d*\\.?\\d+$",
+    "min" : 0
+  },
+  "productPrice" : {
+    "len" : [1, 100],
+    "type" : "number",
+    "regex" : "^\\d*\\.?\\d+$",
+    "min" : 0
+  },
+  "productCost" : {
+    "len" : [1, 100],
+    "type" : "number",
+    "regex" : "^\\d*\\.?\\d+$",
+    "min" : 0
+  },
+  "productStock" : {
+    "len" : [1, 100],
+    "type" : "number",
+    "regex" : "^-?\\d*$",
+    "min" : 1
+  },
+  "off" : {
+    "len" : [1, 100],
+    "type" : "number",
+    "regex" : "^\\d*\\.?\\d+$",
+    "min" : 0
+  },
+  "productCode" : {
+    "len" : [1, 12],
+    "type" : "string",
+    "regex" : "^\\d+-?\\d+$"
+  },
+  "idStore" : {
+    "len" : [1, 100],
+    "type" : "number",
+    "regex" : "^-?\\d*$",
+    "min" : 1
+  },
+  "idCategory" : {
+    "len" : [0, 100],
+    "type" : "number",
+    "regex" : "^-?\\d*$",
+    "min" : 0
+  },
+  "mongoId" : {
+    "len" : [24, 24],
+    "type" : "string",
+    "regex" : "^[a-f\\d]{24}$"
+  },
+  "idProduct" : {
+    "len" : [1, 100],
+    "type" : "number",
+    "regex" : "^-?\\d*$",
+    "min" : 1
+  },
+  "imgSrc" : {
+    "len" : [0, 500],
+    "type" : "string",
+    "regex" : "^.*$"
+  }
+}

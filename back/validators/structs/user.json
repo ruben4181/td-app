@@ -1,0 +1,23 @@
+{
+  "userName" : {
+    "len" : [1, 200],
+    "type" : "string",
+    "regex" : "^(?=[a-zA-Z0-9._]{8,20}$)(?!.*[_.]{2})[^_.].*[^_.]$"
+  },
+  "email" : {
+    "len" : [1, 200],
+    "type" : "string",
+    "regex" : "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$"
+  },
+  "password" : {
+    "len" : [1, 200],
+    "type" : "string",
+    "regex" : ".+"
+  },
+  "idUser" : {
+    "len" : [1, 100],
+    "type" : "number",
+    "regex" : "^-?\\d*$",
+    "min" : 1
+  }
+}

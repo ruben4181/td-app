@@ -1,0 +1,40 @@
+{
+  "categoryName" : {
+    "len" : [1, 200],
+    "type" : "string",
+    "regex" : "^([A-zÀ-ú0-9.&¿?]+ ?\\?*)*[^\\s\\W]*([A-zÀ-ú0-9&¿?%]+ ?\\?*)*"
+  },
+  "categoryDescription" : {
+    "len" : [0, 5000],
+    "type" : "string",
+    "regex" : "^([A-zÀ-ú0-9.&¿?]+ ?\\?*)*[^\\s\\W]*([A-zÀ-ú0-9&¿?%]+ ?\\?*)*"
+  },
+  "idCategoryParent" : {
+    "len" : [1, 100],
+    "type" : "number",
+    "regex" : "^-?\\d*$",
+    "min" : 1
+  },
+  "idStore" : {
+    "len" : [1, 100],
+    "type" : "number",
+    "regex" : "^-?\\d*$",
+    "min" : 1
+  },
+  "mongoId" : {
+    "len" : [24, 24],
+    "type" : "string",
+    "regex" : "^[a-f\\d]{24}$"
+  },
+  "idCategory" : {
+    "len" : [1, 100],
+    "type" : "number",
+    "regex" : "^-?\\d*$",
+    "min" : 1
+  },
+  "imgSrc" : {
+    "len" : [0, 500],
+    "type" : "string",
+    "regex" : "^.*$"
+  }
+}

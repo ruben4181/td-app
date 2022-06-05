@@ -1,0 +1,80 @@
+{
+  "idBill" : {
+    "len" : [1, 100],
+    "type" : "number",
+    "regex" : "^-?\\d*$",
+    "min" : 1
+  },
+  "customerId" : {
+    "len" : [0, 50],
+    "type" : "string",
+    "regex" : "^.*$"
+  },
+  "customerName" : {
+    "len" : [0, 200],
+    "type" : "string",
+    "regex" : "^([A-zÀ-ú0-9.&¿?]+ ?\\?*)*[^\\s\\W]*([A-zÀ-ú0-9&¿?%]+ ?\\?*)*"
+  },
+  "customerPhone" : {
+    "len" : [0, 15],
+    "type" : "string",
+    "regex" : "^([A-zÀ-ú0-9.&¿?]+ ?\\?*)*[^\\s\\W]*([A-zÀ-ú0-9&¿?%]+ ?\\?*)*"
+  },
+  "customerAddress" : {
+    "len" : [0, 200],
+    "type" : "string",
+    "regex" : "^([A-zÀ-ú0-9.&¿?]+ ?\\?*)*[^\\s\\W]*([A-zÀ-ú0-9&¿?%]+ ?\\?*)*"
+  },
+  "ammount" : {
+    "len" : [1, 100],
+    "type" : "number",
+    "regex" : "^\\d*\\.?\\d+$",
+    "min" : 0
+  },
+  "off" : {
+    "len" : [1, 100],
+    "type" : "number",
+    "regex" : "^\\d*\\.?\\d+$",
+    "min" : 0
+  },
+  "units" : {
+    "len" : [1, 100],
+    "type" : "number",
+    "regex" : "^\\d*\\.?\\d+$",
+    "min" : 0
+  },
+  "description" : {
+    "len" : [0, 200],
+    "type" : "string",
+    "regex" : "^([A-zÀ-ú0-9.&¿?]+ ?\\?*)*[^\\s\\W]*([A-zÀ-ú0-9&¿?%]+ ?\\?*)*"
+  },
+  "idStore" : {
+    "len" : [1, 100],
+    "type" : "number",
+    "regex" : "^-?\\d*$",
+    "min" : 1
+  },
+  "idProduct" : {
+    "len" : [1, 100],
+    "type" : "number",
+    "regex" : "^-?\\d*$",
+    "min" : 1
+  },
+  "idStatus" : {
+    "len" : [1, 100],
+    "type" : "number",
+    "regex" : "^-?\\d*$",
+    "min" : 1
+  },
+  "idBillDetail" : {
+    "len" : [1, 100],
+    "type" : "number",
+    "regex" : "^-?\\d*$",
+    "min" : 1
+  },
+  "mongoId" : {
+    "len" : [24, 24],
+    "type" : "string",
+    "regex" : "^[a-f\\d]{24}$"
+  }
+}
