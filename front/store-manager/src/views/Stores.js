@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Navbar from "../components/Navbar";
 import axios from "axios";
 import BasicDialog from "../components/BasicDialog";
+import CreateStoreDialog from "../components/CreateStoreDialog";
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const PORT = process.env.REACT_APP_SERVER_PORT;
@@ -15,7 +16,8 @@ class Stores extends React.Component{
     super(props);
     this.state = {
       authToken : localStorage.getItem("authToken"),
-      stores : []
+      stores : [],
+      showCreateNewStore : false
     }
     this.fetchRoles = this.fetchRoles.bind(this);
     this.renderAdminTools = this.renderAdminTools.bind(this);
@@ -81,17 +83,22 @@ class Stores extends React.Component{
         }}/>
       :<>
         <div className="container-fluid">
+          <CreateStoreDialog isOpen={this.state.showCreateNewStore} config={{title : "Nueva tienda"}} 
+            closeFunc = {()=>{this.onCreateNewStoreClose()}}/>
           <Navbar/>
           <div className="container">
             {this.renderAdminTools()}
             <div className="row mt-3 mb-3">
-              <div className="col-12 col-lg-8">
+              <div className="col-12 col-lg-10">
                 <h1 className="title-primary-text">Tiendas</h1>
               </div>
-              <div className="col-12 col-lg-4">
-                <div className="form-floating mb-3">
-                  <input type="text" className="form-control" placeholder="Search"/>
-                  <label>Buscar tienda</label>
+              <div className="col-12 col-lg-2">
+                <div className="d-flex flex-row justify-content-center mb-3 w-100 h-100 align-items-start">
+                  <button className="btn btn-primary" onClick={()=>{
+                    this.setState({showCreateNewStore : true});
+                  }}>
+                    Nueva tienda
+                  </button>
                 </div>
               </div>
             </div>
@@ -105,6 +112,11 @@ class Stores extends React.Component{
       
     );
   }
+
+  onCreateNewStoreClose(){
+    this.setState({showCreateNewStore : false});
+  }
+
   renderAdminTools(){
     if(this.state.roles){
       return(

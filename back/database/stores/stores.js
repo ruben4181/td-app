@@ -12,7 +12,12 @@ createStore = (payload) => {
       let vUrl = payload.url;
       let vMongoId = payload.mongoId;
       let nUserId = payload.userId;
-      conn.query(sql_constants.SQL_SP_INSERT, [vStoreName, vUrl, vMongoId, nUserId], (err, result)=>{
+      let vNoId = payload.noId;
+      let vAddress = payload.vAddress;
+      let vPhone = payload.phone;
+      let vSocialNetworks = payload.socialNetworks;
+      conn.query(sql_constants.SQL_SP_INSERT, [vStoreName, vUrl, vMongoId, nUserId,
+      vNoId, vAddress, vPhone, vSocialNetworks], (err, result)=>{
         conn.end();
         if(err){
           reject({
@@ -45,7 +50,13 @@ updateStore = (idStore, payload) => {
       let conn = resp;
       let vStoreName = payload.storeName;
       let vUrl = payload.url;
-      conn.query(sql_constants.SQL_SP_UPDATE, [idStore, vStoreName, vUrl], (err, result)=>{
+      let vNoId = payload.noId;
+      let vAddress = payload.address;
+      let vPhone = payload.phone;
+      let socialNetworks = payload.socialNetworks;
+
+      conn.query(sql_constants.SQL_SP_UPDATE, [idStore, vStoreName, vUrl, 
+          vNoId, vAddress, vPhone, socialNetworks], (err, result)=>{
         conn.end();
         if(err){
           reject({

@@ -19,5 +19,25 @@
     "type" : "number",
     "regex" : "^-?\\d*$",
     "min" : 1
+  },
+  "noId" : {
+    "len" : [0, 100],
+    "type" : "string",
+    "regex" : "^.*$"
+  },
+  "address" : {
+    "len" : [0, 100],
+    "type" : "string",
+    "regex" : "^.*$"
+  },
+  "phone" : {
+    "len" : [0, 100],
+    "type" : "string",
+    "regex" : "^.*$"
+  },
+  "socialNetworks" : {
+    "len" : [0, 100],
+    "type" : "string",
+    "regex" : "^.*$"
   }
 }
