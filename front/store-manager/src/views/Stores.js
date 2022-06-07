@@ -4,12 +4,12 @@ import Navbar from "../components/Navbar";
 import axios from "axios";
 import BasicDialog from "../components/BasicDialog";
 import CreateStoreDialog from "../components/CreateStoreDialog";
+import Store from '../par/Store';
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const PORT = process.env.REACT_APP_SERVER_PORT;
 const PROTOCOL = process.env.REACT_APP_PROTOCOL;
 const FETCH_ROLES_PATH = "/api/v1/user/roles";
-const FETCH_STORES_PATH = "/api/v1/store/get/user";
 
 class Stores extends React.Component{
   constructor(props){
@@ -47,19 +47,14 @@ class Stores extends React.Component{
   }
 
   fetchStores(){
+
     if(this.state.authToken){
-      let url = PROTOCOL+"://"+BASE_URL+":"+PORT+FETCH_STORES_PATH;
-      let config = {
-        url,
-        method : "get",
-        headers : {'Authorization' : 'Bearer '+this.state.authToken}
-      }
-      axios(config).then((resp)=>{
-        let stores = resp.data.data;
-        this.setState({stores}, ()=>{console.log(stores)});
-      }).catch((err)=>{
+      Store.fetchStoresByUser(this.state.authToken).then((resp) => {
+        let stores = resp.data;
+        this.setState({stores});
+      }).catch((err) => {
         console.log(err);
-      })
+      });
     }
   }
 
@@ -115,6 +110,7 @@ class Stores extends React.Component{
 
   onCreateNewStoreClose(){
     this.setState({showCreateNewStore : false});
+    this.fetchStores();
   }
 
   renderAdminTools(){
