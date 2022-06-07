@@ -5,12 +5,12 @@
     "regex" : "^([A-zÀ-ú0-9.&¿?]+ ?\\?*)*[^\\s\\W]*[A-zÀ-ú0-9?]$"
   },
   "url" : {
-    "len" : [15, 300],
+    "len" : [0, 300],
     "type" : "string",
     "regex" : "^https?:\/\/(([A-z]){2,100})+(.[A-z]{2,100})*$"
   },
   "mongoId" : {
-    "len" : [24, 24],
+    "len" : [0, 24],
     "type" : "string",
     "regex" : "^[a-f\\d]{24}$"
   },
@@ -36,8 +36,8 @@
     "regex" : "^.*$"
   },
   "socialNetworks" : {
-    "len" : [0, 100],
+    "len" : [0, 2000],
     "type" : "string",
-    "regex" : "^.*$"
+    "regex" : ".*"
   }
 }

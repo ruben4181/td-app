@@ -129,15 +129,16 @@ class Stores extends React.Component{
   }
   renderStores(){
     const {stores} = this.state;
-    
+
     const items = [];
     for(let i=0; i<stores.length; i++){
+      let creada = new Date(stores[i].CREATED_AT);
       items.push(
       <div className="col-12 col-lg-6 mb-3" style={{cursor : "pointer"}} key={"stores-"+i}>
         <div className="card p-3 text-decoration-none" onClick={()=>{this.props.navigation("/store/"+stores[i].ID_STORE)}}>
           <h5 className="card-title">{stores[i].STORE_NAME}</h5>
           <a href={PROTOCOL+"://"+stores[i].URL} target="_blank" style={{width:"fit-content"}} rel="noreferrer" onClick={(e)=>{e.stopPropagation();}}>{stores[i].URL}</a>
-          <span className="text-muted">Creada: {stores[i].CREATED_AT}</span>
+          <span className="text-muted">Creada: {creada.toDateString()}</span>
         </div>
       </div>
       );

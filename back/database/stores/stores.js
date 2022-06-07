@@ -13,7 +13,7 @@ createStore = (payload) => {
       let vMongoId = payload.mongoId;
       let nUserId = payload.userId;
       let vNoId = payload.noId;
-      let vAddress = payload.vAddress;
+      let vAddress = payload.address;
       let vPhone = payload.phone;
       let vSocialNetworks = payload.socialNetworks;
       conn.query(sql_constants.SQL_SP_INSERT, [vStoreName, vUrl, vMongoId, nUserId,
