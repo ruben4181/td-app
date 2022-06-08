@@ -118,7 +118,6 @@ class Login extends React.Component{
   onLoginClicked(e){
     e.preventDefault();
     if(this.state.userName==="" || this.state.password===""){
-      console.log(this.state.userName, this.state.password, "HERE");
       let dConfig = {
         title : "Completa el formulario",
         body : "El campo usuario o contraseña están vacios",
@@ -138,8 +137,6 @@ class Login extends React.Component{
     }
   }
   login(){
-    console.log(PROTOCOL, BASE_URL);
-    console.log(PROTOCOL+"://"+BASE_URL+":"+PORT+"/api/v1/login");
     let config = {
       url : PROTOCOL+"://"+BASE_URL+":"+PORT+"/api/v1/login",
       method : "post",
@@ -148,7 +145,6 @@ class Login extends React.Component{
         password : this.state.password
       }
     }
-    console.log(config);
     axios(config).then((resp)=>{
       if(resp.data.result==="OK"){
         localStorage.setItem('authToken', resp.data.token);

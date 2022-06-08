@@ -178,9 +178,7 @@ class Store extends React.Component{
 
   checkStore(){
     const {store, storeFetched} = this.state;
-    console.log("Checkando", store);
     if(storeFetched===true){
-      console.log("Probando", this.state.params.id.toString(), store.ID_STORE.toString());
       if(this.state.params.id.toString() !== store.ID_STORE.toString()){
         return false;
       }
