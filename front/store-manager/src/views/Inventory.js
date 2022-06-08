@@ -175,8 +175,15 @@ class Inventory extends React.Component{
           {/*Dialog places*/}
           <CreateCategoryDialog isOpen={this.state.showNewCategory} config={{title : "Nueva categoria"}} 
             closeFunc = {()=>{this.onCreateCategoryClose()}} idStore={this.state.params.id}/>
-          <CreateProductDialog isOpen={this.state.showNewProduct} config={{title : "Nuevo producto"}} 
+          {
+            this.state.showNewProduct
+            ?
+            <CreateProductDialog isOpen={this.state.showNewProduct} config={{title : "Nuevo producto"}} 
             closeFunc = {()=>{this.onCreateProductClose()}} idStore={this.state.params.id}/>
+            :
+            <>
+            </>
+          }
           {
             this.state.showProduct
             ?
