@@ -48,9 +48,14 @@ class POS extends React.Component{
     this.saveBillChangesClicked = this.saveBillChangesClicked.bind(this);
     this.closeBill = this.closeBill.bind(this);
     this.handleScan = this.handleScan.bind(this);
+    this.refreshOpenedBills = this.refreshOpenedBills.bind(this);
   }
 
   componentDidMount(){
+    this.refreshOpenedBills();
+  }
+
+  refreshOpenedBills(){
     Bills.getOpenedBills(this.state.authToken, this.state.idStore, this.state.openBillspage).then((resp)=>{
       let data = resp;
       if(data.result === "OK"){
@@ -228,7 +233,6 @@ class POS extends React.Component{
   }
   closeBill(){
     Bills.updateBillStatus(this.state.authToken, this.state.idBill, 4).then((resp) => {
-      console.log(this.state.idBill, 4);
       this.cancelBillChangesClicked();
     }).catch((err) => {
       console.log(err);
@@ -248,7 +252,6 @@ class POS extends React.Component{
           isNew = false;
           let isDifferent = this.checkDifference(p, toSave);
           if(!isNew && isDifferent){
-            console.log("Se actualiza", isDifferent);
             Bills.updateProductFromBill(this.state.authToken, p).then((resp) => {
               this.cancelBillChangesClicked();
             }).catch((err) => {
@@ -259,7 +262,6 @@ class POS extends React.Component{
         }
       }
       if(isNew){
-        console.log("Se agrega", p);
         Bills.addProductToBill(this.state.authToken, this.state.idBill, p).then((resp) => {
           this.cancelBillChangesClicked();
         }).catch((err)=> {
@@ -272,7 +274,6 @@ class POS extends React.Component{
   checkDifference(p, p2){
     if(p.idProduct === p2.ID_PRODUCT){
       if(p.units !== p2.UNITS || p.off !== p2.OFF){
-        console.log("checkDifference", p, p2);
         return true;
       }
     } else{
@@ -388,6 +389,7 @@ class POS extends React.Component{
         showCreateBill : false
       });
     }
+    this.refreshOpenedBills();
   }
 
   delProductFromBill(idProduct){
@@ -398,7 +400,6 @@ class POS extends React.Component{
         if(p.idProduct === idProduct){
           if(idStatus===9 && p.idBillDetail){
             Bills.delProductFromBill(this.state.authToken, this.state.idBill, p.idBillDetail).then((resp) => {
-              console.log(resp);
             }).catch((err) => {
               console.log(err);
             });
@@ -544,10 +545,8 @@ class POS extends React.Component{
   }
 
   keyUpFindProducts(e){
-    console.log("On KeyUpFindProducts triggered", e.keyCode, e.key);
     const {productsSuggested} = this.state;
     if ((e.key === 'Enter' || e.keyCode === 13) && productsSuggested.length > 0){
-      console.log("Agregando producto", productsSuggested);
       this.addProductToBill(productsSuggested[0]);
     } else{
       if((e.key === 'Enter' || e.keyCode === 13) && this.state.searchProducts.length>4){
@@ -565,7 +564,6 @@ class POS extends React.Component{
   }
 
   searchProducts(e){
-    console.log("onChangeEvent triggered");
     this.setState({searchProducts : e.target.value});
     if(e.target.value.length > 4){
       let idCategory = undefined;
