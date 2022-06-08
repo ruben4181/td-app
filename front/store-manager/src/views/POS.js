@@ -30,7 +30,8 @@ class POS extends React.Component{
       openedBills : [],
       openBillspage : 1,
       idBill : undefined,
-      idBillDetail : undefined
+      idBillDetail : undefined,
+      confirmCloseOrder : false
     }
     this.keyUpFindProducts = this.keyUpFindProducts.bind(this);
     this.searchProducts = this.searchProducts.bind(this);
@@ -49,6 +50,7 @@ class POS extends React.Component{
     this.closeBill = this.closeBill.bind(this);
     this.handleScan = this.handleScan.bind(this);
     this.refreshOpenedBills = this.refreshOpenedBills.bind(this);
+    this.closeBillClicked = this.closeBillClicked.bind(this);
   }
 
   componentDidMount(){
@@ -90,6 +92,20 @@ class POS extends React.Component{
       <>
         <BarcodeReader onError={this.handleError}
               onScan={this.handleScan}/>
+        <BasicDialog isOpen={this.state.confirmCloseOrder} config={{
+            title : "Cerrar cuenta",
+            body : "¿Seguro deseas cerrar la cuenta? Después de cerrarla no podras realizar cambios",
+            actions : [
+              {
+                label : "Cancelar",
+                func : ()=>{this.setState({confirmCloseOrder : false})}
+              },
+              {
+                label : "Ok",
+                func : ()=>{this.closeBill()}
+              }
+            ]
+          }}/>
         <BasicDialog isOpen={this.state.showNotProducts} config={{
             title : "No hay productos",
             body : "Debes tener por lo menos un producto en la orden para finalizar o guardar",
@@ -117,7 +133,10 @@ class POS extends React.Component{
           <Navbar/>
           <div className="container">
             <div className="row">
-              <div className="col-12 col-lg-8" style={{position : "relative"}}>
+              <div className="col-12">
+                <h1>Punto de venta</h1>
+              </div>
+              <div className="col-12 col-lg-8 mb-3" style={{position : "relative"}}>
                   <div className="input-group">
                     <div className="input-group-prepend">
                       <span className="input-group-text h-100"><i className="fa-solid fa-magnifying-glass"></i></span>
@@ -131,13 +150,13 @@ class POS extends React.Component{
                     {this.renderSuggestedProducts()}
                   </div>
               </div>
-              <div className="col-12 col-lg-4">
-                <div className="d-flex flex-row w-100 justify-content-end">
+              <div className="col-12 col-lg-4 mb-3">
+                <div className="d-flex flex-row w-100 justify-content-start">
                   {
                     this.state.idStatus===0
                     ?
                     <button className="btn btn-primary mb-3 me-3" onClick={(e)=>{this.openCreateBill()}}>
-                      Crear
+                      Crear cuenta
                     </button>
                     :
                     <>
@@ -147,7 +166,7 @@ class POS extends React.Component{
                       <button className="btn btn-success mb-3 me-3" onClick={(e)=>{this.saveBillChangesClicked()}}>
                         Guardar
                       </button>
-                      <button className="btn btn-primary mb-3 me-3" onClick={(e)=>{this.closeBill()}}>
+                      <button className="btn btn-primary mb-3 me-3" onClick={(e)=>{this.closeBillClicked()}}>
                         Finalizar cuenta
                       </button>
                     </>
@@ -166,12 +185,14 @@ class POS extends React.Component{
               <div className="col-12 col-lg-2 d-none d-block-lg">
                 <div className="row">
                   <div className="col-12 mt-3">
-                    <a className="btn btn-dark mb-3" href={"/bills/"+this.state.idStore+"/1"}>
-                      Todas las facturas
+                    <a className="nav-link mb-3" href={"/bills/"+this.state.idStore+"/1"}>
+                      Ver todas las facturas
                     </a>
                   </div>
                   <div className="col-12">
-                    Cuentas abiertas
+                    <h5>
+                      Cuentas abiertas
+                    </h5>
                   </div>
                   <div className="col-12 mb-3">
                     <input type="text" className="form-control" placeholder="Buscar cuenta"/>
@@ -207,14 +228,14 @@ class POS extends React.Component{
                 <div className="row">
                   <div className="col-12 mt-3">
                     <div className="d-flex flex-row w-100 justify-content-end">
-                      <a className="btn btn-dark mb-3" href={"/bills/"+this.state.idStore+"/1"}>
-                        Todas las facturas
+                      <a className="nav-link" href={"/bills/"+this.state.idStore+"/1"}>
+                        Ver todas las facturas
                       </a>
                     </div>
                   </div>
                   <div className="col-12">
-                    <div className="d-flex flex-row w-100 justify-content-end">
-                      Cuentas abiertas
+                    <div className="d-flex flex-row w-100 justify-content-end pe-3">
+                      <h5>Cuentas abiertas</h5>
                     </div>
                   </div>
                   <div className="col-12 mb-3">
@@ -231,9 +252,18 @@ class POS extends React.Component{
       </>
     );
   }
+  closeBillClicked(){
+    this.setState({
+      confirmCloseOrder : true
+    });
+  }
   closeBill(){
     Bills.updateBillStatus(this.state.authToken, this.state.idBill, 4).then((resp) => {
       this.cancelBillChangesClicked();
+      this.setState({
+        confirmCloseOrder : false
+      });
+      this.refreshOpenedBills();
     }).catch((err) => {
       console.log(err);
     });
