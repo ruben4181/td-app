@@ -90,165 +90,182 @@ class POS extends React.Component{
     const {products} = this.state;
     return(
       <>
-        <BarcodeReader onError={this.handleError}
-              onScan={this.handleScan}/>
-        <BasicDialog isOpen={this.state.confirmCloseOrder} config={{
-            title : "Cerrar cuenta",
-            body : "¿Seguro deseas cerrar la cuenta? Después de cerrarla no podras realizar cambios",
-            actions : [
-              {
-                label : "Cancelar",
-                func : ()=>{this.setState({confirmCloseOrder : false})}
-              },
-              {
-                label : "Ok",
-                func : ()=>{this.closeBill()}
-              }
-            ]
-          }}/>
-        <BasicDialog isOpen={this.state.showNotProducts} config={{
-            title : "No hay productos",
-            body : "Debes tener por lo menos un producto en la orden para finalizar o guardar",
+      {!this.state.authToken?
+        <BasicDialog isOpen={true} config={{
+            title : "No has iniciado sesión",
+            body : "Por favor, inicia sesión e ingresa nuevamente a esta página",
             actions : [
               {
                 label : "Ok",
-                func : ()=>{this.setState({showNotProducts : false})}
+                func : ()=>{this.props.navigation("/login")}
               }
             ]
           }}/>
-        {
-          products.length>0 && this.state.showCreateBill
-          ?
-          <>
-          <CreateBillDialog idStore = {this.state.idStore} isOpen = {this.state.showCreateBill}
-            config={{title : "Crear nueva factura/cuenta"}} closeFunc = {this.onCreateBillClose}
-            products={products}
-            />
-          </>
-          :
-          <>
-          </>
-        }
-        <div className="container-fluid bg-light">
-          <Navbar/>
-          <div className="container">
-            <div className="row">
-              <div className="col-12">
-                <h1>Punto de venta</h1>
-              </div>
-              <div className="col-12 col-lg-8 mb-3" style={{position : "relative"}}>
-                  <div className="input-group">
-                    <div className="input-group-prepend">
-                      <span className="input-group-text h-100"><i className="fa-solid fa-magnifying-glass"></i></span>
+        :
+        <>
+        <>
+          <BarcodeReader onError={this.handleError}
+                onScan={this.handleScan}/>
+          <BasicDialog isOpen={this.state.confirmCloseOrder} config={{
+              title : "Cerrar cuenta",
+              body : "¿Seguro deseas cerrar la cuenta? Después de cerrarla no podras realizar cambios",
+              actions : [
+                {
+                  label : "Cancelar",
+                  func : ()=>{this.setState({confirmCloseOrder : false})}
+                },
+                {
+                  label : "Ok",
+                  func : ()=>{this.closeBill()}
+                }
+              ]
+            }}/>
+          <BasicDialog isOpen={this.state.showNotProducts} config={{
+              title : "No hay productos",
+              body : "Debes tener por lo menos un producto en la orden para finalizar o guardar",
+              actions : [
+                {
+                  label : "Ok",
+                  func : ()=>{this.setState({showNotProducts : false})}
+                }
+              ]
+            }}/>
+          {
+            products.length>0 && this.state.showCreateBill
+            ?
+            <>
+            <CreateBillDialog idStore = {this.state.idStore} isOpen = {this.state.showCreateBill}
+              config={{title : "Crear nueva factura/cuenta"}} closeFunc = {this.onCreateBillClose}
+              products={products}
+              />
+            </>
+            :
+            <>
+            </>
+          }
+            <div className="container-fluid bg-light">
+              <Navbar/>
+              <div className="container">
+                <div className="row">
+                  <div className="col-12">
+                    <h1>Punto de venta</h1>
+                  </div>
+                  <div className="col-12 col-lg-8 mb-3" style={{position : "relative"}}>
+                      <div className="input-group">
+                        <div className="input-group-prepend">
+                          <span className="input-group-text h-100"><i className="fa-solid fa-magnifying-glass"></i></span>
+                        </div>
+                        <input type="text" className="form-control" placeholder="Buscar producto por codigo de o nombre"
+                        onChange={this.searchProducts} value={this.state.searchProducts} onKeyUp={this.keyUpFindProducts}
+                        />
+                      </div>
+                      <div className="d-flex flex-column w-100 bg-white" 
+                        style={{position : "absolute", top : "100%", left : "0", paddingLeft : "12px", paddingRight : "12px"}}>
+                        {this.renderSuggestedProducts()}
+                      </div>
+                  </div>
+                  <div className="col-12 col-lg-4 mb-3">
+                    <div className="d-flex flex-row w-100 justify-content-start">
+                      {
+                        this.state.idStatus===0
+                        ?
+                        <button className="btn btn-primary mb-3 me-3" onClick={(e)=>{this.openCreateBill()}}>
+                          Crear cuenta
+                        </button>
+                        :
+                        <>
+                          <button className="btn btn-dark mb-3 me-3" onClick={(e)=>{this.cancelBillChangesClicked()}}>
+                            Cancelar
+                          </button>
+                          <button className="btn btn-success mb-3 me-3" onClick={(e)=>{this.saveBillChangesClicked()}}>
+                            Guardar
+                          </button>
+                          <button className="btn btn-primary mb-3 me-3" onClick={(e)=>{this.closeBillClicked()}}>
+                            Finalizar cuenta
+                          </button>
+                        </>
+                      }
                     </div>
-                    <input type="text" className="form-control" placeholder="Buscar producto por codigo de o nombre"
-                    onChange={this.searchProducts} value={this.state.searchProducts} onKeyUp={this.keyUpFindProducts}
-                    />
                   </div>
-                  <div className="d-flex flex-column w-100 bg-white" 
-                    style={{position : "absolute", top : "100%", left : "0", paddingLeft : "12px", paddingRight : "12px"}}>
-                    {this.renderSuggestedProducts()}
-                  </div>
-              </div>
-              <div className="col-12 col-lg-4 mb-3">
-                <div className="d-flex flex-row w-100 justify-content-start">
                   {
-                    this.state.idStatus===0
+                    this.state.customerName!==""
                     ?
-                    <button className="btn btn-primary mb-3 me-3" onClick={(e)=>{this.openCreateBill()}}>
-                      Crear cuenta
-                    </button>
+                    <div className="col-12">
+                      Cuenta de: {this.state.customerName}
+                    </div>
                     :
-                    <>
-                      <button className="btn btn-dark mb-3 me-3" onClick={(e)=>{this.cancelBillChangesClicked()}}>
-                        Cancelar
-                      </button>
-                      <button className="btn btn-success mb-3 me-3" onClick={(e)=>{this.saveBillChangesClicked()}}>
-                        Guardar
-                      </button>
-                      <button className="btn btn-primary mb-3 me-3" onClick={(e)=>{this.closeBillClicked()}}>
-                        Finalizar cuenta
-                      </button>
-                    </>
+                    <></>
                   }
-                </div>
-              </div>
-              {
-                this.state.customerName!==""
-                ?
-                <div className="col-12">
-                  Cuenta de: {this.state.customerName}
-                </div>
-                :
-                <></>
-              }
-              <div className="col-12 col-lg-2 d-none d-block-lg">
-                <div className="row">
-                  <div className="col-12 mt-3">
-                    <a className="nav-link mb-3" href={"/bills/"+this.state.idStore+"/1"}>
-                      Ver todas las facturas
-                    </a>
-                  </div>
-                  <div className="col-12">
-                    <h5>
-                      Cuentas abiertas
-                    </h5>
-                  </div>
-                  <div className="col-12 mb-3">
-                    <input type="text" className="form-control" placeholder="Buscar cuenta"/>
-                  </div>
-                  <div className="col-12">
-                    {this.renderOpenedBills()}
-                  </div>
-                </div>
-              </div>
-              <div className="col-12 col-lg-10">
-                <div className="row">
-                  {this.state.products.length===0
-                    ?
-                    <>
-                    </>
-                    :
-                    <>
+                  <div className="col-12 col-lg-2 d-none d-block-lg">
+                    <div className="row">
+                      <div className="col-12 mt-3">
+                        <a className="nav-link mb-3" href={"/bills/"+this.state.idStore+"/1"}>
+                          Ver todas las facturas
+                        </a>
+                      </div>
                       <div className="col-12">
-                        <div className="d-flex flex-column w-100">
-                          {this.renderBillProducts()}
+                        <h5>
+                          Cuentas abiertas
+                        </h5>
+                      </div>
+                      <div className="col-12 mb-3">
+                        <input type="text" className="form-control" placeholder="Buscar cuenta"/>
+                      </div>
+                      <div className="col-12">
+                        {this.renderOpenedBills()}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-12 col-lg-10">
+                    <div className="row">
+                      {this.state.products.length===0
+                        ?
+                        <>
+                        </>
+                        :
+                        <>
+                          <div className="col-12">
+                            <div className="d-flex flex-column w-100">
+                              {this.renderBillProducts()}
+                            </div>
+                          </div>
+                          <div className="col-12">
+                            <div className="d-flex flex-row justify-content-end">
+                              Total:<span className="product-total ms-3 fw-bold">${Products.toCurrency(Math.round(this.state.ammount))}</span>
+                            </div>
+                          </div>
+                        </>
+                      }
+                    </div>
+                  </div>
+                  <div className="col-12 col-lg-2 d-block d-none-lg mt-3">
+                    <div className="row">
+                      <div className="col-12 mt-3">
+                        <div className="d-flex flex-row w-100 justify-content-end">
+                          <a className="nav-link" href={"/bills/"+this.state.idStore+"/1"}>
+                            Ver todas las facturas
+                          </a>
                         </div>
                       </div>
                       <div className="col-12">
-                        <div className="d-flex flex-row justify-content-end">
-                          Total:<span className="product-total ms-3 fw-bold">${Products.toCurrency(Math.round(this.state.ammount))}</span>
+                        <div className="d-flex flex-row w-100 justify-content-end pe-3">
+                          <h5>Cuentas abiertas</h5>
                         </div>
                       </div>
-                    </>
-                  }
-                </div>
-              </div>
-              <div className="col-12 col-lg-2 d-block d-none-lg mt-3">
-                <div className="row">
-                  <div className="col-12 mt-3">
-                    <div className="d-flex flex-row w-100 justify-content-end">
-                      <a className="nav-link" href={"/bills/"+this.state.idStore+"/1"}>
-                        Ver todas las facturas
-                      </a>
+                      <div className="col-12 mb-3">
+                        <input type="text" className="form-control" placeholder="Buscar cuenta"/>
+                      </div>
+                      <div className="col-12">
+                        {this.renderOpenedBills()}
+                      </div>
                     </div>
-                  </div>
-                  <div className="col-12">
-                    <div className="d-flex flex-row w-100 justify-content-end pe-3">
-                      <h5>Cuentas abiertas</h5>
-                    </div>
-                  </div>
-                  <div className="col-12 mb-3">
-                    <input type="text" className="form-control" placeholder="Buscar cuenta"/>
-                  </div>
-                  <div className="col-12">
-                    {this.renderOpenedBills()}
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
+          </>
+        </>
+      }
       </>
     );
   }

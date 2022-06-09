@@ -3,6 +3,7 @@ import Navbar from '../components/Navbar';
 import { useNavigate, useParams } from "react-router-dom";
 import "../css/commons.css";
 import BillsService from "../par/Bills";
+import BasicDialog from '../components/BasicDialog';
 
 class Bills extends React.Component{
   constructor(props){
@@ -32,6 +33,19 @@ class Bills extends React.Component{
   render(){
     return(
       <>
+        {!this.state.authToken?
+        <BasicDialog isOpen={true} config={{
+            title : "No has iniciado sesión",
+            body : "Por favor, inicia sesión e ingresa nuevamente a esta página",
+            actions : [
+              {
+                label : "Ok",
+                func : ()=>{this.props.navigation("/login")}
+              }
+            ]
+          }}/>
+        :
+        <>
         <div className='container-fluid'>
           <Navbar/>
           <div className='container'>
@@ -40,21 +54,21 @@ class Bills extends React.Component{
                 <div className='row mt-3'>
                   <div className='col-12 col-lg-10'>
                     <div className='row'>
-                      <div className='col-12 col-lg-4'>
+                      <div className='col-12 col-lg-4 mb-3'>
                         <label className='ms-1'>Cliente</label>
                         <input className='form-control' placeholder='Cliente' type="text"/>
                       </div>
-                      <div className='col-12 col-lg-4'>
+                      <div className='col-12 col-lg-4 mb-3'>
                         <label className='ms-1'>Inicio</label>
                         <input className='form-control' placeholder='Inicio' type="date"/>
                       </div>
-                      <div className='col-12 col-lg-4'>
+                      <div className='col-12 col-lg-4 mb-3'>
                         <label className='ms-1'>Fin</label>
                         <input className='form-control' placeholder='Fin' type="date"/>
                       </div>
                     </div>
                   </div>
-                  <div className='col-12 col-lg-2'>
+                  <div className='col-12 col-lg-2 mb-3'>
                     <div className='d-flex flex-row align-items-end h-100'>
                       <button className='btn btn-primary'>Filtrar</button>
                     </div>
@@ -73,7 +87,9 @@ class Bills extends React.Component{
               </div>
             </div>
           </div>
-        </div>
+        </div> 
+        </>
+      }
       </>
     )
   }
@@ -89,7 +105,7 @@ class Bills extends React.Component{
           <td>{fecha.toDateString()}</td>
           <td>{b.CUSTOMER_NAME}</td>
           <td>${BillsService.toCurrency(b.AMMOUNT)}</td>
-          <td>Abrir</td>
+          <td style={{width : '200px'}}><a className='nav-link' href={'/bill/'+this.state.idStore+'/'+b.ID_BILL}>Detalle factura</a></td>
         </tr>
       )
     }

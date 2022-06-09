@@ -7,6 +7,7 @@ import Store from "./views/Store";
 import Inventory from "./views/Inventory";
 import POS from "./views/POS";
 import Bills from "./views/Bills";
+import Bill from './views/Bill';
 
 export default function App (){
   return(
@@ -20,6 +21,7 @@ export default function App (){
         <Route path="/inventory/:id/:page" element={<Inventory/>}/>
         <Route path="/pos/:id/" element={<POS/>}/>
         <Route path="/bills/:id/:page" element={<Bills/>}/>
+        <Route path="/bill/:idStore/:idBill" element={<Bill/>}/>
       </Routes>
     </Router>
   )
