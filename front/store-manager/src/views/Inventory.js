@@ -261,7 +261,7 @@ class Inventory extends React.Component{
       if(this.state.selectedCategory.value!=="no-filter"){
         idCategory = this.state.selectedCategory.value;
       }
-      Products.findProducts(this.state.idStore, idCategory, e.target.value).then((resp)=>{
+      Products.findProducts(this.state.idStore, idCategory, e.target.value, this.state.showStockAlert).then((resp)=>{
         this.setState({
           products : resp.data
         });

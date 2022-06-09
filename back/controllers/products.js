@@ -44,7 +44,6 @@ deleteProduct = (idStore, idProduct) => {
 }
 
 getProducts = (idStore, page, stockAlert) => {
-  console.log('Alert', stockAlert);
   if(idStore && page){
     return products_services.getProducts(idStore, page, stockAlert);
   } else{

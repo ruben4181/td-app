@@ -72,7 +72,6 @@ updateProduct = (idStore, idProduct, payload) => {
       let imgSrc = payload.imgSrc;
       let stockAlert = payload.stockAlert;
       
-      console.log('stockAlert:', stockAlert);
 
       conn.query(sql_constants.SQL_SP_UPDATE, [idProduct, productName, productLine, productDescription,
         productBrand, quantity, productPrice, productCost, productStock, off, 
