@@ -42,7 +42,8 @@ class Inventory extends React.Component{
       search : "",
       showProduct : false,
       idProduct : 1,
-      searchProducts : ""
+      searchProducts : "",
+      showStockAlert : 0
     }
     this.createCategoryClicked = this.createCategoryClicked.bind(this);
     this.createProductClicked = this.createProductClicked.bind(this);
@@ -53,6 +54,8 @@ class Inventory extends React.Component{
     this.searchProducts = this.searchProducts.bind(this);
     this.showProduct = this.showProduct.bind(this);
     this.fetchProducts = this.fetchProducts.bind(this);
+    this.showStockAlertClicked = this.showStockAlertClicked.bind(this);
+    
   }
   componentDidMount(){
     Roles.fetchRoles(this.state.authToken, this.state.params.id).then((resp)=>{
@@ -81,9 +84,11 @@ class Inventory extends React.Component{
   }
   fetchProducts(){
     let category = this.state.query.category;
+    console.log(this.state.showStockAlert);
     if(category){
       category = parseInt(category);
-      Products.fetchProductsByCategory(this.state.idStore, category, this.state.page).then((resp)=>{
+      Products.fetchProductsByCategory(this.state.idStore, category, this.state.page, 
+          this.state.showStockAlert).then((resp)=>{
         this.setState({
           products : resp.data
         });
@@ -91,7 +96,7 @@ class Inventory extends React.Component{
         console.log("Error while fetching products", err);
       });
     } else{
-      Products.fetchProducts(this.state.idStore, this.state.page).then((resp)=>{
+      Products.fetchProducts(this.state.idStore, this.state.page, this.state.showStockAlert).then((resp)=>{
         this.setState({
           products : resp.data
         });
@@ -100,6 +105,7 @@ class Inventory extends React.Component{
       });
     }
   }
+
   render(){
     return(
       <>
@@ -148,17 +154,32 @@ class Inventory extends React.Component{
                 </div>
               </div>
               <div className="col-12 mb-3">
-                <div className="d-flex flex-row justify-content-start mb-3">
-                  <div className="row">
-                    <div className="col-12 col-lg-6 mb-3">
-                      <Select options={this.state.categories} 
-                      onChange={(e)=>{this.onChangeCategory(e); this.setState({searchProducts : ""})}} placeholder="Ver todas las categorías"
-                      value={this.state.selectedCategory}/>
-                    </div>
-                    <div className="col-12 col-lg-6 mb-3">
-                      <Select options={this.state.orderBy} 
-                      onChange={(e)=>{this.setState({selectedOrder : e.value})}} placeholder="Ordernar por"
-                      value={{value : "alphabetic", label : 'Ordén alfabetico'}}/>
+                <div className="d-flex flex-row justify-content-start mb-3 w-100">
+                  <div className="container-fluid p-0">
+                    <div className="row">
+                      <div className="col-12 col-lg-3 mb-3">
+                        <Select options={this.state.categories} 
+                        onChange={(e)=>{this.onChangeCategory(e); this.setState({searchProducts : ""})}} placeholder="Ver todas las categorías"
+                        value={this.state.selectedCategory}/>
+                      </div>
+                      <div className="col-12 col-lg-3 mb-3">
+                        <Select options={this.state.orderBy} 
+                        onChange={(e)=>{this.setState({selectedOrder : e.value})}} placeholder="Ordernar por"
+                        value={{value : "alphabetic", label : 'Ordén alfabetico'}}/>
+                      </div>
+                      <div className="col-12 col-lg-6 mb-3">
+                        <div className="d-flex flex-row w-100 justify-content-end">
+                          <a className="nav-link" href="#" onClick={(e)=>{this.showStockAlertClicked()}}>
+                            {
+                              this.state.showStockAlert
+                              ?
+                              <span>Ver todos los productos</span>
+                              :
+                              <span>Ver productos agotandose</span>
+                            }
+                          </a>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -213,6 +234,15 @@ class Inventory extends React.Component{
     )
   }
 
+  showStockAlertClicked(){
+    this.setState({
+      showStockAlert : this.state.showStockAlert==0?1:0
+    }, ()=>{
+      this.fetchProducts();
+      this.onChangeCategory({value : "no-filter", label : "Ver todas las categorias"});
+    });
+  }
+
   showProduct(idProduct){
     this.setState({showProduct : true, idProduct});
   }
@@ -246,7 +276,7 @@ class Inventory extends React.Component{
   onChangeCategory(e){
     this.setState({selectedCategory : e});
     if(e.value==="no-filter"){
-      Products.fetchProducts(this.state.idStore, this.state.page).then((resp)=>{
+      Products.fetchProducts(this.state.idStore, this.state.page, this.state.showStockAlert).then((resp)=>{
         this.setState({
           products : resp.data
         });
@@ -254,7 +284,7 @@ class Inventory extends React.Component{
         window.history.pushState({path:newurl},'',newurl);
       });
     } else{
-      Products.fetchProductsByCategory(this.state.idStore, e.value, this.state.page).then((resp)=>{
+      Products.fetchProductsByCategory(this.state.idStore, e.value, this.state.page, this.state.showStockAlert).then((resp)=>{
         this.setState({
           products : resp.data
         });

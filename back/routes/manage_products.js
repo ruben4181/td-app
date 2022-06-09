@@ -51,10 +51,11 @@ app.get("/get/store", (req, res)=>{
   let idStore = req.query.idStore;
   let idProduct = req.query.idProduct;
   let page = req.query.page;
+  let stockAlert = parseInt(req.query.stockAlert) || 0;
   if(idProduct){
 
   } else{
-    products.getProducts(idStore, page).then((resp)=>{
+    products.getProducts(idStore, page, stockAlert).then((resp)=>{
       res.status(200);
       res.send(resp);
     }).catch((err)=>{
@@ -69,7 +70,8 @@ app.get("/get/category", (req, res)=>{
   let idStore = req.query.idStore;
   let idCategory = req.query.idCategory;
   let page = req.query.page;
-  products.getProductsByCategory(idStore, idCategory, page).then((resp)=>{
+  let stockAlert = req.query.stockAlert || 0;
+  products.getProductsByCategory(idStore, idCategory, page, stockAlert).then((resp)=>{
     res.status(200);
     res.send(resp);
   }).catch((err)=>{
@@ -83,8 +85,9 @@ app.get('/search', (req, res)=>{
   let idStore = req.query.idStore;
   let idCategory = req.query.idCategory;
   let query = req.query.q;
+  let stockAlert = req.query.stockAlert || 0;
   if(idCategory){
-    products.findProductsByCategory(idStore, idCategory, query).then((resp)=>{
+    products.findProductsByCategory(idStore, idCategory, query, stockAlert).then((resp)=>{
       res.status(200);
       res.send(resp);
     }).catch((err)=>{
@@ -93,7 +96,7 @@ app.get('/search', (req, res)=>{
       res.send(err);
     });
   } else{
-    products.findProducts(idStore, query).then((resp)=>{
+    products.findProducts(idStore, query, stockAlert).then((resp)=>{
       res.status(200);
       res.send(resp);
     }).catch((err)=>{

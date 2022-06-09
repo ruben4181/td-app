@@ -4,14 +4,15 @@ const BASE_URL = process.env.REACT_APP_BASE_URL;
 const PORT = process.env.REACT_APP_SERVER_PORT;
 const PROTOCOL = process.env.REACT_APP_PROTOCOL;
 
-let fetchProducts = (idStore, page) => {
+let fetchProducts = (idStore, page, stockAlert) => {
   return new Promise((resolve, reject)=>{
     let config = {
       method : "get",
       url : PROTOCOL+"://"+BASE_URL+":"+PORT+"/api/v1/product/get/store",
       params : {
         idStore,
-        page
+        page,
+        stockAlert
       }
     }
     axios(config).then((resp)=>{
@@ -22,7 +23,7 @@ let fetchProducts = (idStore, page) => {
   });
 }
 
-let fetchProductsByCategory = (idStore, idCategory, page) => {
+let fetchProductsByCategory = (idStore, idCategory, page, stockAlert) => {
   return new Promise((resolve, reject)=>{
     let config = {
       method : "get",
@@ -30,7 +31,8 @@ let fetchProductsByCategory = (idStore, idCategory, page) => {
       params : {
         idStore,
         idCategory,
-        page
+        page,
+        stockAlert
       }
     }
     axios(config).then((resp)=>{
@@ -41,7 +43,7 @@ let fetchProductsByCategory = (idStore, idCategory, page) => {
   });
 }
 
-let findProducts = (idStore, idCategory, q) => {
+let findProducts = (idStore, idCategory, q, stockAlert) => {
   return new Promise((resolve, reject)=>{
     let config = {
       method : "get",
@@ -49,7 +51,8 @@ let findProducts = (idStore, idCategory, q) => {
       params : {
         idStore,
         idCategory,
-        q
+        q,
+        stockAlert
       }
     }
     axios(config).then((resp)=>{

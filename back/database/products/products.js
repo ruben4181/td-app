@@ -134,11 +134,12 @@ deleteProduct = (idStore, idProduct) => {
   });
 }
 
-getProducts = (idStore, page) => {
+getProducts = (idStore, page, stockAlert) => {
+  console.log(stockAlert);
   return new Promise((resolve, reject) => {
     mysql_util.getConnection().then((resp)=>{
       let conn = resp;
-      conn.query(sql_constants.SQL_SP_PRODUCTS_GET_BY_STORE, [idStore, page], (err, resp)=>{
+      conn.query(sql_constants.SQL_SP_PRODUCTS_GET_BY_STORE, [idStore, page, stockAlert], (err, resp)=>{
         conn.end();
         if(err){
           resolve({
@@ -160,11 +161,37 @@ getProducts = (idStore, page) => {
   });
 }
 
-getProductsByCategory = (idStore, idCategory, page) => {
+getProductsByStockAlert = (idStore, page) => {
   return new Promise((resolve, reject) => {
     mysql_util.getConnection().then((resp)=>{
       let conn = resp;
-      conn.query(sql_constants.SQL_SP_PRODUCTS_GET_BY_CATEGORY, [idStore, idCategory, page], (err, resp)=>{
+      conn.query(sql_constants.SQL_SP_PRODUCTS_GET_STOCK_ALERT, [idStore, page], (err, resp)=>{
+        conn.end();
+        if(err){
+          resolve({
+            result : constants.ERROR,
+            message : "Error while calling "+sql_constants.SQL_SP_PRODUCTS_GET_STOCK_ALERT,
+            err
+          });
+        } else{
+          resolve({
+            result : constants.RESULT_OK,
+            message : "Products fetched",
+            data : resp[0]
+          });
+        }
+      });
+    }).catch((err)=>{
+      reject(err);
+    });
+  });
+}
+
+getProductsByCategory = (idStore, idCategory, page, stockAlert) => {
+  return new Promise((resolve, reject) => {
+    mysql_util.getConnection().then((resp)=>{
+      let conn = resp;
+      conn.query(sql_constants.SQL_SP_PRODUCTS_GET_BY_CATEGORY, [idStore, idCategory, page, stockAlert], (err, resp)=>{
         conn.end();
         if(err){
           resolve({
@@ -186,11 +213,11 @@ getProductsByCategory = (idStore, idCategory, page) => {
   });
 }
 
-findProducts = (idStore, query) => {
+findProducts = (idStore, query, stockAlert) => {
   return new Promise((resolve, reject)=>{
     mysql_util.getConnection().then((resp)=>{
       let conn = resp;
-      conn.query(sql_constants.SQL_SP_PRODUCTS_FIND_PRODUCTS, [idStore, query], (err, resp)=>{
+      conn.query(sql_constants.SQL_SP_PRODUCTS_FIND_PRODUCTS, [idStore, query, stockAlert], (err, resp)=>{
         conn.end();
         if(err){
           resolve({
@@ -210,11 +237,12 @@ findProducts = (idStore, query) => {
   });
 }
 
-findProductsByCategory = (idStore, idCategory, query) => {
+findProductsByCategory = (idStore, idCategory, query, stockAlert) => {
   return new Promise((resolve, reject)=>{
+    console.log(SQL_SP_PRODUCTS_FIND_PRODUCTS_BY_CATEGORY, [idStore, idCategory, query, stockAlert]);  
     mysql_util.getConnection().then((resp)=>{
       let conn = resp;
-      conn.query(sql_constants.SQL_SP_PRODUCTS_FIND_PRODUCTS_BY_CATEGORY, [idStore, idCategory, query], (err, resp)=>{
+      conn.query(sql_constants.SQL_SP_PRODUCTS_FIND_PRODUCTS_BY_CATEGORY, [idStore, idCategory, query, stockAlert], (err, resp)=>{
         conn.end();
         if(err){
           resolve({
@@ -268,5 +296,6 @@ module.exports = {
   getProductsByCategory,
   findProducts,
   findProductsByCategory,
-  getProduct
+  getProduct,
+  getProductsByStockAlert
 }

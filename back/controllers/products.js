@@ -43,9 +43,10 @@ deleteProduct = (idStore, idProduct) => {
   }
 }
 
-getProducts = (idStore, page) => {
+getProducts = (idStore, page, stockAlert) => {
+  console.log('Alert', stockAlert);
   if(idStore && page){
-    return products_services.getProducts(idStore, page);
+    return products_services.getProducts(idStore, page, stockAlert);
   } else{
     return new Promise((resolve, reject)=>{
       resolve({
@@ -56,9 +57,9 @@ getProducts = (idStore, page) => {
   }
 }
 
-getProductsByCategory = (idStore, idCategory, page) =>{
+getProductsByCategory = (idStore, idCategory, page, stockAlert) =>{
   if(idStore, idCategory, page){
-    return products_services.getProductsByCategory(idStore, idCategory, page);
+    return products_services.getProductsByCategory(idStore, idCategory, page, stockAlert);
   } else{
     return new Promise((resolve, reject)=>{
       resolve({
@@ -69,9 +70,9 @@ getProductsByCategory = (idStore, idCategory, page) =>{
   }
 }
 
-findProducts = (idStore, query) => {
+findProducts = (idStore, query, stockAlert) => {
   if(idStore && query){
-    return products_services.findProducts(idStore, query);
+    return products_services.findProducts(idStore, query, stockAlert);
   } else{
     return new Promise((resolve, reject)=>{
       resolve({
@@ -82,9 +83,9 @@ findProducts = (idStore, query) => {
   }
 }
 
-findProductsByCategory = (idStore, idCategory, query) => {
+findProductsByCategory = (idStore, idCategory, query, stockAlert) => {
   if(idStore && idCategory && query) {
-    return products_services.findProductsByCategory(idStore, idCategory, query);
+    return products_services.findProductsByCategory(idStore, idCategory, query, stockAlert);
   } else{
     return new Promise((resolve, reject)=>{
       resolve({
