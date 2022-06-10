@@ -158,6 +158,7 @@ changeBillStatus = (idBill, idStatus)=>{
     mysql_util.getConnection().then((resp)=>{
       let conn = resp;
       conn.query(sql_constants.SQL_SP_BILLS_CHANGE_STATUS, [idBill, idStatus], (err, result) => {
+        conn.end();
         if(err){
           reject({
             result : constants.ERROR,
@@ -298,6 +299,7 @@ getOpenBills = (idStore, page) => {
     mysql_util.getConnection().then((resp) => {
       let conn = resp;
       conn.query(sql_constants.SQL_SP_BILLS_GET_OPEN_BILLS, [idStore, page], (err, result) => {
+        conn.end();
         if(err){
           reject({
             result : constants.ERROR,

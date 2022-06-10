@@ -106,7 +106,9 @@ updateProduct = (idStore, idProduct, payload) => {
 deleteProduct = (idStore, idProduct) => {
   return new Promise((resolve, reject) => {
     mysql_util.getConnection().then((resp)=>{
-      let conn = resp.query(sql_constants.SQL_SP_DELETE, [idStore, idProduct], (err, result)=>{
+      let conn = resp
+      conn.query(sql_constants.SQL_SP_DELETE, [idStore, idProduct], (err, result)=>{
+        conn.end();
         if(err){
           resolve({
             result : constants.ERROR,
@@ -266,6 +268,7 @@ getProduct = (idProduct) => {
     mysql_util.getConnection().then((resp)=>{
       let conn = resp;
       conn.query(sql_constants.SQL_SP_PRODUCTS_GET_PRODUCT, [idProduct], (err, result) => {
+        conn.end();
         if(err){
           resolve({
             result : constants.ERROR,

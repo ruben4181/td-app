@@ -120,6 +120,7 @@ getStoresByUser = (idUser)=>{
     mysql_util.getConnection().then((resp)=>{
       let conn = resp;
       conn.query(sql_constants.SQL_SP_GET_STORES_BY_USER, [idUser], (err, result)=>{
+        conn.end();
         if(err){
           resolve({
             result : constants.ERROR,

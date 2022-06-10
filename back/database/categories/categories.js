@@ -84,6 +84,7 @@ getCategoriesByStore = (idStore)=>{
     mysql_util.getConnection().then((resp)=>{
       let conn = resp;
       conn.query(sql_constants.SQL_SP_CATEGORIES_GET_BY_STORE_ALL, [idStore], (err, result)=>{
+        conn.end();
         if(err){
           reject({
             result : constants.ERROR,
