@@ -56,6 +56,7 @@ class Inventory extends React.Component{
     this.showProduct = this.showProduct.bind(this);
     this.fetchProducts = this.fetchProducts.bind(this);
     this.showStockAlertClicked = this.showStockAlertClicked.bind(this);
+    this.renderView = this.renderView.bind(this);
   }
   componentDidMount(){
     Roles.fetchRoles(this.state.authToken, this.state.params.id).then((resp)=>{
@@ -133,6 +134,40 @@ class Inventory extends React.Component{
           this.state.allowedRole===1
           ?
           <>
+            {this.renderView()}
+          </>
+          :
+          <>
+          {
+            this.state.allowedRole===-1
+            ?
+            <>
+            </>
+            :
+            <>
+              <BasicDialog isOpen={true} config={{
+                title : "Usuario no valido",
+                body : "Lo sentimos, pero tu usuario no tiene permiso para ver esta pagina",
+                actions : [
+                  {
+                    label : "Ok",
+                    func : ()=>{this.props.navigation("/login")}
+                  }
+                ]
+              }}/>
+            </>
+          }
+          </>
+        }
+      </div>
+      }
+      </>
+    )
+  }
+
+  renderView(){
+    return(
+      <>
           <Navbar/>
           <div className="container">
             <div className="row">
@@ -219,32 +254,6 @@ class Inventory extends React.Component{
             <></>
           }
           </>
-          :
-          <>
-          {
-            this.state.allowedRole===-1
-            ?
-            <>
-            </>
-            :
-            <>
-              <BasicDialog isOpen={true} config={{
-                title : "Usuario no valido",
-                body : "Lo sentimos, pero tu usuario no tiene permiso para ver esta pagina",
-                actions : [
-                  {
-                    label : "Ok",
-                    func : ()=>{this.props.navigation("/login")}
-                  }
-                ]
-              }}/>
-            </>
-          }
-          </>
-        }
-      </div>
-      }
-      </>
     )
   }
 
