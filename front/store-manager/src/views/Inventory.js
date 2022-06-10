@@ -26,7 +26,7 @@ class Inventory extends React.Component{
     });
     
     this.state = {
-      authToken : localStorage.getItem("authToken"),
+      authToken : '',
       idStore : this.props.params.id,
       params : props.params,
       page : props.params.page || 1,
@@ -59,6 +59,9 @@ class Inventory extends React.Component{
   }
   componentDidMount(){
     //console.log("Failure token", localStorage.getItem("authToken"))
+    this.setState({
+      authToken : localStorage.getItem("authToken")
+    });
     Roles.fetchRoles(this.state.authToken, this.state.params.id).then((resp)=>{
       this.setState({roles : resp});
     }).catch((err)=>{
