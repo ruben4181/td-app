@@ -58,6 +58,7 @@ class Inventory extends React.Component{
     
   }
   componentDidMount(){
+    //console.log("Failure token", localStorage.getItem("authToken"))
     Roles.fetchRoles(this.state.authToken, this.state.params.id).then((resp)=>{
       this.setState({roles : resp});
     }).catch((err)=>{
@@ -107,6 +108,7 @@ class Inventory extends React.Component{
   }
 
   render(){
+    console.log('Resultado', typeof this.state.authToken);
     return(
       <>
       {
