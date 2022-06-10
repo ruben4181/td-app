@@ -26,7 +26,7 @@ class Inventory extends React.Component{
     });
     
     this.state = {
-      authToken : '',
+      authToken : localStorage.getItem("authToken"),
       idStore : this.props.params.id,
       params : props.params,
       page : props.params.page || 1,
@@ -58,10 +58,6 @@ class Inventory extends React.Component{
     
   }
   componentDidMount(){
-    //console.log("Failure token", localStorage.getItem("authToken"))
-    this.setState({
-      authToken : localStorage.getItem("authToken")
-    });
     Roles.fetchRoles(this.state.authToken, this.state.params.id).then((resp)=>{
       this.setState({roles : resp});
     }).catch((err)=>{
@@ -111,31 +107,21 @@ class Inventory extends React.Component{
   }
 
   render(){
-    const at = this.state.authToken;
-    console.log('Resultado', at, at.length, typeof at);
     return(
       <>
       {
-        this.state.authToken.length===0 || this.state.authToken===null
+        !this.state.authToken
         ?
-        <>
-        {
-          this.state.authToken===null
-          ?
-          <BasicDialog isOpen={true} config={{
-            title : "No has iniciado sesión",
-            body : "Por favor, inicia sesión e ingresa nuevamente a esta página",
-            actions : [
-              {
-                label : "Ok",
-                func : ()=>{this.props.navigation("/login")}
-              }
-            ]
-          }}/>
-          :
-          <></>
-        }
-        </>
+        <BasicDialog isOpen={true} config={{
+          title : "No has iniciado sesión",
+          body : "Por favor, inicia sesión e ingresa nuevamente a esta página",
+          actions : [
+            {
+              label : "Ok",
+              func : ()=>{this.props.navigation("/login")}
+            }
+          ]
+        }}/>
         :
         <div className="container-fluid bg-light">
         {
