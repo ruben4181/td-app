@@ -56,7 +56,7 @@
     "min" : 0
   },
   "productCode" : {
-    "len" : [0, 20],
+    "len" : [12, 20],
     "type" : "string",
     "regex" : ".*"
   },
