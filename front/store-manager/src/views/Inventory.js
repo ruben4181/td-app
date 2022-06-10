@@ -109,6 +109,8 @@ class Inventory extends React.Component{
 
   render(){
     console.log('Resultado', typeof this.state.authToken);
+    console.log('Valor', this.state.authToken);
+    console.log('Length', this.state.authToken.length);
     return(
       <>
       {
