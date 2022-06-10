@@ -43,7 +43,8 @@ class Inventory extends React.Component{
       showProduct : false,
       idProduct : 1,
       searchProducts : "",
-      showStockAlert : 0
+      showStockAlert : 0,
+      allowedRole : -1
     }
     this.createCategoryClicked = this.createCategoryClicked.bind(this);
     this.createProductClicked = this.createProductClicked.bind(this);
@@ -55,11 +56,15 @@ class Inventory extends React.Component{
     this.showProduct = this.showProduct.bind(this);
     this.fetchProducts = this.fetchProducts.bind(this);
     this.showStockAlertClicked = this.showStockAlertClicked.bind(this);
-    
   }
   componentDidMount(){
     Roles.fetchRoles(this.state.authToken, this.state.params.id).then((resp)=>{
-      this.setState({roles : resp});
+      let tmp = Roles.checkRoles(resp, Roles.inventoryAllowed);
+      let allowedRole = 0;
+      if(tmp){
+        allowedRole = 1
+      }
+      this.setState({roles : resp, allowedRole});
     }).catch((err)=>{
       console.log("Error while fetching roles", err);
     });
@@ -125,7 +130,7 @@ class Inventory extends React.Component{
         :
         <div className="container-fluid bg-light">
         {
-          Roles.checkRoles(this.state.roles, Roles.inventoryAllowed)
+          this.state.allowedRole===1
           ?
           <>
           <Navbar/>
@@ -216,16 +221,25 @@ class Inventory extends React.Component{
           </>
           :
           <>
-          <BasicDialog isOpen={true} config={{
-          title : "Usuario no valido",
-          body : "Lo sentimos, pero tu usuario no tiene permiso para ver esta pagina",
-          actions : [
-            {
-              label : "Ok",
-              func : ()=>{this.props.navigation("/login")}
-            }
-          ]
-        }}/>
+          {
+            this.state.allowedRole===-1
+            ?
+            <>
+            </>
+            :
+            <>
+              <BasicDialog isOpen={true} config={{
+                title : "Usuario no valido",
+                body : "Lo sentimos, pero tu usuario no tiene permiso para ver esta pagina",
+                actions : [
+                  {
+                    label : "Ok",
+                    func : ()=>{this.props.navigation("/login")}
+                  }
+                ]
+              }}/>
+            </>
+          }
           </>
         }
       </div>
