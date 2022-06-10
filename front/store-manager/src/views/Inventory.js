@@ -114,18 +114,26 @@ class Inventory extends React.Component{
     return(
       <>
       {
-        !this.state.authToken
+        this.state.authToken.length===0 || this.state.authToken===null
         ?
-        <BasicDialog isOpen={true} config={{
-          title : "No has iniciado sesión",
-          body : "Por favor, inicia sesión e ingresa nuevamente a esta página",
-          actions : [
-            {
-              label : "Ok",
-              func : ()=>{this.props.navigation("/login")}
-            }
-          ]
-        }}/>
+        <>
+        {
+          this.state.authToken===null
+          ?
+          <BasicDialog isOpen={true} config={{
+            title : "No has iniciado sesión",
+            body : "Por favor, inicia sesión e ingresa nuevamente a esta página",
+            actions : [
+              {
+                label : "Ok",
+                func : ()=>{this.props.navigation("/login")}
+              }
+            ]
+          }}/>
+          :
+          <></>
+        }
+        </>
         :
         <div className="container-fluid bg-light">
         {
