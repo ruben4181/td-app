@@ -1,6 +1,6 @@
 import React from 'react';
 import Navbar from '../components/Navbar';
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import "../css/commons.css";
 import BillsService from "../par/Bills";
 import BasicDialog from '../components/BasicDialog';
@@ -12,20 +12,33 @@ class Bills extends React.Component{
       authToken : localStorage.getItem("authToken"),
       idStore : parseInt(this.props.params.id),
       page : parseInt(this.props.params.page) || 1,
+      query : this.props.searchParams.get('q'),
+      starts : this.props.searchParams.get('starts'),
+      ends : this.props.searchParams.get('ends'),
       lastPage : 1,
       totalCount : 0,
-      bills : []
+      bills : [],
+      ammount : 0
     }
 
     this.renderBills = this.renderBills.bind(this);
     this.renderPagination = this.renderPagination.bind(this);
+    this.updateField = this.updateField.bind(this);
+    this.filterBillsClicked = this.filterBillsClicked.bind(this);
+    this.loadBills = this.loadBills.bind(this);
   }
 
   componentDidMount(){
-    BillsService.getBills(this.state.authToken, this.state.idStore, this.state.page).then((resp)=>{
+    this.loadBills();
+  }
+
+  loadBills(){
+    BillsService.getBills(this.state.authToken, this.state.idStore, this.state.page,
+      this.state.query, this.state.starts, this.state.ends).then((resp)=>{
       console.log("Respuesta", resp);
       if(resp.result === "OK"){
-        this.setState({bills : resp.data, lastPage : resp.lastPage, totalCount : resp.totalCount});
+        this.setState({bills : resp.data, lastPage : resp.lastPage, totalCount : resp.totalCount,
+        ammount : resp.ammount});
       }
     });
   }
@@ -56,27 +69,38 @@ class Bills extends React.Component{
                     <div className='row'>
                       <div className='col-12 col-lg-4 mb-3'>
                         <label className='ms-1'>Cliente</label>
-                        <input className='form-control' placeholder='Cliente' type="text"/>
+                        <input className='form-control' placeholder='Cliente' type="text"
+                        onChange={(e)=>{this.updateField("query", e.target.value)}}
+                        value={this.state.query}/>
                       </div>
                       <div className='col-12 col-lg-4 mb-3'>
                         <label className='ms-1'>Inicio</label>
-                        <input className='form-control' placeholder='Inicio' type="date"/>
+                        <input className='form-control' placeholder='Inicio' type="date"
+                        onChange={(e)=>{this.updateField("starts", e.target.value)}}
+                        value={this.state.starts}/>
                       </div>
                       <div className='col-12 col-lg-4 mb-3'>
                         <label className='ms-1'>Fin</label>
-                        <input className='form-control' placeholder='Fin' type="date"/>
+                        <input className='form-control' placeholder='Fin' type="date"
+                        onChange={(e)=>{this.updateField("ends", e.target.value)}}
+                        value={this.state.ends}/>
                       </div>
                     </div>
                   </div>
                   <div className='col-12 col-lg-2 mb-3'>
                     <div className='d-flex flex-row align-items-end h-100'>
-                      <button className='btn btn-primary'>Filtrar</button>
+                      <button className='btn btn-primary' onClick={(e)=>{this.filterBillsClicked();}}>Filtrar</button>
                     </div>
                   </div>
                 </div>
               </div>
               <div className='col-12'>
                 {this.renderBills()}
+              </div>
+              <div className='col-12'>
+                <div className='d-flex flex-row justify-content-end mt-3 mb-3'>
+                  <span>Total: ${BillsService.toCurrency(this.state.ammount)}</span>
+                </div>
               </div>
               <div className='col-12'>
                 <div className='d-flex flex-row justify-content-end mt-3 mb-3'>
@@ -92,6 +116,27 @@ class Bills extends React.Component{
       }
       </>
     )
+  }
+
+  filterBillsClicked(){
+    let params = {};
+    if(this.state.query){
+      params["q"] = this.state.query;
+    }
+    if(this.state.starts){ 
+      params["starts"] = this.state.starts;
+    }
+    if(this.state.ends){
+      params["ends"] = this.state.ends;
+    }
+    this.props.setSearchParams(params);
+    this.loadBills();
+  }
+
+  updateField(target, value){
+    let tmp = {};
+    tmp[target] = value;
+    this.setState(tmp);
   }
 
   renderBills(){
@@ -216,5 +261,7 @@ class Bills extends React.Component{
 export default function BillsFunc(props) {
   const navigation = useNavigate();
   const params = useParams();
-  return <Bills navigation={navigation} params = {params}/>;
+  const [searchParams, setSearchParams] = useSearchParams();
+  return <Bills navigation={navigation} params = {params}
+    searchParams = {searchParams} setSearchParams = {setSearchParams}/>;
 }

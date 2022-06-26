@@ -241,11 +241,11 @@ getBill = (idStore, idBill) => {
   });
 }
 
-getBillsByStore = (idStore, page) => {
+getBillsByStore = (idStore, page, query, starts, ends) => {
   return new Promise((resolve, reject) => {
     mysql_util.getConnection().then((resp) => {
       let conn = resp;
-      conn.query(sql_constants.SQL_SP_BILLS_GET_BY_STORE, [idStore, page], (err, result) => {
+      conn.query(sql_constants.SQL_SP_BILLS_GET_BY_STORE, [idStore, page, query, starts, ends], (err, result) => {
         conn.end();
         if(err){
           reject({
@@ -259,6 +259,7 @@ getBillsByStore = (idStore, page) => {
             page : result[1][0].ACTUAL_PAGE,
             lastPage : result[1][0].LAST_PAGE,
             totalCount : result[1][0].TOTAL_COUNT,
+            ammount : result[1][0].AMMOUNT,
             data : result[0]
           });
         }

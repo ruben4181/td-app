@@ -114,8 +114,11 @@ app.get("/get", (req, res) => {
 app.get("/get/store", (req, res) => {
   let idStore = parseInt(req.query.idStore);
   let page = parseInt(req.query.page) || 1;
+  let query = req.query.query;
+  let starts = req.query.starts;
+  let ends = req.query.ends;
 
-  pos.getBillsByStore(idStore, page).then((resp) => {
+  pos.getBillsByStore(idStore, page, query, starts, ends).then((resp) => {
     res.status(200);
     res.send(resp);
   }).catch((err) => {

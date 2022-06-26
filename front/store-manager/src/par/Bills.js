@@ -245,7 +245,7 @@ let saveBill = (authToken, customerInfo, products, status)=>{
   });
 }
 
-let getBills = (authToken, idStore, page) => {
+let getBills = (authToken, idStore, page, query, starts, ends) => {
   return new Promise((resolve, reject) => {
     let config = {
       method : "GET",
@@ -253,7 +253,10 @@ let getBills = (authToken, idStore, page) => {
       url : PROTOCOL+"://"+BASE_URL+":"+PORT+"/api/v1/bill/get/store",
       params : {
         idStore,
-        page
+        page,
+        query,
+        starts, 
+        ends
       }
     }
     axios(config).then((resp) => {

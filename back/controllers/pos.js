@@ -91,9 +91,9 @@ getBill = (idStore, idBill) => {
   }
 }
 
-getBillsByStore = (idStore, page) => {
+getBillsByStore = (idStore, page, query, starts, ends) => {
   if(idStore && page){
-    return pos_services.getBillsByStore(idStore, page);
+    return pos_services.getBillsByStore(idStore, page, query, starts, ends);
   } else{
     resolve({
       result : constants.ERROR,
