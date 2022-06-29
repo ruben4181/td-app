@@ -93,11 +93,12 @@ class Inventory extends React.Component{
   fetchProducts(){
     return new Promise((resolve, reject) => {
       let category = this.state.query.category;
-      console.log("Pagina: ", this.state.page);
       if(category){
+        console.log("By Category");
         category = parseInt(category);
         Products.fetchProductsByCategory(this.state.idStore, category, this.state.page, 
             this.state.showStockAlert).then((resp)=>{
+              console.log(resp.lastPage);
           this.setState({
             products : resp.data,
             lastPage : this.state.page >= resp.lastPage
@@ -106,6 +107,7 @@ class Inventory extends React.Component{
           console.log("Error while fetching products", err);
         });
       } else{
+        console.log("By None");
         Products.fetchProducts(this.state.idStore, this.state.page, this.state.showStockAlert).then((resp)=>{
           this.setState({
             products : resp.data,
@@ -352,6 +354,7 @@ class Inventory extends React.Component{
         page : 1
       }, ()=>{
         Products.fetchProductsByCategory(this.state.idStore, e.value, this.state.page, this.state.showStockAlert).then((resp)=>{
+          console.log('Here i am', resp.lastPage);
           this.setState({
             products : resp.data,
             lastPage : resp.lastPage
