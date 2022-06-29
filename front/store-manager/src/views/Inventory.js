@@ -98,7 +98,7 @@ class Inventory extends React.Component{
         category = parseInt(category);
         Products.fetchProductsByCategory(this.state.idStore, category, this.state.page, 
             this.state.showStockAlert).then((resp)=>{
-              console.log('lastPage:', resp.lastPage);
+              console.log('lastPage:', resp.lastPage, this.state.page >= resp.lastPage);
           this.setState({
             products : resp.data,
             lastPage : this.state.page >= resp.lastPage
