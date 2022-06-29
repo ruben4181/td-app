@@ -336,7 +336,10 @@ class Inventory extends React.Component{
   }
 
   onChangeCategory(e){
-    this.setState({selectedCategory : e});
+    let q = {
+      category : e.value
+    }
+    this.setState({selectedCategory : e, query : q});
     if(e.value==="no-filter"){
       this.setState({
         page : 1
