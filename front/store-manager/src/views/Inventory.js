@@ -259,7 +259,8 @@ class Inventory extends React.Component{
                 <div className="d-flex flex-row w-100 justify-content-center align-items-center">
                   {
                     this.state.lastPage?
-                    <button className="btn btn-primary mt-3 mb-3">
+                    <button className="btn btn-primary mt-3 mb-3"
+                    onClick={(e)=>{window.scrollTo(0, 0)}}>
                         Ir al inicio
                     </button>
                     :
