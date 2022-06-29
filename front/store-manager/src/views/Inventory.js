@@ -257,8 +257,9 @@ class Inventory extends React.Component{
                 <div className="d-flex flex-row w-100 justify-content-center align-items-center">
                   {
                     this.state.lastPage?
-                    <>
-                    </>
+                    <button className="btn btn-primary mt-3 mb-3">
+                        Ir al inicio
+                    </button>
                     :
                     <button className="btn btn-primary mt-3 mb-3"
                       onClick={(e)=>{this.loadMoreProducts()}}>
