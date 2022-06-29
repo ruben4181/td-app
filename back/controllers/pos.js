@@ -33,7 +33,6 @@ delProductFromBill = (idBill, idBillDetail) => {
   if(idBill && idBillDetail){
     return pos_services.delProductFromBill(idBill, idBillDetail);
   } else{
-    console.log("HERE 3");
     return new Promise((resolve, reject) =>{
       resolve({
         result : constants.ERROR,

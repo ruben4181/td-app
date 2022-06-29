@@ -90,7 +90,6 @@ updateUser = (idUser, payload)=>{
             err
           });
         } else{
-          console.log(result[0]);
           if(result[1][0] && result[1][0].ERROR == 0){
             resolve({
               result : constants.RESULT_OK,

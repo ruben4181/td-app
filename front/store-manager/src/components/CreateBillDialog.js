@@ -141,7 +141,6 @@ class CreateBillDialog extends React.Component{
       customerPhone : this.state.customerPhone,
       customerAddress : this.state.customerAddress
     }
-    console.log("Guardando estos productos", this.state.products);
     Bills.saveBill(this.state.authToken, customerInfo, this.state.products, status).then((resp)=>{
       console.log("Respuesta obtenida -- ");
       console.log(resp.message);

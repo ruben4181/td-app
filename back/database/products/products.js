@@ -136,7 +136,6 @@ deleteProduct = (idStore, idProduct) => {
 }
 
 getProducts = (idStore, page, stockAlert) => {
-  console.log(stockAlert);
   return new Promise((resolve, reject) => {
     mysql_util.getConnection().then((resp)=>{
       let conn = resp;
@@ -206,7 +205,9 @@ getProductsByCategory = (idStore, idCategory, page, stockAlert) => {
           resolve({
             result : constants.RESULT_OK,
             message : "Products fetched",
-            data : resp[0]
+            data : resp[0],
+            lastPage : resp[1][0].LAST_PAGE,
+            total : resp[1][0].TOTAL
           });
         }
       });

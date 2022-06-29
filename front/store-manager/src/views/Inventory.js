@@ -336,22 +336,31 @@ class Inventory extends React.Component{
   onChangeCategory(e){
     this.setState({selectedCategory : e});
     if(e.value==="no-filter"){
-      Products.fetchProducts(this.state.idStore, this.state.page, this.state.showStockAlert).then((resp)=>{
-        this.setState({
-          products : resp.data
+      this.setState({
+        page : 1
+      }, ()=>{
+        Products.fetchProducts(this.state.idStore, this.state.page, this.state.showStockAlert).then((resp)=>{
+          this.setState({
+            products : resp.data
+          });
+          var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+          window.history.pushState({path:newurl},'',newurl);
         });
-        var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname;
-        window.history.pushState({path:newurl},'',newurl);
       });
     } else{
-      Products.fetchProductsByCategory(this.state.idStore, e.value, this.state.page, this.state.showStockAlert).then((resp)=>{
-        this.setState({
-          products : resp.data
+      this.setState({
+        page : 1
+      }, ()=>{
+        Products.fetchProductsByCategory(this.state.idStore, e.value, this.state.page, this.state.showStockAlert).then((resp)=>{
+          this.setState({
+            products : resp.data,
+            lastPage : resp.lastPage
+          });
+          var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?category='+e.value;
+          window.history.pushState({path:newurl},'',newurl);
+        }).catch((err)=>{
+          console.log("Error while fetching products", err);
         });
-        var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?category='+e.value;
-        window.history.pushState({path:newurl},'',newurl);
-      }).catch((err)=>{
-        console.log("Error while fetching products", err);
       });
     }
   }
