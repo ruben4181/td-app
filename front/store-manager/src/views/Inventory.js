@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useRef} from "react";
 import Roles from "../par/Roles";
 import BasicDialog from "../components/BasicDialog";
 import CreateCategoryDialog from "../components/CreateCategoryDialog";
@@ -44,7 +44,9 @@ class Inventory extends React.Component{
       idProduct : 1,
       searchProducts : "",
       showStockAlert : 0,
-      allowedRole : -1
+      allowedRole : -1,
+      listInnerRef : this.props.listInnerRef,
+      lastPage : false
     }
     this.createCategoryClicked = this.createCategoryClicked.bind(this);
     this.createProductClicked = this.createProductClicked.bind(this);
@@ -89,27 +91,47 @@ class Inventory extends React.Component{
     
   }
   fetchProducts(){
-    let category = this.state.query.category;
-    console.log(this.state.showStockAlert);
-    if(category){
-      category = parseInt(category);
-      Products.fetchProductsByCategory(this.state.idStore, category, this.state.page, 
-          this.state.showStockAlert).then((resp)=>{
-        this.setState({
-          products : resp.data
+    return new Promise((resolve, reject) => {
+      let category = this.state.query.category;
+      console.log("Pagina: ", this.state.page);
+      if(category){
+        category = parseInt(category);
+        Products.fetchProductsByCategory(this.state.idStore, category, this.state.page, 
+            this.state.showStockAlert).then((resp)=>{
+          this.setState({
+            products : resp.data,
+            lastPage : this.state.page >= resp.lastPage
+          }, ()=>{resolve(resp.data)});
+        }).catch((err)=>{
+          console.log("Error while fetching products", err);
         });
-      }).catch((err)=>{
-        console.log("Error while fetching products", err);
-      });
-    } else{
-      Products.fetchProducts(this.state.idStore, this.state.page, this.state.showStockAlert).then((resp)=>{
-        this.setState({
-          products : resp.data
+      } else{
+        Products.fetchProducts(this.state.idStore, this.state.page, this.state.showStockAlert).then((resp)=>{
+          this.setState({
+            products : resp.data,
+            lastPage : this.state.page >= resp.lastPage
+          }, ()=>{resolve(resp.data)});
+        }).catch((err)=>{
+          console.log("Error while fetching products", err);
         });
-      }).catch((err)=>{
-        console.log("Error while fetching products", err);
+      }
+    });
+  }
+
+  loadMoreProducts(){
+    const { page, products } = this.state;
+    let newPage = parseInt(page)+1;
+    let newProducts = [...products];
+    this.setState({
+      page : newPage
+    }, (e)=>{
+      this.fetchProducts().then((resp)=>{
+        newProducts = newProducts.concat(resp);
+        this.setState({
+          products : newProducts
+        });
       });
-    }
+    });
   }
 
   render(){
@@ -228,6 +250,20 @@ class Inventory extends React.Component{
                 <div className="row">
                   {
                     this.renderProducts()
+                  }
+                </div>
+              </div>
+              <div className="col-12">
+                <div className="d-flex flex-row w-100 justify-content-center align-items-center">
+                  {
+                    this.state.lastPage?
+                    <>
+                    </>
+                    :
+                    <button className="btn btn-primary mt-3 mb-3"
+                      onClick={(e)=>{this.loadMoreProducts()}}>
+                        Ver más productos
+                    </button>
                   }
                 </div>
               </div>
@@ -372,5 +408,6 @@ class Inventory extends React.Component{
 export default function RolesFunc(props) {
   const navigation = useNavigate();
   const params = useParams();
-  return <Inventory navigation={navigation} params = {params}/>;
+  const listInnerRef = useRef();
+  return <Inventory navigation={navigation} params = {params} listInnerRef={listInnerRef}/>;
 }

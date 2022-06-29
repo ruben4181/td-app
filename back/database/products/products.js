@@ -152,7 +152,9 @@ getProducts = (idStore, page, stockAlert) => {
           resolve({
             result : constants.RESULT_OK,
             message : "Products fetched",
-            data : resp[0]
+            data : resp[0],
+            lastPage : resp[1][0].LAST_PAGE,
+            total : resp[1][0].TOTAL
           });
         }
       });
