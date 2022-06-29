@@ -360,7 +360,7 @@ class Inventory extends React.Component{
           console.log('Here i am', resp.lastPage);
           this.setState({
             products : resp.data,
-            lastPage : resp.lastPage
+            lastPage : this.state.page >= resp.lastPage
           });
           var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?category='+e.value;
           window.history.pushState({path:newurl},'',newurl);
