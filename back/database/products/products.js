@@ -78,9 +78,10 @@ updateProduct = (idStore, idProduct, payload) => {
         productCode, idCategory, imgSrc, stockAlert], (err, result)=>{
           conn.end();
           if(err){
+            console.log(err);
             resolve({
               result : constants.ERROR,
-              message : "Error while calling "+sql_constants.SQL_SP_UPDATE,
+              message : "Error while calling x2"+sql_constants.SQL_SP_UPDATE,
               err
             });
           } else{
@@ -243,13 +244,12 @@ findProducts = (idStore, query, stockAlert) => {
 
 findProductsByCategory = (idStore, idCategory, query, stockAlert) => {
   return new Promise((resolve, reject)=>{
-    console.log(SQL_SP_PRODUCTS_FIND_PRODUCTS_BY_CATEGORY, [idStore, idCategory, query, stockAlert]);  
     mysql_util.getConnection().then((resp)=>{
       let conn = resp;
       conn.query(sql_constants.SQL_SP_PRODUCTS_FIND_PRODUCTS_BY_CATEGORY, [idStore, idCategory, query, stockAlert], (err, resp)=>{
         conn.end();
         if(err){
-          resolve({
+          reject({
             result : constants.ERROR,
             message : "Error while calling "+sql_constants.SQL_SP_PRODUCTS_FIND_PRODUCTS_BY_CATEGORY,
             err

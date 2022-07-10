@@ -18,7 +18,8 @@ class Bills extends React.Component{
       lastPage : 1,
       totalCount : 0,
       bills : [],
-      ammount : 0
+      ammount : 0,
+      filtering : false
     }
 
     this.renderBills = this.renderBills.bind(this);
@@ -26,6 +27,7 @@ class Bills extends React.Component{
     this.updateField = this.updateField.bind(this);
     this.filterBillsClicked = this.filterBillsClicked.bind(this);
     this.loadBills = this.loadBills.bind(this);
+    this.delFilterBillsClicked = this.delFilterBillsClicked.bind(this);
   }
 
   componentDidMount(){
@@ -33,8 +35,23 @@ class Bills extends React.Component{
   }
 
   loadBills(){
+    const {query, starts, ends} = this.state;
+    let vQuery = undefined;
+    let vStarts = undefined;
+    let vEnds = undefined;
+
+    if(query && query != ""){
+      vQuery = query;
+    }
+    if(starts && starts != ""){
+      vStarts = starts;
+    }
+    if(ends && ends != ""){
+      vEnds = ends;
+    }
+
     BillsService.getBills(this.state.authToken, this.state.idStore, this.state.page,
-      this.state.query, this.state.starts, this.state.ends).then((resp)=>{
+      vQuery, vStarts, vEnds).then((resp)=>{
       console.log("Respuesta", resp);
       if(resp.result === "OK"){
         this.setState({bills : resp.data, lastPage : resp.lastPage, totalCount : resp.totalCount,
@@ -90,6 +107,13 @@ class Bills extends React.Component{
                   <div className='col-12 col-lg-2 mb-3'>
                     <div className='d-flex flex-row align-items-end h-100'>
                       <button className='btn btn-primary' onClick={(e)=>{this.filterBillsClicked();}}>Filtrar</button>
+                      {
+                        this.state.filtering
+                        ?
+                        <button className='btn btn-primary ms-3' onClick={(e)=>{this.delFilterBillsClicked();}}>Cancelar</button>
+                        :
+                        <></>
+                      }
                     </div>
                   </div>
                 </div>
@@ -97,11 +121,19 @@ class Bills extends React.Component{
               <div className='col-12'>
                 {this.renderBills()}
               </div>
-              <div className='col-12'>
-                <div className='d-flex flex-row justify-content-end mt-3 mb-3'>
-                  <span>Total: ${BillsService.toCurrency(this.state.ammount)}</span>
+              {
+                this.state.filtering
+                ?
+                <div className='col-12'>
+                  <div className='d-flex flex-row justify-content-end mt-3 mb-3'>
+                    <span>Total: ${BillsService.toCurrency(this.state.ammount)}</span>
+                  </div>
                 </div>
-              </div>
+                :
+                <>
+                </>
+              }
+              
               <div className='col-12'>
                 <div className='d-flex flex-row justify-content-end mt-3 mb-3'>
                   <a className='btn btn-dark me-3' href={'/bills/'+this.state.idStore+'/'+Math.max(this.state.page-1, 1)}>Anterior</a>
@@ -118,6 +150,28 @@ class Bills extends React.Component{
     )
   }
 
+  delFilterBillsClicked(){
+    let params = {};
+    if(this.state.query){
+      params["q"] = this.state.query;
+    }
+    if(this.state.starts){ 
+      params["starts"] = this.state.starts;
+    }
+    if(this.state.ends){
+      params["ends"] = this.state.ends;
+    }
+    this.props.setSearchParams({});
+    this.setState({
+      query : "",
+      starts : "",
+      ends : "",
+      filtering : false
+    }, () => {
+      this.loadBills();
+    });
+  }
+
   filterBillsClicked(){
     let params = {};
     if(this.state.query){
@@ -131,6 +185,9 @@ class Bills extends React.Component{
     }
     this.props.setSearchParams(params);
     this.loadBills();
+    this.setState({
+      filtering : true
+    });
   }
 
   updateField(target, value){

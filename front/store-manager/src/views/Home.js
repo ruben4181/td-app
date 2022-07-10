@@ -1,6 +1,7 @@
 import React from "react";
 import '../css/commons.css';
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 export default function Home(){
   return(
     <div className="container-fuild">
@@ -9,12 +10,13 @@ export default function Home(){
         <div className="row full-screen-height">
           <div className="col-12 col-lg-4 mt-3 mb-3">
             <div className="d-flex flex-column h-100 justify-content-center">
-              <h1 className="title-primary-text">Crea tu tienda online totalmente gratis</h1>
+              <h1 className="title-primary-text">Inventario, punto de venta y tienda online:
+                gratis y en un solo lugar</h1>
               <div className="d-flex flex-column mt-3">
                 <span className="title-secondary-text">Administra tu inventario, catalogos,
                   menus y ofrece a domicilio. Todo en un solo lugar, totalmente personalizado, ¡Todo Gratis!</span>
               </div>
-              <div className="btn btn-primary mt-4">Empieza ahora</div>
+              <a className="btn btn-primary mt-4" href="/signup">Empieza ahora</a>
             </div>
           </div>
           <div className="col-12 col-lg-8 mt-3 mb-3 p-5">
@@ -96,42 +98,42 @@ export default function Home(){
           <div className="col-12 col-lg-8 mt-3 mb-3 p-5">
             <div className="d-flex flex-column h-100 justify-content-center">
               <div className="row">
-                <div className="col-6 col-lg-4 mb-3">
+                <div className="col-12 col-md-6 col-lg-4 mb-3">
                   <div className="card h-100 p-2">
                     <div className="d-flex flex-column h-100 justify-content-center">
                       <img className="card-img-top" src="/png/nequi.png" alt="Nequi Logo"/>
                     </div>
                   </div>
                 </div>
-                <div className="col-6 col-lg-4 mb-3">
+                <div className="col-12 col-md-6 col-lg-4 mb-3">
                   <div className="card h-100 p-2">
                     <div className="d-flex flex-column h-100 justify-content-center">
                       <img className="card-img-top" src="/vectors/daviplata.svg" alt="Daviplata Logo"/>
                     </div>
                   </div>
                 </div>
-                <div className="col-6 col-lg-4 mb-3">
+                <div className="col-12 col-md-6 col-lg-4 mb-3">
                   <div className="card h-100 p-2">
                     <div className="d-flex flex-column h-100 justify-content-center">
                       <img className="card-img-top" src="/png/cash.png" alt="Cash Logo"/>
                     </div>
                   </div>
                 </div>
-                <div className="col-6 col-lg-4 mb-3">
+                <div className="col-12 col-md-6 col-lg-4 mb-3">
                   <div className="card h-100 p-4">
                     <div className="d-flex flex-column h-100 justify-content-center">
                       <img className="card-img-top" src="/png/pse.png" alt="PSE Logo"/>
                     </div>
                   </div>
                 </div>
-                <div className="col-6 col-lg-4 mb-3">
+                <div className="col-12 col-md-6 col-lg-4 mb-3">
                   <div className="card h-100 p-2">
                     <div className="d-flex flex-column h-100 justify-content-center">
                       <img className="card-img-top" src="/vectors/visa.svg" alt="VISA Logo"/>
                     </div>
                   </div>
                 </div>
-                <div className="col-6 col-lg-4 mb-3">
+                <div className="col-12 col-md-6 col-lg-4 mb-3">
                   <div className="card h-100 p-2">
                     <div className="d-flex flex-column h-100 justify-content-center">
                       <img className="card-img-top" src="/vectors/mastercard.svg" alt="MASTERCARD Logo"/>
@@ -150,7 +152,7 @@ export default function Home(){
                 <span className="title-secondary-text">Lleva el ordén de tu inventario, menu, ordenes y contabilidad
                 desde cualquier dispositivo computador, tablet o smartphone, donde quiera que estés y completamente facil</span>
               </div>
-              <div className="btn btn-primary mt-4">Empieza ahora</div>
+              <a className="btn btn-primary mt-4" href="/signup">Empieza ahora</a>
             </div>
           </div>
           <div className="col-12 col-lg-8 mt-3 mb-3 p-5">
@@ -166,12 +168,13 @@ export default function Home(){
                 <span className="title-secondary-text">Lleva el ordén de tu inventario, menu, ordenes y contabilidad
                 desde cualquier dispositivo computador, tablet o smartphone, donde quiera que estés y completamente facil</span>
               </div>
-              <div className="btn btn-primary mt-4">Empieza ahora</div>
+              <a className="btn btn-primary mt-4" href="signup">Empieza ahora</a>
             </div>
           </div>
         </div>
         
       </div>
+      <Footer/>
     </div>
     
   );
