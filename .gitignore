@@ -1,3 +1,5 @@
+#server files
+/back/public/files
 # Logs
 logs
 *.log
