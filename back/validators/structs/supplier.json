@@ -1,0 +1,51 @@
+{
+  "idStore" : {
+    "len" : [1, 100],
+    "type" : "number",
+    "regex" : "^-?\\d*$",
+    "min" : 1
+  },
+  "idSupplier" : {
+    "len" : [1, 100],
+    "type" : "number",
+    "regex" : "^-?\\d*$",
+    "min" : 1
+  },
+  "idBill" : {
+    "len" : [1, 100],
+    "type" : "number",
+    "regex" : "^-?\\d*$",
+    "min" : 1
+  },
+  "idBillDetail" : {
+    "len" : [1, 100],
+    "type" : "number",
+    "regex" : "^-?\\d*$",
+    "min" : 1
+  },
+  "supplierName" : {
+    "len" : [1, 200],
+    "type" : "string",
+    "regex" : ".*"
+  },
+  "supplierId" : {
+    "len" : [0, 200],
+    "type" : "string",
+    "regex" : ".*"
+  },
+  "supplierAddress" : {
+    "len" : [0, 200],
+    "type" : "string",
+    "regex" : ".*"
+  },
+  "supplierPhone" : {
+    "len" : [0, 30],
+    "type" : "string",
+    "regex" : ".*"
+  },
+  "supplierEmail" : {
+    "len" : [0, 100],
+    "type" : "string",
+    "regex" : ".*"
+  }
+}
