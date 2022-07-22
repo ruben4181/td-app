@@ -12,6 +12,7 @@ import Select from 'react-select';
 import "../css/commons.css";
 import Navbar from "../components/Navbar";
 import ProductDialog from "../components/ProductDialog";
+import Footer from "../components/Footer";
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const PORT = process.env.REACT_APP_SERVER_PORT;
@@ -93,7 +94,7 @@ class Inventory extends React.Component{
   fetchProducts(){
     return new Promise((resolve, reject) => {
       let category = this.state.query.category;
-      if(category){
+      if(category && category !== "no-filter"){
         console.log("By Category");
         category = parseInt(category);
         Products.fetchProductsByCategory(this.state.idStore, category, this.state.page, 
@@ -153,7 +154,7 @@ class Inventory extends React.Component{
           ]
         }}/>
         :
-        <div className="container-fluid bg-light">
+        <div className="container-fluid bg-light p-0">
         {
           this.state.allowedRole===1
           ?
@@ -193,7 +194,7 @@ class Inventory extends React.Component{
     return(
       <>
           <Navbar/>
-          <div className="container">
+          <div className="container body-container">
             <div className="row">
               <div className="col-12">
                 <h1 className="title-primary-text">Inventario</h1>
@@ -233,7 +234,7 @@ class Inventory extends React.Component{
                       </div>
                       <div className="col-12 col-lg-6 mb-3">
                         <div className="d-flex flex-row w-100 justify-content-end">
-                          <a className="nav-link" href="#" onClick={(e)=>{this.showStockAlertClicked()}}>
+                          <a className="nav-link" href="#stock" onClick={(e)=>{this.showStockAlertClicked()}}>
                             {
                               this.state.showStockAlert
                               ?
@@ -273,6 +274,7 @@ class Inventory extends React.Component{
               </div>
             </div>
           </div>
+          <Footer/>
           {/*Dialog places*/}
           <CreateCategoryDialog isOpen={this.state.showNewCategory} config={{title : "Nueva categoria"}} 
             closeFunc = {()=>{this.onCreateCategoryClose()}} idStore={this.state.params.id}/>
@@ -293,13 +295,13 @@ class Inventory extends React.Component{
             :
             <></>
           }
-          </>
+      </>
     )
   }
 
   showStockAlertClicked(){
     this.setState({
-      showStockAlert : this.state.showStockAlert==0?1:0
+      showStockAlert : this.state.showStockAlert===0?1:0
     }, ()=>{
       this.fetchProducts();
       this.onChangeCategory({value : "no-filter", label : "Ver todas las categorias"});

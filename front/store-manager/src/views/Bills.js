@@ -4,6 +4,7 @@ import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import "../css/commons.css";
 import BillsService from "../par/Bills";
 import BasicDialog from '../components/BasicDialog';
+import Footer from '../components/Footer';
 
 class Bills extends React.Component{
   constructor(props){
@@ -40,13 +41,13 @@ class Bills extends React.Component{
     let vStarts = undefined;
     let vEnds = undefined;
 
-    if(query && query != ""){
+    if(query && query !== ""){
       vQuery = query;
     }
-    if(starts && starts != ""){
+    if(starts && starts !== ""){
       vStarts = starts;
     }
-    if(ends && ends != ""){
+    if(ends && ends !== ""){
       vEnds = ends;
     }
 
@@ -143,6 +144,7 @@ class Bills extends React.Component{
               </div>
             </div>
           </div>
+          <Footer/>
         </div> 
         </>
       }

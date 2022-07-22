@@ -6,6 +6,8 @@ import BasicDialog from "../components/BasicDialog";
 import CreateStoreDialog from "../components/CreateStoreDialog";
 import Store from '../par/Store';
 
+import Footer from "../components/Footer";
+
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const PORT = process.env.REACT_APP_SERVER_PORT;
 const PROTOCOL = process.env.REACT_APP_PROTOCOL;
@@ -77,11 +79,11 @@ class Stores extends React.Component{
           ]
         }}/>
       :<>
-        <div className="container-fluid">
+        <div className="container-fluid p-0">
           <CreateStoreDialog isOpen={this.state.showCreateNewStore} config={{title : "Nueva tienda"}} 
             closeFunc = {()=>{this.onCreateNewStoreClose()}}/>
           <Navbar/>
-          <div className="container">
+          <div className="container body-container">
             {this.renderAdminTools()}
             <div className="row mt-3 mb-3">
               <div className="col-12 col-lg-10">
@@ -101,6 +103,7 @@ class Stores extends React.Component{
               {this.renderStores()}
             </div>
           </div>
+          <Footer/>
         </div>
       </>}
       </>

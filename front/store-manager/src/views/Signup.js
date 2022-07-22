@@ -4,6 +4,7 @@ import '../css/commons.css';
 import axios from "axios";
 import { useNavigate, Navigate } from 'react-router-dom';
 import BasicDialog from "../components/BasicDialog";
+import Footer from "../components/Footer";
 
 const PROTOCOL = process.env.REACT_APP_PROTOCOL;
 const BASE_URL = process.env.REACT_APP_BASE_URL;
@@ -126,6 +127,7 @@ class Signup extends React.Component{
             </div>
           </div>
         </div>
+        <Footer/>
       </div>
     );
   }

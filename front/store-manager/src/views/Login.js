@@ -5,6 +5,7 @@ import '../css/commons.css';
 import axios from "axios";
 import BasicDialog from "../components/BasicDialog";
 import { useNavigate, Navigate } from 'react-router-dom';
+import Footer from "../components/Footer";
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const PROTOCOL = process.env.REACT_APP_PROTOCOL;
@@ -112,6 +113,7 @@ class Login extends React.Component{
             </div>
           </div>
         </div>
+        <Footer/>
       </div>
     );
   }

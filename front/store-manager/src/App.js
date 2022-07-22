@@ -8,6 +8,7 @@ import Inventory from "./views/Inventory";
 import POS from "./views/POS";
 import Bills from "./views/Bills";
 import Bill from './views/Bill';
+import Suppliers from "./views/Suppliers";
 
 export default function App (){
   return(
@@ -22,6 +23,7 @@ export default function App (){
         <Route path="/pos/:id/" element={<POS/>}/>
         <Route path="/bills/:id/:page" element={<Bills/>}/>
         <Route path="/bill/:idStore/:idBill" element={<Bill/>}/>
+        <Route path="/suppliers/:id" element={<Suppliers/>}/>
       </Routes>
     </Router>
   )

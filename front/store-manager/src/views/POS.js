@@ -7,6 +7,7 @@ import CreateBillDialog from "../components/CreateBillDialog";
 import BasicDialog from "../components/BasicDialog";
 import Bills from "../par/Bills";
 import BarcodeReader from 'react-barcode-reader';
+import Footer from "../components/Footer";
 
 class POS extends React.Component{
   constructor(props){
@@ -143,9 +144,9 @@ class POS extends React.Component{
             <>
             </>
           }
-            <div className="container-fluid bg-light">
+            <div className="container-fluid bg-light p-0">
               <Navbar/>
-              <div className="container">
+              <div className="container body-container">
                 <div className="row">
                   <div className="col-12">
                     <h1>Punto de venta</h1>
@@ -262,6 +263,7 @@ class POS extends React.Component{
                   </div>
                 </div>
               </div>
+              <Footer/>
             </div>
           </>
         </>

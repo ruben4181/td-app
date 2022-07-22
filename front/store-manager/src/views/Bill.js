@@ -4,6 +4,7 @@ import BasicDialog from "../components/BasicDialog";
 import Navbar from "../components/Navbar";
 import Products from '../par/Products';
 import Bills from '../par/Bills';
+import Footer from "../components/Footer";
 
 class Bill extends React.Component{
   constructor(props){
@@ -82,9 +83,9 @@ class Bill extends React.Component{
           }}/>
         :
         <>
-          <div className='container-fluid'>
+          <div className='container-fluid p-0'>
             <Navbar/>
-            <div className='container'>
+            <div className='container body-container'>
               <div className='row'>
                 <div className="col-12">
                   <h1>Factura</h1>
@@ -141,6 +142,7 @@ class Bill extends React.Component{
                 </div>
               </div>
             </div>
+            <Footer/>
           </div>
         </>
       }

@@ -5,6 +5,7 @@ import BasicDialog from "../components/BasicDialog";
 import axios from "axios";
 import "../css/store.css";
 import Roles from "../par/Roles";
+import Footer from "../components/Footer";
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const PORT = process.env.REACT_APP_SERVER_PORT;
@@ -49,7 +50,7 @@ class Store extends React.Component{
             }
           ]
         }}/>:
-          <div className="container-fluid bg-light">
+          <div className="container-fluid bg-light p-0">
             {
               !this.checkStore()?
               <div>
@@ -67,7 +68,7 @@ class Store extends React.Component{
               :
               <div>
                 <Navbar/>
-                <div className="container">
+                <div className="container body-container">
                   <div className="row">
                     <div className="col-12">
                       <h1 className="title-primary-text">{this.state.store.STORE_NAME}</h1>
@@ -87,6 +88,23 @@ class Store extends React.Component{
                         :
                         <></>
                     }
+
+                    {
+                      Roles.checkRoles(this.state.roles, Roles.billingAllowed)
+                      ?
+                      <div className="col-12 col-lg-4 mb-3">
+                        <div className="card h-100 p-3" onClick={()=>{this.props.navigation("/pos/"+this.state.params.id)}}>
+                          <img src="/vectors/billing.svg" className="card-img-top" alt="Balance"/>
+                          <div className="card-body">
+                            <div className="card-title">Punto de venta</div>
+                            <span className="card-text">Revisa y crea facturas, cuentas abiertas y creditos</span>
+                          </div>
+                        </div>
+                      </div>
+                      :
+                      <></>
+                    }
+
                     {
                       Roles.checkRoles(this.state.roles, Roles.inventoryAllowed)
                       ?
@@ -96,6 +114,22 @@ class Store extends React.Component{
                           <div className="card-body">
                             <div className="card-title">Inventario</div>
                             <span className="card-text">Agrega, actualiza o elimina productos de tu inventario</span>
+                          </div>
+                        </div>
+                      </div>
+                      :
+                      <></>
+                    }
+
+                    {
+                      Roles.checkRoles(this.state.roles, Roles.billingAllowed)
+                      ?
+                      <div className="col-12 col-lg-4 mb-3">
+                        <div className="card h-100 p-3" onClick={()=>{this.props.navigation("/suppliers/"+this.state.params.id)}}>
+                          <img src="/vectors/suppliers.svg" className="card-img-top" alt="Balance"/>
+                          <div className="card-body">
+                            <div className="card-title">Proveedores</div>
+                            <span className="card-text">Lleva las cuentas con tus proveedores</span>
                           </div>
                         </div>
                       </div>
@@ -112,22 +146,6 @@ class Store extends React.Component{
                           <div className="card-body">
                             <div className="card-title">Pedidos</div>
                             <span className="card-text">Revisa y administra los pedidos de tu negocio</span>
-                          </div>
-                        </div>
-                      </div>
-                      :
-                      <></>
-                    }
-                    
-                    {
-                      Roles.checkRoles(this.state.roles, Roles.billingAllowed)
-                      ?
-                      <div className="col-12 col-lg-4 mb-3">
-                        <div className="card h-100 p-3" onClick={()=>{this.props.navigation("/pos/"+this.state.params.id)}}>
-                          <img src="/vectors/billing.svg" className="card-img-top" alt="Balance"/>
-                          <div className="card-body">
-                            <div className="card-title">Punto de venta</div>
-                            <span className="card-text">Revisa y crea facturas, cuentas abiertas y creditos</span>
                           </div>
                         </div>
                       </div>
@@ -168,6 +186,7 @@ class Store extends React.Component{
                     }
                   </div>
                 </div>
+                <Footer/>
               </div>
             }
           </div>

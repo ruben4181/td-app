@@ -8,9 +8,11 @@ createCategory = (payload) => {
   if(payload){
     return categories_services.createCategory(payload);
   } else{
-    resolve({
-      result : constants.ERROR,
-      message : "EMPTY DATA"
+    return new Promise((resolve, reject) => {
+      resolve({
+        result : constants.ERROR,
+        message : "EMPTY DATA"
+      });
     });
   }
 }

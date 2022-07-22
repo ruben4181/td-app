@@ -76,5 +76,16 @@
     "len" : [24, 24],
     "type" : "string",
     "regex" : "^[a-f\\d]{24}$"
+  },
+  "refPago" : {
+    "len" : [0, 200],
+    "type" : "string",
+    "regex" : ".*"
+  },
+  "idSupplier" : {
+    "len" : [1, 100],
+    "type" : "number",
+    "regex" : "^-?\\d*$",
+    "min" : 1
   }
 }
