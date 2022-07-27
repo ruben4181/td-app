@@ -88,7 +88,8 @@ app.post('/bill/product/delete', (req, res) => {
   let payload = req.body.data;
 
   suppliers.deleteProductFromBill(payload).then((resp) => {
-
+    res.status(200);
+    res.send(resp);
   }).catch((err) => {
     console.log(err);
     res.status(500);

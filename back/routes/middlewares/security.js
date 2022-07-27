@@ -56,6 +56,7 @@ verifyPathAccess = (req, res, next)=>{
             })
           }
         }).catch((err)=>{
+          console.log("Error 6");
           res.status(constants.FORBIDDEN);
           res.send({
             result : constants.RESULT_FAIL,

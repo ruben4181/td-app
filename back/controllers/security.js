@@ -7,6 +7,7 @@ checkPathAccess = (userID, path) =>{
   if(userID>=1 && path!=undefined && typeof path==="string"){
     return path_services.checkPathAccess(userID, path);
   } else{
+    console.log("Error 5");
     return new Promise((resolve, reject)=>{
       reject({
         result : constants.ERROR,

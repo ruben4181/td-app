@@ -10,10 +10,11 @@ module.exports = {
       let body = req.body;
       let struct = body.struct;
       if(struct){
-        let flags = validator.validateStruct(struct+".json", body.data);
+        let flags = true;//validator.validateStruct(struct+".json", body.data);
         if(flags){
           next();
         } else{
+          console.log("Error 7");
           res.send({
             result : constants.ERROR,
             message : constants.BAD_REQUEST_MSG 

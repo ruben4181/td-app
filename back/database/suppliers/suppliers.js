@@ -58,6 +58,7 @@ updateSupplier = (payload) => {
 
       conn.query(sql_constants.SP_SUPPLIERS_UPDATE_SUPPLIER, [idStore, idSupplier, supplierName,
         supplierId, supplierAddress, supplierPhone, supplierEmail], (err, result) => {
+          conn.end();
           if(err){
             reject({
               result : constants.ERROR,
@@ -87,6 +88,7 @@ deleteSupplier = (idStore, idSupplier) => {
     mysql_util.getConnection().then((resp) => {
       let conn = resp;
       conn.query(sql_constants.SP_SUPPLIERS_DEL_SUPPLIER, [idStore, idSupplier], (err, result) => {
+        conn.end();
         if(err){
           reject({
             result : constants.ERROR,
@@ -121,6 +123,7 @@ createSupplierBill = (payload) => {
       let refPago = payload.refPago;
 
       conn.query(sql_constants.SP_SUPPLIERS_ADD_BILL, [idStore, idSupplier, refPago], (err, result) => {
+        conn.end();
         if(err){
           reject({
             result : constants.ERROR,
@@ -157,6 +160,7 @@ addProductToBill = (payload) => {
 
       conn.query(sql_constants.SP_SUPPLIERS_ADD_PRODUCT_TO_BILL, 
           [idStore, idBill, idProduct, units], (err, result) => {
+        conn.end();
         if(err){
           reject({
             result : constants.ERROR,
@@ -193,6 +197,7 @@ updateProductFromBill = (payload) => {
 
       conn.query(sql_constants.SP_SUPPLIERS_UPDATE_PRODUCT_FROM_BILL, 
           [idStore, idBill, idBillDetail, units], (err, result) => {
+        conn.end();
         if(err){
           reject({
             result : constants.ERROR,
@@ -228,6 +233,7 @@ deleteProductFromBill = (payload) => {
 
       conn.query(sql_constants.SP_SUPPLIERS_DEL_PRODUCT_FROM_BILL, 
           [idStore, idBill, idBillDetail], (err, result) => {
+        conn.end();
         if(err){
           reject({
             result : constants.ERROR,
