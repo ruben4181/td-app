@@ -20,6 +20,7 @@ class Store extends React.Component{
     super(props);
     this.state = {
       params : props.params,
+      idStore : props.params.idStore,
       authToken : localStorage.getItem("authToken"),
       roles : [],
       store : {ID_STORE : 'null'},
@@ -30,7 +31,7 @@ class Store extends React.Component{
   }
   componentDidMount(){
     this.fetchStores();
-    Roles.fetchRoles(this.state.authToken, this.state.params.id).then((resp)=>{
+    Roles.fetchRoles(this.state.authToken, this.state.idStore).then((resp)=>{
       this.setState({roles : resp});
     }).catch((err)=>{
       console.log("Error while fetching roles", err);
@@ -67,7 +68,7 @@ class Store extends React.Component{
               </div>
               :
               <div>
-                <Navbar/>
+                <Navbar idStore={this.state.idStore}/>
                 <div className="container body-container">
                   <div className="row">
                     <div className="col-12">
@@ -80,7 +81,7 @@ class Store extends React.Component{
                           <div className="card h-100 p-3">
                             <img src="/vectors/balance.svg" className="card-img-top" alt="Balance"/>
                             <div className="card-body">
-                              <div className="card-title">Balance</div>
+                              <div className="card-title card-title-store">Balance</div>
                               <span className="card-text">Reporte de ventas, costos, utilidades y más</span>
                             </div>
                           </div>
@@ -93,10 +94,10 @@ class Store extends React.Component{
                       Roles.checkRoles(this.state.roles, Roles.billingAllowed)
                       ?
                       <div className="col-12 col-lg-4 mb-3">
-                        <div className="card h-100 p-3" onClick={()=>{this.props.navigation("/pos/"+this.state.params.id)}}>
+                        <div className="card h-100 p-3" onClick={()=>{this.props.navigation("/pos/"+this.state.idStore)}}>
                           <img src="/vectors/billing.svg" className="card-img-top" alt="Balance"/>
                           <div className="card-body">
-                            <div className="card-title">Punto de venta</div>
+                            <div className="card-title card-title-store">Punto de venta</div>
                             <span className="card-text">Revisa y crea facturas, cuentas abiertas y creditos</span>
                           </div>
                         </div>
@@ -109,10 +110,10 @@ class Store extends React.Component{
                       Roles.checkRoles(this.state.roles, Roles.inventoryAllowed)
                       ?
                       <div className="col-12 col-lg-4 mb-3">
-                        <div className="card h-100 p-3" onClick={()=>{this.props.navigation("/inventory/"+this.state.params.id+"/1")}}>
+                        <div className="card h-100 p-3" onClick={()=>{this.props.navigation("/inventory/"+this.state.idStore+"/1")}}>
                           <img src="/vectors/inventory.svg" className="card-img-top" alt="Balance"/>
                           <div className="card-body">
-                            <div className="card-title">Inventario</div>
+                            <div className="card-title card-title-store">Inventario</div>
                             <span className="card-text">Agrega, actualiza o elimina productos de tu inventario</span>
                           </div>
                         </div>
@@ -125,11 +126,11 @@ class Store extends React.Component{
                       Roles.checkRoles(this.state.roles, Roles.billingAllowed)
                       ?
                       <div className="col-12 col-lg-4 mb-3">
-                        <div className="card h-100 p-3" onClick={()=>{this.props.navigation("/suppliers/"+this.state.params.id)}}>
+                        <div className="card h-100 p-3" onClick={()=>{this.props.navigation("/suppliers/"+this.state.idStore)}}>
                           <img src="/vectors/suppliers.svg" className="card-img-top" alt="Balance"/>
                           <div className="card-body">
-                            <div className="card-title">Proveedores</div>
-                            <span className="card-text">Lleva las cuentas con tus proveedores</span>
+                            <div className="card-title card-title-store">Gastos y proveedores</div>
+                            <span className="card-text">Lleva las cuentas de tu negocio</span>
                           </div>
                         </div>
                       </div>
@@ -144,8 +145,8 @@ class Store extends React.Component{
                         <div className="card h-100 p-3">
                           <img src="/vectors/delivery.svg" className="card-img-top" alt="Balance"/>
                           <div className="card-body">
-                            <div className="card-title">Pedidos</div>
-                            <span className="card-text">Revisa y administra los pedidos de tu negocio</span>
+                            <div className="card-title card-title-store">Pedidos</div>
+                            <span className="card-text">Administra los pedidos de tu negocio</span>
                           </div>
                         </div>
                       </div>
@@ -160,7 +161,7 @@ class Store extends React.Component{
                         <div className="card h-100 p-3">
                           <img src="/vectors/people.svg" className="card-img-top" alt="Balance"/>
                           <div className="card-body">
-                            <div className="card-title">Colaboradores</div>
+                            <div className="card-title card-title-store">Colaboradores</div>
                             <span className="card-text">Gestiona el personal que ayuda este negocio a crecer todos los días</span>
                           </div>
                         </div>
@@ -176,8 +177,8 @@ class Store extends React.Component{
                         <div className="card h-100 p-3">
                           <img src="/vectors/web.svg" className="card-img-top" alt="Balance"/>
                           <div className="card-body">
-                            <div className="card-title">Web</div>
-                            <span className="card-text">Administra tu sitio web</span>
+                            <div className="card-title card-title-store">Web y App movil</div>
+                            <span className="card-text">Diseña, crea y administra tu sitio web y aplicativo movil</span>
                           </div>
                         </div>
                       </div>
@@ -198,7 +199,7 @@ class Store extends React.Component{
   checkStore(){
     const {store, storeFetched} = this.state;
     if(storeFetched===true){
-      if(this.state.params.id.toString() !== store.ID_STORE.toString()){
+      if(this.state.idStore.toString() !== store.ID_STORE.toString()){
         return false;
       }
     }
@@ -217,7 +218,7 @@ class Store extends React.Component{
       axios(config).then((resp)=>{
         let stores = resp.data.data;
         for(let i=0; i<stores.length; i++){
-          if(stores[i].ID_STORE.toString() === this.state.params.id){
+          if(stores[i].ID_STORE.toString() === this.state.idStore){
             this.setState({store : stores[i], storeFetched : true});
             break;
           }

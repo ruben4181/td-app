@@ -11,7 +11,7 @@ class Bills extends React.Component{
     super(props);
     this.state = {
       authToken : localStorage.getItem("authToken"),
-      idStore : parseInt(this.props.params.id),
+      idStore : parseInt(this.props.params.idStore),
       page : parseInt(this.props.params.page) || 1,
       query : this.props.searchParams.get('q'),
       starts : this.props.searchParams.get('starts'),
@@ -77,9 +77,9 @@ class Bills extends React.Component{
           }}/>
         :
         <>
-        <div className='container-fluid'>
-          <Navbar/>
-          <div className='container'>
+        <div className='container-fluid p-0'>
+          <Navbar idStore={this.state.idStore}/>
+          <div className='container body-container'>
             <div className='row'>
               <div className='col-12'>
                 <div className='row mt-3'>

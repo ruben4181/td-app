@@ -29,73 +29,75 @@ class Login extends React.Component{
   }
   render(){
     return(
-      <div className="container-fluid">
+      <div className="container-fluid p-0">
         {/*Si se debe redireccionar porque el usuario ya está loggeado*/}
         {this.state.authToken && <Navigate replace to="/stores" />}
         <BasicDialog isOpen={this.state.showDialog} onClose={this.onCloseDialog}
         config={this.state.dialogConfig}/>
         <Navbar options={{right : "no-display"}}/>
-        <div className="container">
-          <div className="row full-screen-height">
-            <div className="col-12">
-              <div className="d-flex flex-column justify-content-center h-100">
-                <div className="d-flex flex-row w-100">
-                  <div className="d-flex flex-column w-100">
-                    <div className="d-flex flex-column text-center">
-                      <h1 className="title-primary-text text-center">Iniciar sesión</h1>
-                      <p>¿No tienes cuenta aún? <a href="/signup">Registrate</a></p>
-                    </div>
-                    <div className="row">
-                      <div className="col-12 col-lg-6">
-                        <div className="form-floating mb-3">
-                          <input type="text" className="form-control" placeholder="name@example.com"
-                          onChange={(e)=>{this.updateField("userName", e.target.value)}}
-                          />
-                          <label>Nombre de usuario</label>
-                        </div>
-                        <div className="form-floating mb-3">
-                          <input type="password" className="form-control" placeholder="your password here"
-                          onChange={(e)=>{this.updateField("password", e.target.value)}}
-                          />
-                          <label>Contraseña</label>
-                        </div>
-                        <div className="mb-3 text-center">
-                          <button className="btn btn-primary w-100 " onClick={this.onLoginClicked}>Iniciar sesión</button>
-                        </div>
-                      </div>  
-                      <div className="col-12 col-lg-6">
-                        <div className="mb-3 text-center bg-light btn w-100">
-                          <div className="btn btn-light btn-labeled">
-                            <div className="d-flex flex-row">
-                              <div className="btn-icon">
-                                <i className="fa-brands fa-google"></i>    
-                              </div>  
-                              <div className="btn-label">
-                                Continuar con Google
+        <div className="container body-container">
+          <div className="d-flex flex-row" style={{height : "100vh"}}>
+            <div className="row full-screen-height">
+              <div className="col-12">
+                <div className="d-flex flex-column justify-content-center h-100">
+                  <div className="d-flex flex-row w-100">
+                    <div className="d-flex flex-column w-100">
+                      <div className="d-flex flex-column text-center">
+                        <h1 className="title-primary-text text-center">Iniciar sesión</h1>
+                        <p>¿No tienes cuenta aún? <a href="/signup">Registrate</a></p>
+                      </div>
+                      <div className="row">
+                        <div className="col-12 col-lg-6">
+                          <div className="form-floating mb-3">
+                            <input type="text" className="form-control" placeholder="name@example.com"
+                            onChange={(e)=>{this.updateField("userName", e.target.value)}}
+                            />
+                            <label>Nombre de usuario</label>
+                          </div>
+                          <div className="form-floating mb-3">
+                            <input type="password" className="form-control" placeholder="your password here"
+                            onChange={(e)=>{this.updateField("password", e.target.value)}}
+                            />
+                            <label>Contraseña</label>
+                          </div>
+                          <div className="mb-3 text-center">
+                            <button className="btn btn-primary w-100 " onClick={this.onLoginClicked}>Iniciar sesión</button>
+                          </div>
+                        </div>  
+                        <div className="col-12 col-lg-6">
+                          <div className="mb-3 text-center bg-light btn w-100">
+                            <div className="btn btn-light btn-labeled">
+                              <div className="d-flex flex-row">
+                                <div className="btn-icon">
+                                  <i className="fa-brands fa-google"></i>    
+                                </div>  
+                                <div className="btn-label">
+                                  Continuar con Google
+                                </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                        <div className="mb-3 text-center bg-light btn w-100">
-                          <div className="btn btn-light btn-labeled ">
-                            <div className="d-flex flex-row ">
-                              <div className="btn-icon">
-                                <i className="fa-brands fa-facebook-f"></i>    
-                              </div>  
-                              <div className="btn-label">
-                                Continuar con Facebook
+                          <div className="mb-3 text-center bg-light btn w-100">
+                            <div className="btn btn-light btn-labeled ">
+                              <div className="d-flex flex-row ">
+                                <div className="btn-icon">
+                                  <i className="fa-brands fa-facebook-f"></i>    
+                                </div>  
+                                <div className="btn-label">
+                                  Continuar con Facebook
+                                </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                        <div className="mb-3 text-center bg-light btn w-100">
-                          <div className="btn btn-light btn-labeled">
-                            <div className="d-flex flex-row">
-                              <div className="btn-icon">
-                                <i className="fa-brands fa-apple"></i>    
-                              </div>  
-                              <div className="btn-label">
-                                Continuar con Apple
+                          <div className="mb-3 text-center bg-light btn w-100">
+                            <div className="btn btn-light btn-labeled">
+                              <div className="d-flex flex-row">
+                                <div className="btn-icon">
+                                  <i className="fa-brands fa-apple"></i>    
+                                </div>  
+                                <div className="btn-label">
+                                  Continuar con Apple
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -105,13 +107,14 @@ class Login extends React.Component{
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="col-12">
-              <div className="d-flex flex-column justify-content-center align-items-content">
-                <p className="text-center">Al iniciar sesión, aceptas nuestros Términos de uso</p>
+              <div className="col-12">
+                <div className="d-flex flex-column justify-content-center align-items-content">
+                  <p className="text-center">Al iniciar sesión, aceptas nuestros Términos de uso</p>
+                </div>
               </div>
             </div>
           </div>
+            
         </div>
         <Footer/>
       </div>

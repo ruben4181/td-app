@@ -18,12 +18,12 @@ export default function App (){
         <Route path="/login" element={<Login/>}/>
         <Route path="/signup" element={<Signup/>}/>
         <Route path="/stores" element={<Stores/>}/>
-        <Route path="/store/:id" element={<Store/>}/>
-        <Route path="/inventory/:id/:page" element={<Inventory/>}/>
-        <Route path="/pos/:id/" element={<POS/>}/>
-        <Route path="/bills/:id/:page" element={<Bills/>}/>
+        <Route path="/store/:idStore" element={<Store/>}/>
+        <Route path="/inventory/:idStore/:page" element={<Inventory/>}/>
+        <Route path="/pos/:idStore/" element={<POS/>}/>
+        <Route path="/bills/:idStore/:page" element={<Bills/>}/>
         <Route path="/bill/:idStore/:idBill" element={<Bill/>}/>
-        <Route path="/suppliers/:id" element={<Suppliers/>}/>
+        <Route path="/suppliers/:idStore" element={<Suppliers/>}/>
       </Routes>
     </Router>
   )

@@ -67,10 +67,32 @@ emptyData = () => {
   });  
 }
 
+getSuppliers = (idStore, query, page) => {
+  if(idStore){
+    idStore = parseInt(idStore);
+    
+    if(query && query !="") {
+      query = parseInt(query);
+    } else{
+      query = undefined;
+    }
+
+    if(page){
+      page = parseInt(page);
+    } else{
+      page = undefined;
+    }
+    return services.getSuppliers(idStore, query, page);
+  } else{
+    return emptyData();
+  }
+}
+
 module.exports = {
   createSupplier,
   updateSupplier,
   deleteSupplier,
+  getSuppliers,
   createSupplierBill,
   addProductToBill,
   updateProductFromBill,

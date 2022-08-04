@@ -84,7 +84,7 @@ class Bill extends React.Component{
         :
         <>
           <div className='container-fluid p-0'>
-            <Navbar/>
+            <Navbar idStore={this.state.idStore}/>
             <div className='container body-container'>
               <div className='row'>
                 <div className="col-12">

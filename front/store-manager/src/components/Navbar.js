@@ -5,7 +5,9 @@ class Navbar extends React.Component{
     super(props);
     this.state = {
       options : props.options,
-      authToken : localStorage.getItem("authToken")
+      authToken : localStorage.getItem("authToken"),
+      idStore : props.idStore,
+      refLink : props.idStore?"/store/"+props.idStore:"/"
     }
   }
   render(){
@@ -16,13 +18,21 @@ class Navbar extends React.Component{
         ?
         <nav className="navbar navbar-light bg-light navbar-expand-lg">
           <div className="container">
-            <a className="navbar-brand mb-0 h1" href="/">TD</a>
+            <a className="navbar-brand mb-0 h1" href={this.state.refLink}>TD</a>
             <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
               <span className="navbar-toggler-icon"></span>
             </button>
             <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
               <div className="navbar-nav">
-                <a className="nav-link active" aria-current="page" href="/">Inicio</a>
+                <a className="nav-link active" aria-current="page" href={this.state.refLink}>
+                  {
+                    this.state.idStore
+                    ?
+                    <>Tienda</>
+                    :
+                    <>Inicio</>
+                  }
+                </a>
                 <a className="nav-link" href="/">Aprende</a>
                 <a className="nav-link" href="/">Planes</a>
               </div>
@@ -36,13 +46,21 @@ class Navbar extends React.Component{
         :
         <nav className="navbar navbar-light bg-light navbar-expand-lg">
           <div className="container">
-            <a className="navbar-brand mb-0 h1" href="/">TD</a>
+            <a className="navbar-brand mb-0 h1" href={this.state.refLink}>TD</a>
             <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
               <span className="navbar-toggler-icon"></span>
             </button>
             <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
               <div className="navbar-nav">
-                <a className="nav-link active" aria-current="page" href="/">Inicio</a>
+                <a className="nav-link active" aria-current="page" href={this.state.refLink}>
+                  {
+                    this.state.idStore
+                    ?
+                    <>Tienda</>
+                    :
+                    <>Inicio</>
+                  }
+                </a>
                 <a className="nav-link" href="/">Aprende</a>
                 <a className="nav-link" href="/">Planes</a>
               </div>

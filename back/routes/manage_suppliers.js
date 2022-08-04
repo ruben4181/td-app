@@ -4,6 +4,22 @@ const express = require("express");
 const app = express();
 const suppliers = require('../controllers/suppliers');
 
+app.get('/get/store', (req, res) => {
+  let q = req.query;
+  let idStore = q.idStore;
+  let query = q.query;
+  let page = q.page;
+
+  suppliers.getSuppliers(idStore, query, page).then((resp) => {
+    res.status(200);
+    res.send(resp);
+  }).catch((err) => {
+    console.log(err);
+    res.status(500);
+    res.send(err);
+  });
+});
+
 app.post('/create', (req, res) => {
   let payload = req.body.data;
 

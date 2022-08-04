@@ -28,7 +28,7 @@ class Inventory extends React.Component{
     
     this.state = {
       authToken : localStorage.getItem("authToken"),
-      idStore : this.props.params.id,
+      idStore : props.params.idStore,
       params : props.params,
       page : props.params.page || 1,
       roles : [],
@@ -62,7 +62,7 @@ class Inventory extends React.Component{
     this.renderView = this.renderView.bind(this);
   }
   componentDidMount(){
-    Roles.fetchRoles(this.state.authToken, this.state.params.id).then((resp)=>{
+    Roles.fetchRoles(this.state.authToken, this.state.idStore).then((resp)=>{
       let tmp = Roles.checkRoles(resp, Roles.inventoryAllowed);
       let allowedRole = 0;
       if(tmp){
@@ -193,7 +193,7 @@ class Inventory extends React.Component{
   renderView(){
     return(
       <>
-          <Navbar/>
+          <Navbar idStore={this.state.idStore}/>
           <div className="container body-container">
             <div className="row">
               <div className="col-12">
@@ -277,12 +277,12 @@ class Inventory extends React.Component{
           <Footer/>
           {/*Dialog places*/}
           <CreateCategoryDialog isOpen={this.state.showNewCategory} config={{title : "Nueva categoria"}} 
-            closeFunc = {()=>{this.onCreateCategoryClose()}} idStore={this.state.params.id}/>
+            closeFunc = {()=>{this.onCreateCategoryClose()}} idStore={this.state.idStore}/>
           {
             this.state.showNewProduct
             ?
             <CreateProductDialog isOpen={this.state.showNewProduct} config={{title : "Nuevo producto"}} 
-            closeFunc = {()=>{this.onCreateProductClose()}} idStore={this.state.params.id}/>
+            closeFunc = {()=>{this.onCreateProductClose()}} idStore={this.state.idStore}/>
             :
             <>
             </>

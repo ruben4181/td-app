@@ -14,7 +14,7 @@ class POS extends React.Component{
     super(props);
     this.state = {
       authToken : localStorage.getItem("authToken"),
-      idStore : parseInt(this.props.params.id),
+      idStore : parseInt(this.props.params.idStore),
       products : [],
       oldProducts : [],
       productsOptions : [],
@@ -145,7 +145,7 @@ class POS extends React.Component{
             </>
           }
             <div className="container-fluid bg-light p-0">
-              <Navbar/>
+              <Navbar idStore={this.state.idStore}/>
               <div className="container body-container">
                 <div className="row">
                   <div className="col-12">
