@@ -5,6 +5,7 @@ import Footer from "../components/Footer";
 import CreateSupplier from "../components/CreateSupplier";
 import SuppliersServices from "../par/Suppliers";
 import "../css/commons.css";
+import SupplierDialog from "../components/SupplierDialog";
 
 class Suppliers extends React.Component{
   constructor(props){
@@ -13,13 +14,20 @@ class Suppliers extends React.Component{
       authToken : localStorage.getItem("authToken"),
       idStore : props.params.idStore,
       suppliersQuery : "",
+      query : "",
       suppliers : [],
-      suppliersPage : 1
+      suppliersPage : 1,
+      addSuplierShow : false,
+      supplierShow : false,
+      currentSupplier : -1
     }
     this.addSupplierClicked = this.addSupplierClicked.bind(this);
     this.onCloseAddSupplier = this.onCloseAddSupplier.bind(this);
     this.fetchSuppliers = this.fetchSuppliers.bind(this);
     this.renderSuppliers = this.renderSuppliers.bind(this);
+    this.suppliersQueryOnChange = this.suppliersQueryOnChange.bind(this);
+    this.supplierClicked = this.supplierClicked.bind(this);
+    this.onCloseSuppler = this.onCloseSuppler.bind(this);
   }
 
   componentDidMount(){
@@ -28,7 +36,7 @@ class Suppliers extends React.Component{
 
   render(){
     return(
-      <div className="container-fluid p-0">
+      <div className="container-fluid p-0 bg-light">
         <Navbar idStore={this.state.idStore}/>
         <div className="container body-container">
           <div className="row">
@@ -47,7 +55,8 @@ class Suppliers extends React.Component{
               <h3>Proveedores</h3>
             </div>
             <div className="col-12 col-lg-8 mb-3">
-              <input type="text" className="form-control" placeholder="Buscar proveedor"/>
+              <input type="text" className="form-control" placeholder="Buscar proveedor" value={this.state.suppliersQuery}
+              onChange={this.suppliersQueryOnChange}/>
             </div>
             <div className="col-12">
               <div className="row">
@@ -58,18 +67,47 @@ class Suppliers extends React.Component{
         </div>
         <Footer/>
         {
-          this.state.addProveedorShow
+          this.state.addSuplierShow
           ?
-          <CreateSupplier idStore={this.state.idStore} isOpen={this.state.addProveedorShow}
+          <CreateSupplier idStore={this.state.idStore} isOpen={this.state.addSuplierShow}
           onClose={this.onCloseAddSupplier}/>
           :
           <>
           </> 
         }
+        {
+          this.state.supplierShow
+          ?
+          <SupplierDialog idStore={this.state.idStore} isOpen={this.state.supplierShow}
+          onClose={this.onCloseSuppler} idSupplier={this.state.currentSupplier}/>
+          :
+          <></>
+        }
       </div>
     )
   }
 
+  suppliersQueryOnChange(e){
+    let value = e.target.value;
+    this.setState({
+      suppliersQuery : value
+    }, ()=>{
+      if(value.length > 4){
+        this.setState({
+          query : value
+        }, ()=> {
+          this.fetchSuppliers();
+        });
+      } else{
+        this.setState({
+          query : ""
+        }, ()=>{
+          this.fetchSuppliers();
+        });
+      }
+    });
+  }
+  
   renderSuppliers(){
     const {suppliers} = this.state;
     const items = [];
@@ -77,8 +115,8 @@ class Suppliers extends React.Component{
     for(let i=0; i<suppliers.length; i++){
       let supplier = suppliers[i];
       items.push(
-        <div className="col-12 col-md-6 col-xxl-3 mb-3">
-          <div className="card m-1 h-100 bg-light">
+        <div className="col-12 col-md-6 col-xxl-3 mb-3" key={"supplier-"+i}>
+          <div className="card m-1 h-100" onClick={(e)=>{this.supplierClicked(supplier.ID_SUPPLIER)}}>
             <div className="card-body">
               <div className="d-flex flex-row h-100 align-items-center">
                 <div className="card-text">
@@ -101,6 +139,24 @@ class Suppliers extends React.Component{
       )
     }
     return items;
+  }
+
+  supplierClicked(idSupplier){
+    this.setState({
+      currentSupplier : idSupplier
+    }, ()=> {
+      this.setState({
+        supplierShow : true
+      })
+    });
+  }
+
+  onCloseSuppler(e){
+    this.setState({
+      supplierShow : false
+    }, ()=>{
+      this.fetchSuppliers();
+    })
   }
 
   getContactLetters(text){
@@ -136,12 +192,14 @@ class Suppliers extends React.Component{
 
   addSupplierClicked(){
     this.setState({
-      addProveedorShow : true
+      addSuplierShow : true
     });
   }
   onCloseAddSupplier(){
     this.setState({
-      addProveedorShow : false
+      addSuplierShow : false
+    }, ()=> {
+      this.fetchSuppliers();
     });
   }
 }

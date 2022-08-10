@@ -18,6 +18,7 @@ class CreateSupplier extends React.Component{
       supplierPhone : "",
       supplierEmail : "",
       supplierAddress : "",
+      description : "",
       showResult : false,
       resultMessage : "",
       resultState : ""
@@ -83,6 +84,13 @@ class CreateSupplier extends React.Component{
                   />
                   <label>Dirección</label>
                 </div>
+                <div className="form-floating mb-3">
+                  <input type="text" placeholder="Antonio Pérez" value={this.state.description}
+                  className="form-control" onChange={(e)=>{this.updateField("description", e.target.value)}}
+                  />
+                  <label>Descripción</label>
+                  <span className="form-text">Información adicional o de ayuda para futuras busquedas</span>
+                </div>
               </div>
             </div>
           </DialogContent>
@@ -122,7 +130,8 @@ class CreateSupplier extends React.Component{
   }
 
   prepareData(){
-    let {idStore, supplierName, supplierId, supplierPhone, supplierEmail, supplierAddress} = this.state;
+    let {idStore, supplierName, supplierId, supplierPhone, 
+      supplierEmail, supplierAddress, description} = this.state;
     idStore = parseInt(idStore);
     let data = {
       idStore,
@@ -130,7 +139,8 @@ class CreateSupplier extends React.Component{
       supplierId : supplierId!==""?supplierId:undefined,
       supplierPhone : supplierPhone!==""?supplierPhone:undefined,
       supplierEmail : supplierEmail!==""?supplierEmail:undefined,
-      supplierAddress : supplierAddress!==""?supplierAddress:undefined
+      supplierAddress : supplierAddress!==""?supplierAddress:undefined,
+      description : description!==""?description:undefined
     }
 
     if(idStore && supplierName && supplierName != ""){

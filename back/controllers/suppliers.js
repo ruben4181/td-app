@@ -70,12 +70,6 @@ emptyData = () => {
 getSuppliers = (idStore, query, page) => {
   if(idStore){
     idStore = parseInt(idStore);
-    
-    if(query && query !="") {
-      query = parseInt(query);
-    } else{
-      query = undefined;
-    }
 
     if(page){
       page = parseInt(page);
@@ -88,11 +82,22 @@ getSuppliers = (idStore, query, page) => {
   }
 }
 
+getSupplier = (idStore, idSupplier) => {
+  if(idStore && idSupplier){
+    idStore = parseInt(idStore);
+    idSupplier = parseInt(idSupplier);
+
+    return services.getSupplier(idStore, idSupplier);
+  } else{
+    return emptyData();
+  }
+}
 module.exports = {
   createSupplier,
   updateSupplier,
   deleteSupplier,
   getSuppliers,
+  getSupplier,
   createSupplierBill,
   addProductToBill,
   updateProductFromBill,
