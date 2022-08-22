@@ -27,7 +27,8 @@ class SupplierDialog extends React.Component{
       showConfirmation : false,
       showMessage : false,
       updateMessage : "",
-      showConfirmDelete : false
+      showConfirmDelete : false,
+      someChanged : false
     }
     this.prepareData = this.prepareData.bind(this);
     this.updateClicked = this.updateClicked.bind(this);
@@ -68,7 +69,7 @@ class SupplierDialog extends React.Component{
             actions : [
               {
                 label : "Ok",
-                func : ()=>{this.setState({showResult : false}); this.props.onClose();}
+                func : ()=>{this.setState({showResult : false}); this.props.onClose(this.state.someChanged);}
               }
             ]
           }}>
@@ -76,7 +77,7 @@ class SupplierDialog extends React.Component{
 
         <Dialog
           open = {this.props.isOpen}
-          onClose = {this.props.onClose}
+          onClose = {()=>{this.props.onClose(this.state.someChanged)}}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
           fullWidth maxWidth="sm"
@@ -142,12 +143,12 @@ class SupplierDialog extends React.Component{
                   <span className="btn btn-danger">Eliminar</span>
                 </Button>
                 <Button onClick={this.updateClicked}>Modificar</Button>
-                <Button onClick={this.props.onClose}>Cerrar</Button>
+                <Button onClick={()=>{this.props.onClose(this.state.someChanged)}}>Cerrar</Button>
               </>
               :
               <>
                 <Button onClick={this.saveClicked}>Guardar</Button>
-                <Button onClick={this.props.onClose}>Cerrar</Button>
+                <Button onClick={()=>{this.props.onClose(this.state.someChanged)}}>Cerrar</Button>
               </>
             }
           </DialogActions>
@@ -231,7 +232,8 @@ class SupplierDialog extends React.Component{
       console.log(resp);
       this.setState({
         showMessage : true,
-        updateMessage : resp.message
+        updateMessage : resp.message,
+        someChanged : true
       });
     });
   }
@@ -249,6 +251,7 @@ class SupplierDialog extends React.Component{
     data.idSupplier = this.state.idSupplier;
     Suppliers.updateSupplier(authToken, data).then((resp) => {
       this.setState({
+        someChanged : true,
         showConfirmation : false,
         showMessage : true,
         updateMessage : resp.message
@@ -269,10 +272,11 @@ class SupplierDialog extends React.Component{
       this.setState({
         updating : false,
         showConfirmation : false,
-        showMessage : false
+        showMessage : false,
+        someChanged : true
       });
     } else{
-      this.props.onClose();
+      this.props.onClose(this.state.someChanged);
     }
   }
 
