@@ -400,6 +400,7 @@ class Inventory extends React.Component{
   }
 
   searchProducts(e){
+    console.log(e.target.value+"end");
     this.setState({searchProducts : e.target.value});
     if(e.target.value.length > 4){
       let idCategory = undefined;
