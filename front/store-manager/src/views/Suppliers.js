@@ -17,6 +17,7 @@ class Suppliers extends React.Component{
       query : "",
       suppliers : [],
       suppliersPage : 1,
+      suppliersLast : 1,
       addSuplierShow : false,
       supplierShow : false,
       currentSupplier : -1
@@ -28,6 +29,7 @@ class Suppliers extends React.Component{
     this.suppliersQueryOnChange = this.suppliersQueryOnChange.bind(this);
     this.supplierClicked = this.supplierClicked.bind(this);
     this.onCloseSuppler = this.onCloseSuppler.bind(this);
+    this.seeMoreSuppliersClicked = this.seeMoreSuppliersClicked.bind(this);
   }
 
   componentDidMount(){
@@ -62,6 +64,21 @@ class Suppliers extends React.Component{
               <div className="row">
                 {this.renderSuppliers()}
               </div>
+              <div className="row">
+                <div className="col-12 m-3">
+                  <div className="d-flex flex-row justify-content-center align-items-center w-100">
+                    <button className="btn btn-primary" onClick={this.seeMoreSuppliersClicked}>
+                      {
+                        this.state.suppliersPage<this.state.suppliersLast
+                        ?
+                        <span>Ver más proveedores</span>
+                        :
+                        <span>Ir al inicio</span>
+                      }
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -87,6 +104,25 @@ class Suppliers extends React.Component{
     )
   }
 
+  seeMoreSuppliersClicked(e){
+    const {authToken, idStore, query, suppliersPage, suppliersLast, suppliers} = this.state;
+    if(suppliersPage < suppliersLast){
+      let page = suppliersPage + 1;
+      SuppliersServices.getSuppliers(authToken, idStore, query, page).then((resp) => {
+        let newSuppliers = [...suppliers];
+        newSuppliers = newSuppliers.concat(resp.data);
+        this.setState({
+          suppliersPage : page,
+          suppliers : newSuppliers
+        });
+      }).catch((err) => {
+        console.log(err);
+      });
+    } else{
+      window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
+    }
+  }
+
   suppliersQueryOnChange(e){
     let value = e.target.value;
     this.setState({
@@ -100,7 +136,8 @@ class Suppliers extends React.Component{
         });
       } else{
         this.setState({
-          query : ""
+          query : "",
+          suppliersPage : 1
         }, ()=>{
           this.fetchSuppliers();
         });
@@ -151,11 +188,15 @@ class Suppliers extends React.Component{
     });
   }
 
-  onCloseSuppler(e){
+  onCloseSuppler(someChanged){
+    console.log("Aqui", someChanged);
     this.setState({
-      supplierShow : false
+      supplierShow : false,
+      suppliersPage : someChanged?1:this.state.suppliersPage
     }, ()=>{
-      this.fetchSuppliers();
+      if(someChanged){
+        this.fetchSuppliers();
+      }
     })
   }
 
@@ -175,15 +216,19 @@ class Suppliers extends React.Component{
   }
 
   fetchSuppliers(){
-    let {idStore, query, page, authToken} = this.state;
+    let {idStore, query, suppliersPage, authToken} = this.state;
+    console.log("page", suppliersPage);
 
     if(query && query === ""){
       query = undefined;
     }
 
-    SuppliersServices.getSuppliers(authToken, idStore, query, page).then((resp) => {
+    SuppliersServices.getSuppliers(authToken, idStore, query, suppliersPage).then((resp) => {
+      console.log(resp);
       this.setState({
-        suppliers : resp.data
+        suppliersPage : 1,
+        suppliers : resp.data,
+        suppliersLast : resp.lastPage
       });
     }).catch((err) => {
       console.log(err);

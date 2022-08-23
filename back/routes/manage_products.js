@@ -119,4 +119,16 @@ app.get('/get', (req, res) => {
   });
 });
 
+app.get('/get/all', (req, res) => {
+  let idStore = req.query.idStore;
+  products.getAllProducts(idStore).then((resp) => {
+    res.status(200);
+    res.send(resp);
+  }).catch((err) => {
+    console.log(err);
+    res.status(500);
+    res.send(err);
+  });
+})
+
 module.exports = app;

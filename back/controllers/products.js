@@ -108,6 +108,19 @@ getProduct = (idProduct) => {
   }
 }
 
+getAllProducts = (idStore) => {
+  if(idStore){
+    return products_services.getAllProducts(idStore);
+  } else{
+    return new Promise((resolve, reject) => {
+      resolve({
+        result : constants.ERROR,
+        message : "EMPTY DATA"
+      });
+    });
+  }
+}
+
 module.exports = {
   createProduct,
   updateProduct,
@@ -116,5 +129,6 @@ module.exports = {
   getProductsByCategory,
   findProducts,
   findProductsByCategory,
-  getProduct
+  getProduct,
+  getAllProducts
 }

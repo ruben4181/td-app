@@ -293,6 +293,32 @@ getProduct = (idProduct) => {
   });
 }
 
+getAllProducts = (idStore) => {
+  return new Promise((resolve, reject) => {
+    mysql_util.getConnection().then((resp)=>{
+      let conn = resp;
+      conn.query(sql_constants.SQL_SP_PRODUCTS_GET_ALL_BY_STORE, [idStore], (err, result) => {
+        if(err){
+          resolve({
+            result : constants.ERROR,
+            message : "Error while calling "+sql_constants.SQL_SP_PRODUCTS_GET_ALL_BY_STORE,
+            err
+          });
+        } else{
+          resolve({
+            result : constants.RESULT_OK,
+            message : "Products fetched",
+            data : result[0]
+          });
+        }
+      });
+    }).catch((err) => {
+      console.log(err);
+      reject(err);
+    });
+  });
+}
+
 module.exports = {
   createProduct,
   updateProduct,
@@ -302,5 +328,6 @@ module.exports = {
   findProducts,
   findProductsByCategory,
   getProduct,
-  getProductsByStockAlert
+  getProductsByStockAlert,
+  getAllProducts
 }

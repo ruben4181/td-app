@@ -13,6 +13,7 @@ import "../css/commons.css";
 import Navbar from "../components/Navbar";
 import ProductDialog from "../components/ProductDialog";
 import Footer from "../components/Footer";
+import * as XLSX from "xlsx";
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const PORT = process.env.REACT_APP_SERVER_PORT;
@@ -60,6 +61,8 @@ class Inventory extends React.Component{
     this.fetchProducts = this.fetchProducts.bind(this);
     this.showStockAlertClicked = this.showStockAlertClicked.bind(this);
     this.renderView = this.renderView.bind(this);
+    this.onCloseProduct = this.onCloseProduct.bind(this);
+    this.exportProducts = this.exportProducts.bind(this);
   }
   componentDidMount(){
     Roles.fetchRoles(this.state.authToken, this.state.idStore).then((resp)=>{
@@ -196,8 +199,14 @@ class Inventory extends React.Component{
           <Navbar idStore={this.state.idStore}/>
           <div className="container body-container">
             <div className="row">
-              <div className="col-12">
+              <div className="col-12 col-lg-6">
                 <h1 className="title-primary-text">Inventario</h1>
+              </div>
+              <div className="col-12 col-lg-6">
+                <div className="d-flex flex-row justify-content-end mb-3">
+                  <button className="btn btn-dark me-3" onClick={this.createCategoryClicked}>Crear categoria</button>
+                  <button className="btn btn-primary me-3" onClick={this.createProductClicked}>Agregar producto</button>
+                </div>
               </div>
               <div className="col-12">
                 <div className="row">
@@ -212,8 +221,9 @@ class Inventory extends React.Component{
                   </div>
                   <div className="col-12 col-lg-6">
                     <div className="d-flex flex-row justify-content-end mb-3">
-                      <button className="btn btn-dark me-3" onClick={this.createCategoryClicked}>Crear categoria</button>
-                      <button className="btn btn-primary me-3" onClick={this.createProductClicked}>Agregar producto</button>
+                      <a className="nav-link" href="#stock" onClick={(e)=>{this.exportProducts()}}>
+                        Exportar inventario
+                      </a>
                     </div>
                   </div>
                 </div>
@@ -290,13 +300,47 @@ class Inventory extends React.Component{
           {
             this.state.showProduct
             ?
-            <ProductDialog isOpen={this.state.showProduct} closeFunc = {()=>{this.onCloseProduct()}} 
+            <ProductDialog isOpen={this.state.showProduct} closeFunc = {this.onCloseProduct} 
             idProduct={this.state.idProduct} config={{title : "Producto"}} idStore={this.state.idStore}/>
             :
             <></>
           }
       </>
     )
+  }
+
+  exportProducts(){
+   Products.getAllProducts(this.state.authToken, this.state.idStore).then((resp) => {
+    console.log(this.parseProductsToExport(resp.data));
+    let pp = this.parseProductsToExport(resp.data);
+
+    let wb = XLSX.utils.book_new();
+    let ws = XLSX.utils.json_to_sheet(pp);
+
+    XLSX.utils.book_append_sheet(wb, ws, "Productos");
+
+    XLSX.writeFile(wb, "Inventario.xlsx");
+   }).catch((err) => {
+    console.log(err);
+   });
+  }
+
+  parseProductsToExport(products){
+    const items = [];
+
+    for(let i=0; i<products.length; i++){
+      let p = products[i];
+      items.push({
+        "Producto" : p.PRODUCT_NAME,
+        "Descripción" : p.PRODUCT_DESCRIPTION,
+        "Codigo" : p.PRODUCT_CODE || "",
+        "Precio" : p.PRODUCT_PRICE,
+        "Costo" : p.PRODUCT_COST,
+        "Stock" : p.PRODUCT_STOCK
+      });
+    }
+
+    return items;
   }
 
   showStockAlertClicked(){
@@ -312,11 +356,29 @@ class Inventory extends React.Component{
     this.setState({showProduct : true, idProduct});
   }
 
-  onCloseProduct(){
+  onCloseProduct(someUpdated, idProduct){
+    if(someUpdated){
+      let newProducts = this.state.products.slice();
+      this.removeProductById(newProducts, idProduct);
+      this.setState({
+        products : newProducts
+      });
+      console.log("Algo actualizó", newProducts);
+    }
     this.setState({
       showProduct : false,
       idProduct : 1
     });
+  }
+
+  removeProductById(products, idProduct){
+    for(let i=0; i<products.length; i++){
+      let p = products[i];
+      if(p.ID_PRODUCT === idProduct){
+        return products.splice(i, 1);
+      }
+    }
+    return products;
   }
 
   searchProducts(e){
@@ -349,7 +411,8 @@ class Inventory extends React.Component{
       }, ()=>{
         Products.fetchProducts(this.state.idStore, this.state.page, this.state.showStockAlert).then((resp)=>{
           this.setState({
-            products : resp.data
+            products : resp.data,
+            lastPage : this.state.page >= resp.lastPage
           });
           var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname;
           window.history.pushState({path:newurl},'',newurl);
@@ -360,7 +423,6 @@ class Inventory extends React.Component{
         page : 1
       }, ()=>{
         Products.fetchProductsByCategory(this.state.idStore, e.value, this.state.page, this.state.showStockAlert).then((resp)=>{
-          console.log('Here i am', resp.lastPage);
           this.setState({
             products : resp.data,
             lastPage : this.state.page >= resp.lastPage
