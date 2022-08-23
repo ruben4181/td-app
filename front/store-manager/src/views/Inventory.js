@@ -419,6 +419,12 @@ class Inventory extends React.Component{
     }
   }
 
+  keyUpFindProducts(e){
+    if((e.key === 'Enter' || e.keyCode === 13)){
+      console.log("Prendio");
+    }
+  }
+
   onChangeCategory(e){
     let q = {
       category : e.value
