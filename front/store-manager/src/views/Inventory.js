@@ -14,6 +14,7 @@ import Navbar from "../components/Navbar";
 import ProductDialog from "../components/ProductDialog";
 import Footer from "../components/Footer";
 import * as XLSX from "xlsx";
+import BarcodeReader from 'react-barcode-reader';
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const PORT = process.env.REACT_APP_SERVER_PORT;
@@ -63,6 +64,8 @@ class Inventory extends React.Component{
     this.renderView = this.renderView.bind(this);
     this.onCloseProduct = this.onCloseProduct.bind(this);
     this.exportProducts = this.exportProducts.bind(this);
+    this.handleScan = this.handleScan.bind(this);
+    this.handleError = this.handleError.bind(this);
   }
   componentDidMount(){
     Roles.fetchRoles(this.state.authToken, this.state.idStore).then((resp)=>{
@@ -193,9 +196,24 @@ class Inventory extends React.Component{
     )
   }
 
+  handleScan(data){
+    let e = {
+      target : {
+        value : data
+      }
+    }
+    this.searchProducts(e);
+  }
+
+  handleError(){
+    console.log("Error al escanear con codigo de barras");
+  }
+
   renderView(){
     return(
       <>
+          <BarcodeReader onError={this.handleError}
+                onScan={this.handleScan}/>
           <Navbar idStore={this.state.idStore}/>
           <div className="container body-container">
             <div className="row">
