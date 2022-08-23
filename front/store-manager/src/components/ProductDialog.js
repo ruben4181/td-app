@@ -27,13 +27,15 @@ class ProductDialog extends React.Component{
       authToken : localStorage.getItem("authToken"),
       idStore : props.idStore,
       message : "",
-      showResult : false
+      showResult : false,
+      deleting : false
     }
     this.close = this.close.bind(this);
     this.modifyProductClicked = this.modifyProductClicked.bind(this);
     this.confirmProductModification = this.confirmProductModification.bind(this);
     this.modifyProduct = this.modifyProduct.bind(this);
     this.updateField = this.updateField.bind(this);
+    this.delProductClicked = this.delProductClicked.bind(this);
   }
   componentDidMount(){
     Products.fetchProduct(this.props.idProduct).then((resp)=>{
@@ -65,6 +67,20 @@ class ProductDialog extends React.Component{
   render(){
     return(
       <>
+        <BasicDialog isOpen={this.state.deleting} config={{
+          title : "Borrar producto",
+          body : "¿Seguro que deseas borrar este producto?",
+          actions : [
+            {
+              label : "Cancelar",
+              func : ()=>{this.setState({deleting : false})}
+            },
+            {
+              label : "Ok",
+              func : ()=>{this.delProduct()}
+            }
+          ]
+        }}/>
         <BasicDialog isOpen={this.state.saving} config={{
             title : "Guardar producto",
             body : "¿Seguro que deseas guardar los cambios?",
@@ -226,7 +242,7 @@ class ProductDialog extends React.Component{
           {
             this.state.disabled?
             <>
-              <Button onClick={this.close}><span className="btn btn-danger">Eliminar</span></Button>
+              <Button onClick={this.delProductClicked}><span className="btn btn-danger">Eliminar</span></Button>
               <Button onClick={this.modifyProductClicked}>Modificar</Button>
             </>
             :
@@ -238,6 +254,33 @@ class ProductDialog extends React.Component{
       </>
     )
   }
+
+  delProduct(){
+    const {authToken, idStore, idProduct} = this.state;
+
+    Products.deleteProduct(authToken, idStore, idProduct).then((resp) => {
+      this.setState({
+        message : resp.message,
+        showResult : false,
+        deleting : false
+      }, ()=>{
+        this.close(true);
+      });
+    }).catch((err) => {
+      console.log(err);
+      this.setState({
+        message : "Ha ocurrido un error",
+        showResult : true
+      });
+    });
+  }
+
+  delProductClicked(e){
+    this.setState({
+      deleting : true
+    });
+  }
+
   updateField(target, value){
     let tmp = {};
     tmp[target] = value;
@@ -282,7 +325,7 @@ class ProductDialog extends React.Component{
     });
   }
   close(e){
-    this.props.closeFunc(e);
+    this.props.closeFunc(e, this.state.idProduct);
     this.setState({
       product : {},
       disabled : true

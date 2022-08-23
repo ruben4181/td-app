@@ -14,6 +14,13 @@ getConnection = function(){
         multipleStatements: true,
         multipleResults : true
     });
+
+    console.log("Here I am");
+    console.log("host", process.env.DATABASE_SQL_HOST);
+    console.log("db", process.env.DATABASE_SQL_DBNAME);
+    console.log("username", process.env.DATABASE_SQL_USER);
+    console.log("password", process.env.DATABASE_SQL_PASSWORD);
+
     connection.connect(function(err) {
     if (err) {
       console.error('Error connecting: ' + err.stack);

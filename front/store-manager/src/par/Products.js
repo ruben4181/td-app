@@ -82,6 +82,29 @@ let fetchProduct = (idProduct) => {
   });
 }
 
+let deleteProduct = (authToken, idStore, idProduct) => {
+  return new Promise((resolve, reject) => {
+    let config = {
+      url : PROTOCOL+"://"+BASE_URL+":"+PORT+"/api/v1/product/delete",
+      method : "post",
+      headers: { 'Authorization' : 'Bearer '+authToken },
+      data : {
+        struct : "product",
+        data : {
+          idStore,
+          idProduct
+        }
+      }
+    }
+
+    axios(config).then((resp) => {
+      resolve(resp.data);
+    }).catch((err)=> {
+      reject(err);
+    });
+  });
+}
+
 let updateProduct = (authToken, product) => {
   return new Promise((resolve, reject) => {
     let config = {
@@ -93,7 +116,25 @@ let updateProduct = (authToken, product) => {
       },
       headers: { 'Authorization' : 'Bearer '+authToken }
     }
-    console.log(config);
+    axios(config).then((resp)=>{
+      resolve(resp.data);
+    }).catch((err)=>{
+      console.log(err);
+      reject(err);
+    })
+  });
+}
+
+let getAllProducts = (authToken, idStore) => {
+  return new Promise((resolve, reject) => {
+    let config = {
+      url : PROTOCOL+"://"+BASE_URL+":"+PORT+"/api/v1/product/get/all",
+      method : "get",
+      params : {
+        idStore
+      },
+      headers: { 'Authorization' : 'Bearer '+authToken }
+    }
     axios(config).then((resp)=>{
       resolve(resp.data);
     }).catch((err)=>{
@@ -113,7 +154,9 @@ let toExport = {
   findProducts,
   fetchProduct,
   updateProduct,
-  toCurrency
+  toCurrency,
+  deleteProduct,
+  getAllProducts
 }
 
 export default toExport;
