@@ -39,6 +39,7 @@ class CreateProductDialog extends React.Component{
     this.imgChange = this.imgChange.bind(this);
     this.cancelProduct = this.cancelProduct.bind(this);
     this.fetchCategories = this.fetchCategories.bind(this);
+    this.onCloseFunc = this.onCloseFunc.bind(this);
   }
 
   componentDidMount(){
@@ -75,11 +76,15 @@ class CreateProductDialog extends React.Component{
     })
   }
 
+  onCloseFunc(){
+    this.props.onClose("I'm a looser");
+  }
+
   render(){
     return(
      <Dialog
       open = {this.props.isOpen}
-      onClose = {this.props.onClose}
+      onClose = {this.onCloseFunc}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
      >
@@ -208,7 +213,7 @@ class CreateProductDialog extends React.Component{
            <></>
          }
         </DialogActions>
-     </Dialog> 
+     </Dialog>
     )
   }
 
@@ -219,8 +224,9 @@ class CreateProductDialog extends React.Component{
   }
 
   cancelProduct(e){
-    this.props.closeFunc(e);
+    this.props.closeFunc(this.state.product);
     this.setState({
+      product : undefined,
       page : 1,
       productName : "",
       productDescription : "",
@@ -312,7 +318,8 @@ class CreateProductDialog extends React.Component{
     axios(config).then((resp)=>{
       this.setState({
         page : 3,
-        message : resp.data.message
+        message : resp.data.message,
+        product : resp.data.data
       });
     }).catch((err)=>{
       console.log(err);
