@@ -66,6 +66,7 @@ class Inventory extends React.Component{
     this.exportProducts = this.exportProducts.bind(this);
     this.handleScan = this.handleScan.bind(this);
     this.handleError = this.handleError.bind(this);
+    this.keyUpFindProducts = this.keyUpFindProducts(this);
   }
   componentDidMount(){
     Roles.fetchRoles(this.state.authToken, this.state.idStore).then((resp)=>{
@@ -135,7 +136,7 @@ class Inventory extends React.Component{
       page : newPage
     }, (e)=>{
       this.fetchProducts().then((resp)=>{
-        newProducts = newProducts.concat(resp);
+        newProducts = this.mergeProducts(newProducts, resp);
         this.setState({
           products : newProducts
         });
@@ -234,7 +235,7 @@ class Inventory extends React.Component{
                       <span className="input-group-text h-100"><i className="fa-solid fa-magnifying-glass"></i></span>
                     </div>
                     <input type="text" className="form-control" placeholder="Buscar productos"
-                    onChange={this.searchProducts} value={this.state.searchProducts}/>
+                    onChange={this.searchProducts} value={this.state.searchProducts} onKeyUp={this.keyUpFindProducts}/>
                   </div>
                   </div>
                   <div className="col-12 col-lg-6">
@@ -310,7 +311,7 @@ class Inventory extends React.Component{
             this.state.showNewProduct
             ?
             <CreateProductDialog isOpen={this.state.showNewProduct} config={{title : "Nuevo producto"}} 
-            closeFunc = {()=>{this.onCreateProductClose()}} idStore={this.state.idStore}/>
+            closeFunc = {this.onCreateProductClose} idStore={this.state.idStore}/>
             :
             <>
             </>
@@ -494,11 +495,40 @@ class Inventory extends React.Component{
     return items;
   }
 
+  mergeProducts(main, toAdd){
+    console.log("Haciendo merge");
+    const items = [];
+    const idProducts = [];
+    for(let i=0; i<main.length; i++){
+      let p = main[i];
+      idProducts.push(p.ID_PRODUCT);
+      items.push(p);
+    }
+
+    console.log(idProducts);
+
+    for(let i=0; i<toAdd.length; i++){
+      let p = toAdd[i];
+      if(idProducts.indexOf(p.ID_PRODUCT)<0){
+        items.push(p);
+      } else{
+        console.log("Repeated", p.ID_PRODUCT, p.PRODUCT_NAME);
+      }
+    }
+    return items;
+  }
+
   onCreateCategoryClose(){
     this.setState({showNewCategory : false});
   }
-  onCreateProductClose(){
-    this.fetchProducts();
+  onCreateProductClose(newProduct){
+    if(newProduct){
+      let products = [...this.state.products];
+      products.push(newProduct);
+      this.setState({
+        products
+      });
+    }
     this.setState({showNewProduct : false});
   }
   createCategoryClicked(e){

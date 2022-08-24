@@ -35,15 +35,22 @@ createProduct = (payload) => {
             err
           });
         } else{
+          let data = undefined;
+          if(result.length > 1){
+            data = result[1][0];
+          }
+
           if(result[0][0] && result[0][0].ERROR == 0){
             resolve({
               result : constants.RESULT_OK,
-              message : result[0][0].MESSAGE
+              message : result[0][0].MESSAGE,
+              data
             });
           } else{
             resolve({
               result : constants.RESULT_FAIL,
-              message : result[0][0].MESSAGE
+              message : result[0][0].MESSAGE,
+              data : undefined
             });
           }
         }
