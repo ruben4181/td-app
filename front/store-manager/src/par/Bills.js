@@ -324,6 +324,21 @@ let getBill = (authToken, idStore, idBill) => {
   });
 }
 
+let getParTipoPago = (authToken) => {
+  return new Promise((resolve, reject) => {
+    let config = {
+      method : "get",
+      headers : { 'Authorization' : 'Bearer '+authToken },
+      url : PROTOCOL+"://"+BASE_URL+":"+PORT+"/api/v1/bill/par/tipo_pago"
+    }
+    axios(config).then((resp) => {
+      resolve(resp.data);
+    }).catch((err) => {
+      reject(err);
+    }); 
+  });
+}
+
 let toCurrency = (price) => {
   if(price){
     return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
@@ -341,7 +356,8 @@ let toExport = {
   updateProductFromBill,
   delProductFromBill,
   updateBillStatus,
-  getBill
+  getBill,
+  getParTipoPago
 }
 
 export default toExport;

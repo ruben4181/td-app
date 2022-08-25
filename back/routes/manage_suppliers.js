@@ -20,6 +20,21 @@ app.get('/get/store', (req, res) => {
   });
 });
 
+app.get('/get/all', (req, res) => {
+  let q = req.query;
+  let idStore = q.idStore;
+  let query = q.query;
+
+  suppliers.getSuppliersAll(idStore, query).then((resp) => {
+    res.status(200);
+    res.send(resp);
+  }).catch((err) => {
+    console.log(err);
+    res.status(500);
+    res.send(err);
+  });
+});
+
 app.get('/get', (req, res) => {
   let q = req.query;
   let idStore = q.idStore;

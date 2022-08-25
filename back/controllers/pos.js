@@ -123,6 +123,10 @@ getOpenBills = (idStore, page) => {
   }
 }
 
+getParTipoPago = () => {
+  return pos_services.getParTipoPago();
+}
+
 module.exports = {
   createBill,
   addProductToBill,
@@ -133,5 +137,6 @@ module.exports = {
   getBill,
   getBillsByStore,
   getBillDetail,
-  getOpenBills
+  getOpenBills,
+  getParTipoPago
 }

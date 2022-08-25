@@ -82,6 +82,15 @@ getSuppliers = (idStore, query, page) => {
   }
 }
 
+getSuppliersAll = (idStore, query) => {
+  if(idStore){
+    idStore = parseInt(idStore);
+    return services.getSuppliersAll(idStore, query);
+  } else{
+    return emptyData();
+  }
+}
+
 getSupplier = (idStore, idSupplier) => {
   if(idStore && idSupplier){
     idStore = parseInt(idStore);
@@ -101,5 +110,6 @@ module.exports = {
   createSupplierBill,
   addProductToBill,
   updateProductFromBill,
-  deleteProductFromBill
+  deleteProductFromBill,
+  getSuppliersAll
 }

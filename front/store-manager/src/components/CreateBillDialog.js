@@ -76,7 +76,7 @@ class CreateBillDialog extends React.Component{
       </DialogTitle>
       <DialogContent>
         <div className="row">
-          <div className="col-12 mb-3">
+          <div className="col-12">
             Estado de la orden ({this.state.products.length} productos)
           </div>
           <div className="col-12 mb-3">
