@@ -111,6 +111,17 @@ app.get("/get", (req, res) => {
   })
 });
 
+app.get("/par/tipo_pago", (req, res) => {
+  pos.getParTipoPago().then((resp) => {
+    res.status(200);
+    res.send(resp);
+  }).catch((err) => {
+    console.log(err);
+    res.status(500);
+    res.send(err);
+  });
+});
+
 app.get("/get/store", (req, res) => {
   let idStore = parseInt(req.query.idStore);
   let page = parseInt(req.query.page) || 1;

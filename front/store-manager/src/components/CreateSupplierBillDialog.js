@@ -7,8 +7,9 @@ import Button from '@mui/material/Button';
 import Select from 'react-select'
 import Bills from "../par/Bills";
 import BasicDialog from "./BasicDialog";
+import Suppliers from  "../par/Suppliers";
 
-class CreateBillDialog extends React.Component{
+class CreateSupplierBillDialog extends React.Component{
   constructor(props){
     super(props);
     this.state = {
@@ -21,17 +22,53 @@ class CreateBillDialog extends React.Component{
       customerPhone : "",
       customerAddress : "",
       idStauts : this.props.idStauts,
-      statusOptions : [{value : 4, label : "Pagado y entregado"}, {value : 9, label : "Cuenta abierta"}],
-      selectedStatus : this.props.status || {value : 4, label : "Pagado y entregado"},
+      statusOptions :   [{value : 14, label : "Pendiente"}, 
+                            {value : 15, label : "Pagado NO entregado"},
+                            {value : 17, label : "Pagado y entregado"},
+                            {value : 18, label : "Cuenta abierta"}],
+      supplierOptions : [],
+      selectedStatus : this.props.status || {value : 17, label : "Pagado y entregado"},
       saving : false,
       showResult : false,
-      message : "Numero de factura: LGM-201712131930"
+      message : "Numero de factura: LGM-201712131930",
+			selectedSupplier : {},
+			parTipoPagoOptions : [],
+			selectedParTipoPago : {}
     }
     this.updateField = this.updateField.bind(this);
     this.close = this.close.bind(this);
     this.closeAfterSaving = this.closeAfterSaving.bind(this);
     this.saveBill = this.saveBill.bind(this);
+  }
 
+  componentDidMount(){
+    Suppliers.getSuppliersAll(this.state.authToken, this.state.idStore).then((resp) => {
+			let options = [];
+			for(let i=0; i<resp.data.length; i++){
+				let s = resp.data[i];
+				options.push({
+					value : s.ID_SUPPLIER,
+					label : s.SUPPLIER_NAME
+				});
+			}
+			this.setState({
+				supplierOptions : options
+			});
+    });
+		Bills.getParTipoPago(this.state.authToken).then((resp) => {
+			let options = [];
+			for(let i=0; i<resp.data.length; i++){
+				let p = resp.data[i];
+				options.push({
+					value : p.ID_TIPO_PAGO,
+					label : p.DESCRIPTION
+				});
+			}
+
+			this.setState({
+				parTipoPagoOptions : options
+			});
+		});
   }
 
   render(){
@@ -84,35 +121,34 @@ class CreateBillDialog extends React.Component{
             value={this.state.selectedStatus}
             onChange={(e)=>{this.setState({selectedStatus : e})}}/>
           </div>
-          <div className="col-12 mb-3">
-            Información del cliente(opcional)
-          </div>
           <div className="col-12">
-            <div className="form-floating mb-3">
+            Proveedor (opcional)
+          </div>
+          <div className="col-12 mb-3">
+            <Select options={this.state.supplierOptions} placeholder="Estado" 
+            value={this.state.selectedSupplier}
+            onChange={(e)=>{this.setState({selectedSupplier : e})}}/>
+          </div>
+          <div className="col-12 mb-3">
+            <div className="form-floating">
               <input type="text" className="form-control" value={this.state.customerId} 
               onChange={(e)=>{this.updateField("customerId", e.target.value)}}/>
-              <label>Documento de identidad</label>
+              <label>Referencia de pago (opcional)</label>
             </div>
           </div>
           <div className="col-12">
-            <div className="form-floating mb-3">
-              <input type="text" className="form-control" value={this.state.customerName} 
-              onChange={(e)=>{this.updateField("customerName", e.target.value)}}/>
-              <label>Nombre</label>
-            </div>
+            Tipo de pago (opcional)
           </div>
-          <div className="col-12">
-            <div className="form-floating mb-3">
-              <input type="text" className="form-control" value={this.state.customerPhone} 
-              onChange={(e)=>{this.updateField("customerPhone", e.target.value)}}/>
-              <label>Telefono</label>
-            </div>
+          <div className="col-12 mb-3">
+            <Select options={this.state.parTipoPagoOptions} placeholder="Estado" 
+            value={this.state.selectedParTipoPago}
+            onChange={(e)=>{this.setState({selectedParTipoPago : e})}}/>
           </div>
-          <div className="col-12">
-            <div className="form-floating mb-3">
-              <input type="text" className="form-control" value={this.state.customerAddress} 
-              onChange={(e)=>{this.updateField("customerAddress", e.target.value)}}/>
-              <label>Dirección</label>
+          <div className="col-12 mb-3">
+            <div className="form-floating">
+              <input type="text" className="form-control" value={this.state.customerId} 
+              onChange={(e)=>{this.updateField("customerId", e.target.value)}}/>
+              <label>Descripción (opcional)</label>
             </div>
           </div>
         </div>
@@ -177,4 +213,4 @@ class CreateBillDialog extends React.Component{
   }
 }
 
-export default CreateBillDialog;
+export default CreateSupplierBillDialog;

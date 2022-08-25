@@ -97,6 +97,28 @@ let getSuppliers = (authToken, idStore, query, page) => {
   });
 }
 
+let getSuppliersAll = (authToken, idStore, query) => {
+  return new Promise((resolve, reject) => {
+    idStore = parseInt(idStore);
+
+    let config = {
+      url : PROTOCOL+"://"+BASE_URL+":"+PORT+"/api/v1/suppliers/get/all",
+      headers: { 'Authorization' : 'Bearer '+authToken },
+      method : "get",
+      params : {
+        idStore,
+        query
+      }
+    }
+
+    axios(config).then((resp) => {
+      resolve(resp.data);
+    }).catch((err) => {
+      reject(err);
+    });
+  });
+}
+
 let getSupplier = (authToken, idStore, idSupplier) => {
   return new Promise((resolve, reject) => {
     idStore = parseInt(idStore);
@@ -125,7 +147,8 @@ let toExport = {
   updateSupplier,
   deleteSupplier,
   getSuppliers,
-  getSupplier
+  getSupplier,
+  getSuppliersAll
 }
 
 export default toExport;

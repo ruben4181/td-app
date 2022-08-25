@@ -323,6 +323,29 @@ getOpenBills = (idStore, page) => {
   });
 }
 
+getParTipoPago = () => {
+  return new Promise((resolve, reject) => {
+    mysql_util.getConnection().then((resp) => {
+      let conn = resp;
+      conn.query(sql_constants.SP_PAR_TIPO_PAGO_GET, [], (err, result) => {
+        conn.end();
+        if(err){
+          reject({
+            result : constants.ERROR,
+            message : "Error while executing " + sql_constants.SQL_SP_BILLS_GET_OPEN_BILLS
+          });
+        } else{
+          resolve({
+            result : constants.RESULT_OK,
+            message : "Par tipo pago fetched",
+            data : result[0]
+          });
+        }
+      });
+    });
+  });
+}
+
 module.exports = {
   createBill,
   addProductToBill,
@@ -333,5 +356,6 @@ module.exports = {
   getBill,
   getBillsByStore,
   getBillDetail,
-  getOpenBills
+  getOpenBills,
+  getParTipoPago
 }

@@ -141,6 +141,30 @@ getSuppliers = (idStore, query, page) => {
   });
 }
 
+getSuppliersAll = (idStore, query) => {
+  return new Promise((resolve, reject) => {
+    mysql_util.getConnection().then((resp) => {
+      let conn = resp;
+      conn.query(sql_constants.SP_SUPPLIERS_GET_ALL, [idStore, query], (err, result) => {
+        conn.end();
+        if(err){
+          reject({
+            result : constants.ERROR,
+            message : "Error while calling "+sql_constants.SP_SUPPLIERS_GET_ALL,
+            err
+          });
+        } else{
+          resolve({
+            result : constants.RESULT_OK,
+            message : "Suppliers fetched",
+            data : result[0]
+          });
+        }
+      })
+    });
+  });
+}
+
 getSupplier = (idStore, idSupplier) => {
   return new Promise((resolve, reject) => {
     mysql_util.getConnection().then((resp) => {
@@ -335,5 +359,6 @@ module.exports = {
   createSupplierBill,
   addProductToBill,
   updateProductFromBill,
-  deleteProductFromBill
+  deleteProductFromBill,
+  getSuppliersAll
 }
