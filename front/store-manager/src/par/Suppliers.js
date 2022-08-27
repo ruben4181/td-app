@@ -3,13 +3,117 @@ const BASE_URL = process.env.REACT_APP_BASE_URL;
 const PORT = process.env.REACT_APP_SERVER_PORT;
 const PROTOCOL = process.env.REACT_APP_PROTOCOL;
 
+let createSupplierBill = (authToken, billPayload, products) => {
+  return new Promise((resolve, reject) => {
+    addSupplierBill(authToken, billPayload).then((resp) => {
+      if(resp.result === "OK") {
+        let idBill = resp.idBill;
+        let promises = [];
+        for(let i=0; i<products.length; i++){
+          let p = products[i];
+          promises.push({
+            idStore : p.idStore,
+            idBill,
+            idProduct : p.idProduct,
+            units : p.units
+          });
+        }
+
+        enqueAddProducts(authToken, promises);
+      }
+    }).catch((err) => {
+      reject(err);
+    });
+  });
+}
+
+let enqueAddProducts = (authToken, props) => {
+  if(props.length > 0) {
+    let current = props.pop();
+    addSupplierProductToBill(authToken, current).then((resp) => {
+      enqueAddProducts(authToken, props);
+    }).catch((err) => {
+      console.log(err);
+    });
+  }
+}
+
+let addSupplierProductToBill = (authToken, product) => {
+  return new Promise((resolve, reject) => {
+    let p = parseProduct(product);
+
+    let config = {
+      url : PROTOCOL+"://"+BASE_URL+":"+PORT+"/api/v1/suppliers/bill/product/add",
+        headers: { 'Authorization' : 'Bearer '+ authToken },
+        method : "post",
+        data : {
+          struct : "bill",
+          data : p
+        }
+    }
+
+    axios(config).then((resp) => {
+      resolve(resp.data);
+    }).catch((err) => {
+      reject(err);
+    });
+  });
+}
+
+let parseProduct = (p) => {
+  let product = {
+    idProduct : p.ID_PRODUCT,
+    productName : p.PRODUCT_NAME,
+    productLine : p.PRODUCT_LINE,
+    productDescription : p.PRODUCT_DESCRIPTION,
+    productBrand : p.PRODUCT_BRAND,
+    productQuantity : p.PRODUCT_QUANTITY,
+    productPrice : p.PRODUCT_PRICE,
+    productCost : p.PRODUCT_COST,
+    productStock : p.PRODUCT_STOCK,
+    stockAlert : p.STOCK_ALERT,
+    productOff : p.PRODUCT_OFF,
+    productCode : p.PRODUCT_CODE,
+    idStore : p.ID_STORE,
+    idCategory : p.ID_CATEGORY,
+    mongoId : p.MONGO_ID,
+    active : p.ACTIVE,
+    createdAt : p.CREATED_AT,
+    updatedAt : p.UPDATED_AT
+  }
+  return product;
+}
+
+let addSupplierBill = (authToken, payload) => {
+  return new Promise((resolve, reject) => {
+    payload.idStore = parseInt(payload.idStore);
+    payload.idTipoPago = parseInt(payload.idTipoPago);
+
+    let config = {
+      url : PROTOCOL+"://"+BASE_URL+":"+PORT+"/api/v1/suppliers/bill/create",
+        headers: { 'Authorization' : 'Bearer '+ authToken },
+        method : "post",
+        data : {
+          struct : "bill",
+          data : payload
+        }
+    }
+
+    axios(config).then((resp) => {
+      resolve(resp.data);
+    }).catch((err) => {
+      reject(err);
+    });
+  });
+}
+
 let addSupplier = (authToken, payload) => {
     return new Promise((resolve, reject) => {
       payload.idStore = parseInt(payload.idStore);
       
       let config = {
         url : PROTOCOL+"://"+BASE_URL+":"+PORT+"/api/v1/suppliers/create",
-        headers: { 'Authorization' : 'Bearer '+authToken },
+        headers: { 'Authorization' : 'Bearer '+ authToken },
         method : "post",
         data : {
           struct : "supplier",
@@ -33,7 +137,7 @@ let updateSupplier = (authToken, payload) => {
 
     let config = {
       url : PROTOCOL+"://"+BASE_URL+":"+PORT+"/api/v1/suppliers/update",
-      headers: { 'Authorization' : 'Bearer '+authToken },
+      headers: { 'Authorization' : 'Bearer '+ authToken },
       method : "post",
       data : {
         struct : "supplier",
@@ -56,7 +160,7 @@ let deleteSupplier = (authToken, idStore, idSupplier) => {
 
     let config = {
       url : PROTOCOL+"://"+BASE_URL+":"+PORT+"/api/v1/suppliers/delete",
-      headers: { 'Authorization' : 'Bearer '+authToken },
+      headers: { 'Authorization' : 'Bearer '+ authToken },
       method : "post",
       data : {
         struct : "supplier",
@@ -80,7 +184,7 @@ let getSuppliers = (authToken, idStore, query, page) => {
 
     let config = {
       url : PROTOCOL+"://"+BASE_URL+":"+PORT+"/api/v1/suppliers/get/store",
-      headers: { 'Authorization' : 'Bearer '+authToken },
+      headers: { 'Authorization' : 'Bearer '+ authToken },
       method : "get",
       params : {
         idStore,
@@ -103,7 +207,7 @@ let getSuppliersAll = (authToken, idStore, query) => {
 
     let config = {
       url : PROTOCOL+"://"+BASE_URL+":"+PORT+"/api/v1/suppliers/get/all",
-      headers: { 'Authorization' : 'Bearer '+authToken },
+      headers: { 'Authorization' : 'Bearer '+ authToken },
       method : "get",
       params : {
         idStore,
@@ -126,7 +230,7 @@ let getSupplier = (authToken, idStore, idSupplier) => {
 
     let config = {
       url : PROTOCOL+"://"+BASE_URL+":"+PORT+"/api/v1/suppliers/get",
-      headers: { 'Authorization' : 'Bearer '+authToken },
+      headers: { 'Authorization' : 'Bearer '+ authToken },
       method : "get",
       params : {
         idStore,
@@ -148,7 +252,10 @@ let toExport = {
   deleteSupplier,
   getSuppliers,
   getSupplier,
-  getSuppliersAll
+  getSuppliersAll,
+  createSupplierBill,
+  addSupplierProductToBill,
+  addSupplierBill
 }
 
 export default toExport;

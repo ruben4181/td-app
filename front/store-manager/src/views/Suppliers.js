@@ -355,6 +355,7 @@ class Suppliers extends React.Component{
   }
 
   addProductToBill(product){
+    console.log(product);
     const {products} = this.state;
     let flag = true;
 
