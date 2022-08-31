@@ -49,7 +49,6 @@ let addProductToBill = (authToken, idBill, product) => {
       }
     }
     axios(config).then((resp)=>{
-      console.log("GREYHOUND", resp.data);
       resolve(resp.data);
     }).catch((err)=>{
       console.log(err);
@@ -110,7 +109,7 @@ PromiseQueue.prototype.run = function () {
 
 PromiseQueue.prototype.then = function(){
   if (!this.runNext()){
-    console.log("Termino todo");
+    
   }
 }
 

@@ -50,6 +50,7 @@ class Suppliers extends React.Component{
     this.delProductFromBill = this.delProductFromBill.bind(this);
     this.updateBillProduct = this.updateBillProduct.bind(this);
     this.createSupplierBillClicked = this.createSupplierBillClicked.bind(this);
+    this.onCreateBillClose = this.onCreateBillClose.bind(this);
   }
 
   componentDidMount(){
@@ -218,6 +219,19 @@ class Suppliers extends React.Component{
     )
   }
 
+  onCreateBillClose(e){
+    if(e==="DEL-PRODUCTS") {
+      this.setState({
+        products : [],
+        showCreateBill : false
+      });
+    } else{
+      this.setState({
+        showCreateBill : false
+      })
+    }
+  }
+
   createSupplierBillClicked(e){
     if(this.state.products.length>=1){
       this.setState({
@@ -355,7 +369,6 @@ class Suppliers extends React.Component{
   }
 
   addProductToBill(product){
-    console.log(product);
     const {products} = this.state;
     let flag = true;
 

@@ -15,7 +15,6 @@ class CustomDialog extends React.Component{
     }
     this.handleClose = this.handleClose.bind(this);
     this.renderDialog = this.renderDialog.bind(this);
-    console.log("Contruyó", this.props.isOpen);
   }
   render(){
     return(

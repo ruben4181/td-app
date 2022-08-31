@@ -14,7 +14,6 @@ module.exports = {
         if(flags){
           next();
         } else{
-          console.log("Error 7");
           res.send({
             result : constants.ERROR,
             message : constants.BAD_REQUEST_MSG 

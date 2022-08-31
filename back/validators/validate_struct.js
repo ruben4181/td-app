@@ -53,7 +53,6 @@ validateStruct = (structFilename, struct2Validate)=>{
       console.log(field, "=> regex no valid:", data, re);
     }
     if (!(lenFlag && typeFlag && regexFlag)){
-      //console.log(lenFlag, typeFlag, regexFlag);
       flags = false;
       return;
     }

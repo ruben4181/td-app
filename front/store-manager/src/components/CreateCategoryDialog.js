@@ -207,7 +207,6 @@ class CreateCategoryDialog extends React.Component{
         headers: { 'Authorization' : 'Bearer '+this.state.authToken }
       }
       this.createCategory(config);
-      console.log(config);
 
     }).catch((err)=>{
       console.log(err);

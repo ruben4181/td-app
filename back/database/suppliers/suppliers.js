@@ -214,8 +214,11 @@ createSupplierBill = (payload) => {
       let idSupplier = payload.idSupplier;
       let refPago = payload.refPago;
       let idTipoPago = payload.idTipoPago;
+      let description = payload.description;
+      let idStatus = payload.idStatus;
 
-      conn.query(sql_constants.SP_SUPPLIERS_ADD_BILL, [idStore, idSupplier, refPago, idTipoPago], (err, result) => {
+      conn.query(sql_constants.SP_SUPPLIERS_ADD_BILL, [idStore, idSupplier, 
+          refPago, idTipoPago, description, idStatus], (err, result) => {
         conn.end();
         if(err){
           reject({
