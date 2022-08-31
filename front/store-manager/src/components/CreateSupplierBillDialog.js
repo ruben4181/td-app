@@ -17,10 +17,7 @@ class CreateSupplierBillDialog extends React.Component{
       idStore : this.props.idStore,
       isOpen : this.props.isOpen,
       products : this.props.products,
-      customerId : "",
-      customerName : "",
-      customerPhone : "",
-      customerAddress : "",
+      refPago : "",
       idStauts : this.props.idStauts,
       statusOptions :   [{value : 14, label : "Pendiente"}, 
                             {value : 15, label : "Pagado NO entregado"},
@@ -131,8 +128,8 @@ class CreateSupplierBillDialog extends React.Component{
           </div>
           <div className="col-12 mb-3">
             <div className="form-floating">
-              <input type="text" className="form-control" value={this.state.customerId} 
-              onChange={(e)=>{this.updateField("customerId", e.target.value)}}/>
+              <input type="text" className="form-control" value={this.state.refPago} 
+              onChange={(e)=>{this.updateField("refPago", e.target.value)}}/>
               <label>Referencia de pago (opcional)</label>
             </div>
           </div>
@@ -146,8 +143,8 @@ class CreateSupplierBillDialog extends React.Component{
           </div>
           <div className="col-12 mb-3">
             <div className="form-floating">
-              <input type="text" className="form-control" value={this.state.customerId} 
-              onChange={(e)=>{this.updateField("customerId", e.target.value)}}/>
+              <input type="text" className="form-control" value={this.state.description} 
+              onChange={(e)=>{this.updateField("description", e.target.value)}}/>
               <label>Descripción (opcional)</label>
             </div>
           </div>
@@ -167,22 +164,45 @@ class CreateSupplierBillDialog extends React.Component{
       saving : false
     });
     
-    let status = this.state.selectedStatus;
-    status = parseInt(status.value);
-
-    let customerInfo = {
-      idStore : this.state.idStore,
-      customerId : this.state.customerId,
-      customerName : this.state.customerName,
-      customerPhone : this.state.customerPhone,
-      customerAddress : this.state.customerAddress
+    var status = undefined;
+    if(this.state.selectedStatus){
+      status = parseInt(this.state.selectedStatus.value);
     }
-    Bills.saveBill(this.state.authToken, customerInfo, this.state.products, status).then((resp)=>{
-      console.log("Respuesta obtenida -- ");
-      console.log(resp.message);
+
+    console.log("statys", status);
+
+    var idTipoPago = undefined;
+    var idSupplier = undefined;
+
+
+    if(this.state.selectedParTipoPago){
+      idTipoPago = parseInt(this.state.selectedParTipoPago.value);
+    }
+    if(this.state.selectedSupplier){
+      idSupplier = parseInt(this.state.selectedSupplier.value);
+    }
+
+    let data = {
+      idStatus : status, 
+      idStore : this.state.idStore,
+      idSupplier,
+      refPago : this.state.refPago,
+      description : this.state.description,
+      idTipoPago
+    }
+
+    console.log(data);
+
+    Suppliers.createSupplierBill(this.state.authToken, data, this.state.products).then((resp) => {
       this.setState({
         showResult : true,
         message : resp.message
+      });
+    }).catch((err) => {
+      console.log(err);
+      this.setState({
+        showResult : true,
+        message : "Oops ha ocurrido un error"
       });
     });
   }

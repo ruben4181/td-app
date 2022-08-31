@@ -102,7 +102,6 @@ class Inventory extends React.Component{
     return new Promise((resolve, reject) => {
       let category = this.state.query.category;
       if(category && category !== "no-filter"){
-        console.log("By Category");
         category = parseInt(category);
         Products.fetchProductsByCategory(this.state.idStore, category, this.state.page, 
             this.state.showStockAlert).then((resp)=>{
@@ -115,7 +114,6 @@ class Inventory extends React.Component{
           console.log("Error while fetching products", err);
         });
       } else{
-        console.log("By None");
         Products.fetchProducts(this.state.idStore, this.state.page, this.state.showStockAlert).then((resp)=>{
           this.setState({
             products : resp.data,

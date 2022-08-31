@@ -213,8 +213,12 @@ createSupplierBill = (payload) => {
       let idStore = payload.idStore;
       let idSupplier = payload.idSupplier;
       let refPago = payload.refPago;
+      let idTipoPago = payload.idTipoPago;
+      let description = payload.description;
+      let idStatus = payload.idStatus;
 
-      conn.query(sql_constants.SP_SUPPLIERS_ADD_BILL, [idStore, idSupplier, refPago], (err, result) => {
+      conn.query(sql_constants.SP_SUPPLIERS_ADD_BILL, [idStore, idSupplier, 
+          refPago, idTipoPago, description, idStatus], (err, result) => {
         conn.end();
         if(err){
           reject({
@@ -226,7 +230,9 @@ createSupplierBill = (payload) => {
           if(result[0][0] && result[0][0].ERROR == 0){
             resolve({
               result : constants.RESULT_OK,
-              message : result[0][0].MESSAGE
+              message : result[0][0].MESSAGE,
+              code : result[0][0].CODE,
+              idBill : result[0][0].ID_BILL
             });
           } else{
             resolve({
