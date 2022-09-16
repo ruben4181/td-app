@@ -101,8 +101,43 @@ getStatus = () => {
   });
 }
 
+getCosts = (payload) => {
+  return new Promise((resolve, reject) => {
+    let idStore = parseInt(payload.idStore);
+    let query = payload.query;
+    let page = payload.page;
+    let from = payload.from;
+    let to = payload.to;
+
+    mysql_util.getConnection().then((resp) => {
+      let conn = resp;
+      conn.query(sql_constants.SP_COSTS_GET, [idStore, query, page, from, to], (err, result) => {
+        conn.end();
+        if(err){
+          resolve({
+            result : constants.ERROR,
+            message : "Error while calling "+sql_constants.SP_COSTS_GET,
+            err
+          });
+        } else{
+          resolve({
+            result : constants.RESULT_OK,
+            message : "Costs fetched",
+            data : result[0],
+            total : result[1][0].TOTAL_COUNT,
+            lastPage : result[1][0].LAST_PAGE
+          });
+        }
+      });
+    }).catch((err) => {
+      reject(err);
+    });
+  });
+}
+
 module.exports = {
   addCost,
   getCategories,
-  getStatus
+  getStatus,
+  getCosts
 }

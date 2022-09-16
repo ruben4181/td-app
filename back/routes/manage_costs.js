@@ -39,4 +39,25 @@ app.get('/status/get', (req, res) => {
   })
 });
 
+app.get('/get', (req, res) => {
+  let q = req.query;
+  let payload = {
+    idStore : parseInt(q.idStore),
+    query : q.query,
+    page : q.page?parseInt(q.page):undefined,
+    from : q.from,
+    to : q.to
+  }
+
+
+  costs.getCosts(payload).then((resp) => {
+    res.status(200);
+    res.send(resp);
+  }).catch((err) => {
+    console.log(err);
+    res.status(500);
+    res.send(err);
+  });
+});
+
 module.exports = app;

@@ -12,6 +12,7 @@ import CreateSupplierBillDialog from "../components/CreateSupplierBillDialog";
 import BasicDialog from "../components/BasicDialog";
 import '../css/links.css';
 import CreateCostDialog from "../components/CreateCostDialog";
+import Costs from "../par/Costs";
 
 class Suppliers extends React.Component{
   constructor(props){
@@ -35,7 +36,8 @@ class Suppliers extends React.Component{
       showCreateBill : false,
       showNotProducts : false,
       recentSupplierBills : [],
-      showCreateCost : false
+      showCreateCost : false,
+      recentCosts : []
     }
     this.addSupplierClicked = this.addSupplierClicked.bind(this);
     this.onCloseAddSupplier = this.onCloseAddSupplier.bind(this);
@@ -59,11 +61,14 @@ class Suppliers extends React.Component{
     this.renderRecentSuppliersBills = this.renderRecentSuppliersBills.bind(this);
     this.onCreateCostClose = this.onCreateCostClose.bind(this);
     this.addCostClicked = this.addCostClicked.bind(this);
+    this.fetchRecentCosts = this.fetchRecentCosts.bind(this);
+    this.renderRecentCosts = this.renderRecentCosts.bind(this);
   }
 
   componentDidMount(){
     this.fetchSuppliers();
     this.fetchRecentBills();
+    this.fetchRecentCosts();
   }
 
   fetchRecentBills(){
@@ -76,6 +81,17 @@ class Suppliers extends React.Component{
       });
     }).catch((err) => {
       console.log(err);
+    });
+  }
+
+  fetchRecentCosts(){
+    Costs.getCosts(this.state.authToken, {
+      idStore : this.state.idStore, 
+      page : 1}
+      ).then((resp) => {
+      this.setState({
+        recentCosts : resp.data
+      });
     });
   }
 
@@ -196,7 +212,7 @@ class Suppliers extends React.Component{
                         <span>Gastos recientes</span>
                       </div>
                       <div className="col-12">
-                        {this.renderRecentSuppliersBills()}
+                        {this.renderRecentCosts()}
                       </div>
                     </div>
                     
@@ -273,12 +289,12 @@ class Suppliers extends React.Component{
   renderRecentSuppliersBills(){
     const {recentSupplierBills, idStore} = this.state;
     const items = [];
-
+    let limit = 1;
     let flag = false;
 
     for(let i=0; i<recentSupplierBills.length; i++){
       flag = true;
-      if(i>=2){
+      if(i>=limit){
         break;
       }
       let b = recentSupplierBills[i];
@@ -303,6 +319,45 @@ class Suppliers extends React.Component{
     if(flag){
       items.push(
         <a className="nav-link p-0" key={"view-more-bills-1"} href={"/suppliers/costs/bills/"+idStore}>Ver más facturas</a>
+      )
+    }
+    return items;
+  }
+
+  renderRecentCosts(){
+    const {recentCosts, idStore} = this.state;
+    const items = [];
+    let limit = 1;
+    let flag = false;
+
+    for(let i=0; i<recentCosts.length; i++){
+      flag = true;
+      if(i>=limit){
+        break;
+      }
+      let b = recentCosts[i];
+
+      if(!b.DESCRIPTION || b.DESCRIPTION === ''){
+        continue;
+      }
+
+      items.push(
+        <a className="link-unstyled p-0" key={"supplier-bill-"+i} href={"/costs/"
+          +this.state.idStore+"/"+b.ID_COST}>
+          <div className="card mb-2">
+            <div className="col-12 p-2" style={{cursor : "pointer"}}>
+              <div className="form-text">{b.DESCRIPTION}</div>
+              <div className="form-text">{b.REF_PAGO}</div>
+              <div className="">${Products.toCurrency(b.AMMOUNT)}</div>
+            </div>
+          </div>
+        </a>
+      );
+    }
+
+    if(flag){
+      items.push(
+        <a className="nav-link p-0" key={"view-more-bills-1"} href={"/suppliers/costs/bills/"+idStore}>Ver más gastos</a>
       )
     }
     return items;

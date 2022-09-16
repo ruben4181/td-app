@@ -35,6 +35,26 @@ let getCategories = (authToken) => {
   });
 }
 
+let getCosts = (authToken, payload) => {
+  if(payload.idStore){
+    payload.idStore = parseInt(payload.idStore);
+  }
+  return new Promise((resolve, reject) => {
+    let config = {
+      method : "get",
+      headers : { 'Authorization' : 'Bearer '+authToken },
+      url : PROTOCOL+"://"+BASE_URL+":"+PORT+"/api/v1/costs/get",
+      params : payload
+    }
+
+    axios(config).then((resp) => {
+      resolve(resp.data);
+    }).catch((err) => {
+      reject(err);
+    })
+  });
+}
+
 let addCost = (authToken, payload) => {
   return new Promise((resolve, reject) => {
     let config = {
@@ -57,7 +77,8 @@ let addCost = (authToken, payload) => {
 let toExport = {
   getStatus,
   getCategories,
-  addCost
+  addCost,
+  getCosts
 }
 
 export default toExport;

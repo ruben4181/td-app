@@ -43,8 +43,19 @@ getStatus = () => {
   return services.getStatus();
 }
 
+getCosts = (payload) => {
+  if(payload.idStore){
+    payload.idStore = parseInt(payload.idStore);
+
+    return services.getCosts(payload);
+  } else{
+    return emptyData();
+  }
+}
+
 module.exports = {
   addCost,
   getCategories,
-  getStatus
+  getStatus,
+  getCosts
 }
