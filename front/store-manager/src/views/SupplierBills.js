@@ -178,8 +178,8 @@ class SupplierBills extends React.Component{
 
     this.setState({
       query : q,
-      from : tmpFrom,
-      to : tmpTo
+      from : tmpFrom===""?null:tmpFrom,
+      to : tmpTo===""?null:tmpTo
     }, ()=> {this.putParams(true)});
   }
 
