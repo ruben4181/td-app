@@ -255,6 +255,7 @@ let getSupplier = (authToken, idStore, idSupplier) => {
 
 let getBills = (authToken, payload) => {
   return new Promise((resolve, reject) => {
+    console.log("GET Payload", payload);
     payload.idStore = parseInt(payload.idStore);
     let config = {
       url : PROTOCOL+"://"+BASE_URL+":"+PORT+"/api/v1/suppliers/bill/costs/get",

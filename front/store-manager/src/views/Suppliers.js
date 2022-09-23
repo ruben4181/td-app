@@ -136,7 +136,6 @@ class Suppliers extends React.Component{
               </div>
               <div className="col-12 col-lg-6">
                 <div className="d-flex flex-row w-100 justify-content-end pt-2">
-                  <button className="btn btn-dark me-3" onClick={()=>{this.addSupplierClicked()}}>Agregar proveedor</button>
                   <button className="btn btn-danger" onClick={()=>{this.addCostClicked()}}>Agregar gasto</button>
                 </div>
               </div>
@@ -225,8 +224,17 @@ class Suppliers extends React.Component{
                 <h3>Proveedores</h3>
               </div>
               <div className="col-12 col-lg-8 mb-3">
-                <input type="text" className="form-control" placeholder="Buscar proveedor" value={this.state.suppliersQuery}
-                onChange={this.suppliersQueryOnChange}/>
+                <div className="row">
+                  <div className="col-12 col-lg-3 mb-3">
+                    <div className="d-flex flex-row w-100 justify-content-end">
+                      <button className="btn btn-dark" onClick={()=>{this.addSupplierClicked()}}>Agregar</button>
+                    </div>
+                  </div>
+                  <div className="col-12 col-lg-9 mb-3">
+                    <input type="text" className="form-control" placeholder="Buscar proveedor" value={this.state.suppliersQuery}
+                    onChange={this.suppliersQueryOnChange}/>
+                  </div>
+                </div>
               </div>
               <div className="col-12">
                 <div className="row">
@@ -280,7 +288,10 @@ class Suppliers extends React.Component{
     });
   }
 
-  onCreateCostClose(){
+  onCreateCostClose(e){
+    if(e==="RELOAD"){
+      this.fetchRecentCosts();
+    }
     this.setState({
       showCreateCost : false
     });
@@ -365,6 +376,7 @@ class Suppliers extends React.Component{
 
   onCreateBillClose(e){
     if(e==="DEL-PRODUCTS") {
+      this.fetchRecentBills();
       this.setState({
         products : [],
         showCreateBill : false
