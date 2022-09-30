@@ -338,6 +338,18 @@ let getParTipoPago = (authToken) => {
   });
 }
 
+let parseTipoPago = (data) => {
+  let items = [];
+  for(let i=0; i<data.length; i++){
+    items.push({
+      value : data[i].ID_TIPO_PAGO,
+      label : data[i].DESCRIPTION
+    });
+  }
+
+  return items;
+}
+
 let toCurrency = (price) => {
   if(price){
     return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
@@ -356,7 +368,8 @@ let toExport = {
   delProductFromBill,
   updateBillStatus,
   getBill,
-  getParTipoPago
+  getParTipoPago,
+  parseTipoPago
 }
 
 export default toExport;

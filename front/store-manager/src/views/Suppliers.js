@@ -368,7 +368,7 @@ class Suppliers extends React.Component{
 
     if(flag){
       items.push(
-        <a className="nav-link p-0" key={"view-more-bills-1"} href={"/suppliers/costs/bills/"+idStore}>Ver más gastos</a>
+        <a className="nav-link p-0" key={"view-more-bills-1"} href={"/suppliers/costs/"+idStore}>Ver más gastos</a>
       )
     }
     return items;

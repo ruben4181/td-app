@@ -35,6 +35,30 @@ let getCategories = (authToken) => {
   });
 }
 
+let parseCategories = (data) => {
+  let items = [];
+  for(let i=0; i<data.length; i++){
+    items.push({
+      value : data[i].ID_COST_CATEGORY,
+      label : data[i].DESCRIPTION
+    });
+  }
+
+  return items;
+}
+
+let parseStatus = (data) => {
+  let items = [];
+  for(let i=0; i<data.length; i++){
+    items.push({
+      value : data[i].ID_STATUS,
+      label : data[i].DESCRIPTION
+    });
+  }
+
+  return items;
+}
+
 let getCosts = (authToken, payload) => {
   if(payload.idStore){
     payload.idStore = parseInt(payload.idStore);
@@ -47,6 +71,31 @@ let getCosts = (authToken, payload) => {
       params : payload
     }
 
+    axios(config).then((resp) => {
+      resolve(resp.data);
+    }).catch((err) => {
+      reject(err);
+    })
+  });
+}
+
+let getCost = (authToken, idStore, idCost) => {
+  if(idStore){
+    idStore = parseInt(idStore);
+    idCost = parseInt(idCost);
+  }
+
+  return new Promise((resolve, reject) => {
+    let config = {
+      method : "get",
+      headers : { 'Authorization' : 'Bearer '+authToken },
+      url : PROTOCOL+"://"+BASE_URL+":"+PORT+"/api/v1/costs/get/cost",
+      params : {
+        idStore,
+        idCost
+      }
+    }
+    
     axios(config).then((resp) => {
       resolve(resp.data);
     }).catch((err) => {
@@ -78,7 +127,10 @@ let toExport = {
   getStatus,
   getCategories,
   addCost,
-  getCosts
+  getCosts,
+  getCost,
+  parseCategories,
+  parseStatus
 }
 
 export default toExport;

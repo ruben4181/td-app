@@ -13,7 +13,6 @@ getBills = (payload) => {
       let page = payload.page;
       let from = payload.from;
       let to = payload.to;
-      console.log(from, to);
 
       conn.query(sql_constants.SP_BILLS_COST_GET, [idStore, query, page, from, to], (err, result) => {
         conn.end();

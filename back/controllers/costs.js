@@ -1,5 +1,5 @@
 require('dotenv').config({path:'.env'});
-
+const constants = require(process.env.DIR_PATH+"/utils/constants.js");
 const services = require(process.env.DIR_PATH+"/database/costs/costs");
 
 addCost = (payload)=> {
@@ -53,9 +53,21 @@ getCosts = (payload) => {
   }
 }
 
+getCost = (idStore, idCost) => {
+  if(idStore && idCost){
+    idStore = parseInt(idStore);
+    idCost = parseInt(idCost);
+
+    return services.getCost(idStore, idCost);
+  } else{
+    return emptyData();
+  }
+}
+
 module.exports = {
   addCost,
   getCategories,
   getStatus,
-  getCosts
+  getCosts,
+  getCost
 }

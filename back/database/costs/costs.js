@@ -135,9 +135,41 @@ getCosts = (payload) => {
   });
 }
 
+getCost = (idStore, idCost) => {
+  return new Promise((resolve, reject) => {
+    mysql_util.getConnection().then((resp) => {
+      let conn = resp;
+      conn.query(sql_constants.SP_COSTS_GET_ONE, [idStore, idCost], (err, result) => {
+        conn.end();
+        if(err){
+          resolve({
+            result : constants.ERROR,
+            message : "Error while calling "+sql_constants.SP_COSTS_GET_ONE,
+            err
+          });
+        } else{
+          if(result[0][0]){
+            resolve({
+              result : constants.RESULT_OK,
+              message : "Cost fetched",
+              data : result[0][0]
+            });
+          } else{
+            resolve({
+              result : constants.RESULT_FAIL,
+              message : "Nothing fetched"
+            });
+          }
+        }
+      });
+    })
+  });
+}
+
 module.exports = {
   addCost,
   getCategories,
   getStatus,
-  getCosts
+  getCosts,
+  getCost
 }

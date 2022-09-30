@@ -60,4 +60,21 @@ app.get('/get', (req, res) => {
   });
 });
 
+app.get('/get/cost', (req, res) => {
+  let q = req.query;
+  let idStore = q.idStore;
+  let idCost = q.idCost;
+
+  console.log(idStore, idCost);
+
+  costs.getCost(idStore, idCost).then((resp) => {
+    res.status(200);
+    res.send(resp);
+  }).catch((err) => {
+    console.log(err);
+    res.status(500);
+    res.send(err);
+  })
+});
+
 module.exports = app;
