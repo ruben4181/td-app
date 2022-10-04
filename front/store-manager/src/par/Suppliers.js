@@ -14,6 +14,7 @@ let createSupplierBill = (authToken, billPayload, products) => {
           promises.push({
             idStore : billPayload.idStore,
             idBill,
+            refPago : billPayload.refPago,
             idProduct : p.idProduct,
             units : p.units
           });
@@ -252,6 +253,27 @@ let getSupplier = (authToken, idStore, idSupplier) => {
   });
 }
 
+let getBills = (authToken, payload) => {
+  return new Promise((resolve, reject) => {
+    console.log("GET Payload", payload);
+    payload.idStore = parseInt(payload.idStore);
+    let config = {
+      url : PROTOCOL+"://"+BASE_URL+":"+PORT+"/api/v1/suppliers/bill/costs/get",
+      headers: { 'Authorization' : 'Bearer '+ authToken },
+      method : "get",
+      params : payload
+    }
+
+    axios(config).then((resp) => {
+      resolve(resp.data);
+    }).catch((err) => {
+      reject(err);
+    });
+  }).catch((err) => {
+    
+  });
+}
+
 let toExport = {
   addSupplier,
   updateSupplier,
@@ -261,7 +283,8 @@ let toExport = {
   getSuppliersAll,
   createSupplierBill,
   addSupplierProductToBill,
-  addSupplierBill
+  addSupplierBill,
+  getBills
 }
 
 export default toExport;

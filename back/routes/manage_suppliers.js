@@ -143,5 +143,24 @@ app.post('/bill/product/delete', (req, res) => {
   })
 });
 
+app.get('/bill/costs/get', (req, res) => {
+  let q = req.query;
+  let payload = {
+    idStore : q.idStore,
+    query : q.query,
+    page : q.page,
+    from : q.from,
+    to : q.to
+  };
+
+  suppliers.getBills(payload).then((resp) => {
+    res.status(200);
+    res.send(resp);
+  }).catch((err) => {
+    console.log(err);
+    res.status(500);
+    res.send(err);
+  });
+});
 
 module.exports = app;

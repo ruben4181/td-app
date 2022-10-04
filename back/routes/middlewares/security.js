@@ -43,6 +43,7 @@ verifyPathAccess = (req, res, next)=>{
           err
         });
       } else{
+        console.log("seguridad", payload);
         idUser = payload.user.ID_USER;
         req.idUser = idUser;
         path = req.path;

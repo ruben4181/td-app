@@ -101,6 +101,20 @@ getSupplier = (idStore, idSupplier) => {
     return emptyData();
   }
 }
+
+getBills = (payload) => {
+  if(payload.idStore){
+    payload.idStore = parseInt(payload.idStore);
+    if(payload.page){
+      payload.page = parseInt(payload.page);
+    }
+
+    return services.getBills(payload);
+  } else{
+    return emptyData();
+  }
+}
+
 module.exports = {
   createSupplier,
   updateSupplier,
@@ -111,5 +125,6 @@ module.exports = {
   addProductToBill,
   updateProductFromBill,
   deleteProductFromBill,
-  getSuppliersAll
+  getSuppliersAll,
+  getBills
 }

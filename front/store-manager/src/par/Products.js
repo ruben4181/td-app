@@ -145,7 +145,7 @@ let getAllProducts = (authToken, idStore) => {
 }
 
 let toCurrency = (price) => {
-  return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 }
 
 let toExport = {

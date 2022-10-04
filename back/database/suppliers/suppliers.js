@@ -4,6 +4,42 @@ const mysql_util = require(process.env.DIR_PATH+'/database/connections/mysql_con
 const sql_constants = require('./constants');
 const constants = require(process.env.DIR_PATH+"/utils/constants.js");
 
+getBills = (payload) => {
+  return new Promise((resolve, reject) => {
+    mysql_util.getConnection().then((resp) => {
+      let conn = resp;
+      let idStore = payload.idStore;
+      let query = payload.query;
+      let page = payload.page;
+      let from = payload.from;
+      let to = payload.to;
+
+      conn.query(sql_constants.SP_BILLS_COST_GET, [idStore, query, page, from, to], (err, result) => {
+        conn.end();
+        if(err){
+          reject({
+            result : constants.ERROR,
+            message : "Error while calling "+sql_constants.SP_BILLS_COST_GET,
+            err
+          });
+        } else{
+          resolve({
+            result : constants.RESULT_OK,
+            message : "Bills fetched",
+            data : result[0],
+            lastPage : result[1][0].LAST_PAGE,
+            actualPage : result[1][0].ACTUAL_PAGE,
+            total : result[1][0].TOTAL
+          });
+        }
+      });
+    }).catch((err) => {
+      console.log(err);
+      reject(err);
+    });
+  });
+}
+
 createSupplier = (payload) => {
   return new Promise((resolve, reject) => {
     mysql_util.getConnection().then((resp) => {
@@ -25,7 +61,7 @@ createSupplier = (payload) => {
               result : constants.ERROR,
               message : "Error while calling "+sql_constants.SP_SUPPLIERS_ADD_SUPPLIER,
               err
-            })
+            });
           } else{
             if(result[0][0] && result[0][0].ERROR == 0){
               resolve({
@@ -366,5 +402,6 @@ module.exports = {
   addProductToBill,
   updateProductFromBill,
   deleteProductFromBill,
-  getSuppliersAll
+  getSuppliersAll,
+  getBills
 }
