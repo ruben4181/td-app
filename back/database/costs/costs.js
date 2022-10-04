@@ -166,10 +166,91 @@ getCost = (idStore, idCost) => {
   });
 }
 
+updateCost = (payload) => {
+  return new Promise((resolve, reject) => {
+    let idStore = payload.idStore;
+    let idCost = payload.idCost;
+    let idCostCategory = payload.idCostCategory;
+    let ammount = payload.ammount;
+    let refCobro = payload.refCobro;
+    let refPago = payload.refPago;
+    let idTipoPago = payload.idTipoPago;
+    let description = payload.description;
+    let idStatus = payload.idStatus;
+    let createdAt = payload.createdAt;
+
+    mysql_util.getConnection().then((resp) => {
+      let conn = resp;
+      conn.query(sql_constants.SP_COSTS_UPDATE_COST, [idStore, idCost, idCostCategory,
+        ammount, refCobro, refPago, idTipoPago, description, idStatus, createdAt], (err, result) => {
+          console.log("Sabes donde vivo");
+          conn.end();
+          if(err){
+            resolve({
+              result : constants.ERROR,
+              message : "Error while calling "+sql_constants.SP_COSTS_UPDATE_COST,
+              err
+            });
+          } else{
+            console.log("Here dimelo mami");
+            if(result[0][0] && result[0][0].RESULT == 'OK'){
+              resolve({
+                result : constants.RESULT_OK,
+                message : result[0][0].MESSAGE
+              });
+            } else{
+              resolve({
+                result : constants.RESULT_FAIL,
+                message : result[0][0].MESSAGE
+              });
+            }
+          }
+        });
+    }).catch((err) => {
+      reject(err);
+    })
+  });
+}
+
+delCost = (idStore, idCost) => {
+  return new Promise((resolve, reject) => {
+    mysql_util.getConnection().then((resp) => {
+      let conn = resp;
+      conn.query(sql_constants.SP_COSTS_DEL_COST, [idStore, idCost], (err, result) => {
+        conn.end();
+        if(err){
+          resolve({
+            result : constants.ERROR,
+            message : "Error while calling "+sql_constants.SP_COSTS_DEL_COST,
+            err
+          });
+        } else{
+          console.log(result[0][0]);
+          if(result[0][0].RESULT == 'OK'){
+            resolve({
+              result : constants.RESULT_OK,
+              message : result[0][0].MESSAGE
+            });
+          } else{
+            resolve({
+              result : constants.RESULT_FAIL,
+              message : result[0][0].MESSAGE
+            });
+          }
+        }
+      });
+    }).catch((err) => {
+      reject(err);
+    });
+  });
+}
+
 module.exports = {
   addCost,
   getCategories,
   getStatus,
   getCosts,
-  getCost
+  getCost,
+  updateCost,
+  delCost
 }

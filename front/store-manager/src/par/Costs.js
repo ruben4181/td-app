@@ -123,6 +123,49 @@ let addCost = (authToken, payload) => {
   });
 }
 
+let updateCost = (authToken, payload) => {
+  return new Promise((resolve, reject) => {
+    let config = {
+      method : "post",
+      headers : { 'Authorization' : 'Bearer '+authToken },
+      url : PROTOCOL+"://"+BASE_URL+":"+PORT+"/api/v1/costs/update",
+      data : {
+        struct : "costs",
+        data : payload
+      }
+    }
+
+    axios(config).then((resp) => {
+      resolve(resp.data);
+    }).catch((err) => {
+      reject(err);
+    });
+  });
+}
+
+let delCost = (authToken, idStore, idCost) => {
+  return new Promise((resolve, reject) => {
+    let config = {
+      method : "post",
+      headers : { 'Authorization' : 'Bearer '+authToken },
+      url : PROTOCOL+"://"+BASE_URL+":"+PORT+"/api/v1/costs/delete",
+      data : {
+        struct : "costs",
+        data : {
+          idStore,
+          idCost
+        }
+      }
+    }
+
+    axios(config).then((resp) => {
+      resolve(resp.data);
+    }).catch((err) => {
+      reject(err);
+    });
+  });
+}
+
 let toExport = {
   getStatus,
   getCategories,
@@ -130,7 +173,9 @@ let toExport = {
   getCosts,
   getCost,
   parseCategories,
-  parseStatus
+  parseStatus,
+  updateCost,
+  delCost
 }
 
 export default toExport;

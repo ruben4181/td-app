@@ -5,6 +5,7 @@ import Footer from "../components/Footer";
 import Select from "react-select";
 import CostServices from "../par/Costs";
 import Bills from "../par/Bills";
+import BasicDialog from "../components/BasicDialog";
 
 class Cost extends React.Component{
   constructor(props){
@@ -20,11 +21,19 @@ class Cost extends React.Component{
       selectedEstadoPago : {},
       estadoPagoOptions : [],
       tipoPagoOptions : [],
-      costCategoryOptions : []
+      costCategoryOptions : [],
+      saving : false,
+      showResult : false,
+      deleting : false
     }
 
     this.fetchCost = this.fetchCost.bind(this);
     this.editClicked = this.editClicked.bind(this);
+    this.saveChangesClicked = this.saveChangesClicked.bind(this);
+    this.saveCost = this.saveCost.bind(this);
+    this.delCost = this.delCost.bind(this);
+    this.deleteClicked = this.deleteClicked.bind(this);
+    this.closeResult = this.closeResult.bind(this);
   }
 
   componentDidMount(){
@@ -70,37 +79,50 @@ class Cost extends React.Component{
     });
   }
 
-  parseCost(costData){
-    let createdAt = new Date(costData.CREATED_AT);
-
-    const offset = createdAt.getTimezoneOffset()
-    createdAt = new Date(createdAt.getTime() - (offset*60*1000))
-    createdAt = createdAt.toISOString().split("T")[0];
-
-    let cost = {
-      idCost : costData.ID_COST,
-      idStore : costData.ID_STORE,
-      idCostCategory : costData.ID_COST_CATEGORY,
-      refPago : costData.REF_PAGO,
-      ammount : costData.AMMOUNT,
-      costCategory : costData.COST_CATEGORY,
-      createdAt,
-      description : costData.DESCRIPTION,
-      idStatus : costData.ID_STATUS,
-      idTipoPago : costData.ID_TIPO_PAGO,
-      updatedAt : costData.UPDATED_AT,
-      tipoPago : costData.TIPO_PAGO,
-      selectedCostCategory : {value : costData.ID_COST_CATEGORY, label : costData.COST_CATEGORY},
-      selectedTipoPago : {value : costData.ID_TIPO_PAGO, label : costData.TIPO_PAGO},
-      selectedEstadoPago : {value : costData.ID_STATUS, label : costData.STATUS},
-    }
-
-    return cost;
-  }
-
   render(){
     return(
       <>
+      <BasicDialog isOpen={this.state.showResult} config={{
+          title : this.state.resultState,
+          body : this.state.resultMessage,
+          actions : [
+            {
+              label : "Ok",
+              func : ()=>{this.closeResult();}
+            }
+          ]
+        }}>
+      </BasicDialog>
+      <BasicDialog isOpen={this.state.saving} config={{
+          title : "Actualizar costo",
+          body : "¿Seguro que deseas actualizar el costo?",
+          actions : [
+            {
+              label : "Ok",
+              func : ()=>{this.saveCost();}
+            },
+            {
+              label : "Cancelar",
+              func : () => {this.setState({saving : false})}
+            }
+          ]
+        }}>
+      </BasicDialog>
+      <BasicDialog isOpen={this.state.deleting} config={{
+          title : "Eliminar costo",
+          body : "¿Seguro que deseas eliminar el costo?",
+          actions : [
+            {
+              label : "Ok",
+              func : ()=>{this.delCost();}
+            },
+            {
+              label : "Cancelar",
+              func : () => {this.setState({deleting : false})}
+            }
+          ]
+        }}>
+      </BasicDialog>
       <div className="container-fluid p-0 bg-light">
         <Navbar idStore={this.state.idStore}/>
         <div className="container body-container">
@@ -115,7 +137,7 @@ class Cost extends React.Component{
                     <button type="button" className={!this.state.isDisabled?"btn btn-primary active":"btn btn-primary "} 
                     data-bs-toggle="button" autocomplete="off" aria-pressed="true"
                     onClick={this.editClicked}>Editar</button>
-                    <button className="btn btn-danger ms-3">Borrar</button>
+                    <button className="btn btn-danger ms-3" onClick={this.deleteClicked}>Borrar</button>
                   </div>
                 </div>
               </div>
@@ -141,7 +163,7 @@ class Cost extends React.Component{
               <div className="form-text">Categoria</div>
               <Select options={this.state.costCategoryOptions} placeholder="Categoría" 
                   isDisabled={this.state.isDisabled} value={this.state.selectedCostCategory}
-                  onChange={(e)=>{this.setState({selectedCategory : e})}}
+                  onChange={(e)=>{this.setState({selectedCostCategory : e})}}
                   disabled={this.state.isDisabled}/>
               </div>
             </div>
@@ -150,7 +172,7 @@ class Cost extends React.Component{
               <div className="form-text">Tipo pago</div>
               <Select options={this.state.tipoPagoOptions} placeholder="Tipo pago" 
                   isDisabled={this.state.isDisabled} value={this.state.selectedTipoPago}
-                  onChange={(e)=>{this.setState({selectedCategory : e})}}
+                  onChange={(e)=>{this.setState({selectedTipoPago : e})}}
                   disabled={this.state.isDisabled}/>
               </div>
             </div>
@@ -159,7 +181,7 @@ class Cost extends React.Component{
               <div className="form-text">Estado de pago</div>
               <Select options={this.state.estadoPagoOptions} placeholder="Tipo pago" 
                   isDisabled={this.state.isDisabled} value={this.state.selectedEstadoPago}
-                  onChange={(e)=>{this.setState({selectedCategory : e})}}/>
+                  onChange={(e)=>{this.setState({selectedEstadoPago : e})}}/>
               </div>
             </div>
             <div className="col-12 col-lg-6">
@@ -177,12 +199,94 @@ class Cost extends React.Component{
                 disabled={this.state.isDisabled}/>
               </div>
             </div>
+            <div className="col-12">
+              <div className="d-flex flex-row w-100 justify-content-end">
+                {
+                  this.state.isDisabled?
+                  <></>
+                  :
+                  <button className="btn btn-primary" onClick={this.saveChangesClicked}>Guardar</button>
+                }
+              </div>
+            </div>
           </div>
         </div>
         <Footer/>
       </div>
       </>
     );
+  }
+  closeResult(){
+    const { saving, deleting, idStore } = this.state;
+
+    if(saving){
+      this.setState({
+        showResult : false,
+        saving : false,
+        isDisabled : true
+      })
+    } else if(deleting){
+      this.setState({
+        showResult : false,
+        deleting : false,
+        isDisabled : true
+      }, () => {
+        window.location.href = "/suppliers/costs/"+idStore;
+      });
+    }
+  }
+
+  delCost(){
+    const { authToken, idStore, idCost } = this.state;
+    CostServices.delCost(authToken, idStore, idCost).then((resp) => {
+      this.setState({
+        resultMessage : "Resultado",
+        resultMessage : resp.message,
+        showResult : true,
+      });
+    }).catch((err) => {
+      console.log(err);
+    });
+  }
+
+  saveCost(){
+    const { selectedCostCategory, selectedEstadoPago, 
+      selectedTipoPago, authToken } = this.state;
+
+    let payload = {
+      idStore : this.state.idStore,
+      idCost : this.state.idCost,
+      refPago : this.state.refPago,
+      ammount : this.state.ammount,
+      idTipoPago : selectedTipoPago.value,
+      idCostCategory : selectedCostCategory.value,
+      idStatus : selectedEstadoPago.value,
+      createdAt : this.state.createdAt,
+      description : this.state.description
+    }
+
+    CostServices.updateCost(authToken, payload).then((resp) => {
+      this.setState({
+        resultState : "Resultado",
+        resultMessage : resp.message,
+        showResult : true,
+        isDisabled : true
+      });
+    }).then((err) => {
+      console.log(err);
+    });
+  }
+
+  deleteClicked(e) {
+    this.setState({
+      deleting : true
+    });
+  }
+
+  saveChangesClicked(e){
+    this.setState({
+      saving : true
+    });
   }
 
   editClicked(e){
@@ -201,6 +305,34 @@ class Cost extends React.Component{
     let tmp = {};
     tmp[target] = value;
     this.setState(tmp);
+  }
+
+  parseCost(costData){
+    let createdAt = new Date(costData.CREATED_AT);
+
+    const offset = createdAt.getTimezoneOffset()
+    createdAt = new Date(createdAt.getTime() - (offset*60*1000))
+    createdAt = createdAt.toISOString().split("T")[0];
+
+    let cost = {
+      idCost : costData.ID_COST,
+      idStore : costData.ID_STORE,
+      idCostCategory : costData.ID_COST_CATEGORY,
+      refPago : costData.REF_PAGO,
+      ammount : costData.AMMOUNT,
+      costCategory : costData.COST_CATEGORY,
+      createdAt,
+      description : costData.DESCRIPTION,
+      idStatus : costData.ID_STATUS,
+      idTipoPago : costData.ID_TIPO_PAGO,
+      updatedAt : costData.UPDATED_AT,
+      tipoPago : costData.TIPO_PAGO,
+      selectedCostCategory : {value : costData.ID_COST_CATEGORY, label : costData.COST_CATEGORY},
+      selectedTipoPago : {value : costData.ID_TIPO_PAGO, label : costData.TIPO_PAGO},
+      selectedEstadoPago : {value : costData.ID_STATUS, label : costData.STATUS}
+    }
+
+    return cost;
   }
 }
 

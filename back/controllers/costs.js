@@ -64,10 +64,34 @@ getCost = (idStore, idCost) => {
   }
 }
 
+updateCost = (payload) => {
+  if(payload.idStore, payload.idCost){
+    payload.idStore = parseInt(payload.idStore);
+    payload.idCost = parseInt(payload.idCost);
+
+    return services.updateCost(payload);
+  } else{
+    return emptyData();
+  }
+}
+
+delCost = (idStore, idCost) => {
+  if(idStore && idCost){
+    idStore = parseInt(idStore);
+    idCost = parseInt(idCost);
+
+    return services.delCost(idStore, idCost);
+  } else{
+    return emptyData();
+  }
+}
+
 module.exports = {
   addCost,
   getCategories,
   getStatus,
   getCosts,
-  getCost
+  getCost,
+  updateCost,
+  delCost
 }

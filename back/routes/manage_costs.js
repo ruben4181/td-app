@@ -77,4 +77,33 @@ app.get('/get/cost', (req, res) => {
   })
 });
 
+app.post('/update', (req, res) => {
+  let body = req.body;
+  let payload = body.data;
+
+  costs.updateCost(payload).then((resp) => {
+    res.status(200);
+    res.send(resp);
+  }).catch((err) => {
+    console.log(err);
+    res.status(500);
+    res.send(err);
+  });
+});
+
+app.post('/delete', (req, res) => {
+  let body = req.body;
+  let idStore = body.data.idStore;
+  let idCost = body.data.idCost;
+
+  costs.delCost(idStore, idCost).then((resp) => {
+    res.status(200);
+    res.send(resp);
+  }).catch((err) => {
+    console.log(err);
+    res.status(500);
+    res.send(err);
+  })
+});
+
 module.exports = app;
