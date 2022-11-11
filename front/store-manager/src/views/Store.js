@@ -137,7 +137,7 @@ class Store extends React.Component{
                       :
                       <></>
                     }
-                    
+
                     {
                       Roles.checkRoles(this.state.roles, Roles.deliveryAllowed)
                       ?

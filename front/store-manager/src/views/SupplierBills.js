@@ -190,7 +190,7 @@ class SupplierBills extends React.Component{
   }
 
   renderBills(){
-    const {bills} = this.state;
+    const {bills, idStore} = this.state;
     const items = [];
 
     for(let i=0; i<bills.length; i++){
@@ -203,7 +203,13 @@ class SupplierBills extends React.Component{
           <td>{b.SUPPLIER_NAME}</td>
           <td>{b.STATUS}</td>
           <td>{b.CREATED_AT}</td>
-          <td>A</td>
+          <td>
+            <div className="d-flex flex-row">
+              <a href={"/bill/"+idStore+"/"+b.ID_BILL}><i class="fa-regular fa-eye me-2"></i></a>
+              <a href={"/bill/"+idStore+"/"+b.ID_BILL+"?edit=1"}><i class="fa-regular fa-pen-to-square me-2"></i></a>
+              <a href="#" onClick={(e)=>{this.deleteClicked(b.ID_COST)}}><i class="fa-regular fa-trash me-2"></i></a>
+            </div>
+          </td>
         </tr>
       )
     }

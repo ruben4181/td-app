@@ -4,7 +4,7 @@ const JWT_MASTER_KEY = process.env.JWT_MASTER_KEY;
 const jwt = require("jsonwebtoken");
 //const services
 
-const noTokenNeeded = ['/api/v1/login', '/api/v1/user/create', 
+const noTokenNeeded = ['/api/v1/login', '/api/v1/user/create',
   '/api/v1/files/download', '/api/v1/category/get/store', '/api/v1/product/get/store',
   '/api/v1/files/download/',
   '/api/v1/product/get/category',
@@ -43,7 +43,6 @@ verifyPathAccess = (req, res, next)=>{
           err
         });
       } else{
-        console.log("seguridad", payload);
         idUser = payload.user.ID_USER;
         req.idUser = idUser;
         path = req.path;

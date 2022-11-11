@@ -5,6 +5,7 @@ import Navbar from "../components/Navbar";
 import CostsServices from "../par/Costs";
 import Products from "../par/Products";
 import Pagination from "../components/Pagination";
+import BasicDialog from "../components/BasicDialog";
 
 class Costs extends React.Component{
   constructor(props){
@@ -21,7 +22,12 @@ class Costs extends React.Component{
       query : undefined,
       q : "",
       tmpFrom : null,
-      tmpTo : null
+      tmpTo : null,
+      idCost : null,
+      deleting : false,
+      showResult : false,
+      resultTitle : "",
+      resultMessage : ""
     }
     this.renderCosts = this.renderCosts.bind(this);
     this.prevPage = this.prevPage.bind(this);
@@ -32,6 +38,9 @@ class Costs extends React.Component{
     this.toPage = this.toPage.bind(this);
     this.filterClicked = this.filterClicked.bind(this);
     this.resetClicked = this.resetClicked.bind(this);
+    this.deleteClicked = this.deleteClicked.bind(this);
+    this.deleteCost = this.deleteCost.bind(this);
+    this.closeResult = this.closeResult.bind(this);
   }
 
   componentDidMount(){
@@ -89,6 +98,30 @@ class Costs extends React.Component{
     const {actualPage, lastPage} = this.state;
     return(
       <>
+      <BasicDialog isOpen={this.state.showResult} config={{
+          title : this.state.resultTitle,
+          body : this.state.resultMessage,
+          actions : [
+            {
+              label : "Ok",
+              func : ()=>{this.closeResult();}
+            }
+          ]
+        }}></BasicDialog>
+      <BasicDialog isOpen={this.state.deleting} config={{
+          title : "Eliminar costo",
+          body : "¿Seguro que deseas eliminar el costo?",
+          actions : [
+            {
+              label : "Ok",
+              func : ()=>{this.deleteCost();}
+            },
+            {
+              label : "Cancelar",
+              func : () => {this.setState({deleting : false})}
+            }
+          ]
+      }}/>
       <div className="container-fluid p-0 bg-light">
         <Navbar idStore={this.state.idStore}/>
         <div className="container body-container">
@@ -161,6 +194,26 @@ class Costs extends React.Component{
     );
   }
 
+  closeResult(){
+    const { costs, idCost } = this.state;
+    let items = [...costs];
+    for(let i = 0; i<costs.length; i++){
+      let item = items[i];
+      if(item.ID_COST === idCost){
+        items.splice(i, 1);
+        break;
+      }
+    }
+
+    console.log("Aqui con items", items);
+
+    this.setState({
+      costs : items,
+      showResult : false,
+      idCost : null
+    });
+  }
+
   resetClicked(e){
     this.setState({
       query : undefined,
@@ -207,13 +260,32 @@ class Costs extends React.Component{
             <div className="d-flex flex-row">
             <a href={"/cost/"+idStore+"/"+c.ID_COST}><i class="fa-regular fa-eye me-2"></i></a>
             <a href={"/cost/"+idStore+"/"+c.ID_COST+"?edit=1"}><i class="fa-regular fa-pen-to-square me-2"></i></a>
-            <a href={"/cost/"+idStore+"/"+c.ID_COST+"?del=1"}><i class="fa-regular fa-trash me-2"></i></a>
+            <a href="#" onClick={(e)=>{this.deleteClicked(c.ID_COST)}}><i class="fa-regular fa-trash me-2"></i></a>
             </div>
           </td>
         </tr>
       )
     }
     return items;
+  }
+
+  deleteClicked(idCost){
+    this.setState({
+      deleting : true,
+      idCost
+    });
+  }
+
+  deleteCost(){
+    const { authToken, idStore, idCost } = this.state;
+    CostsServices.delCost(authToken, idStore, idCost).then((resp) => {
+      this.setState({
+        deleting : false,
+        showResult : true,
+        resultTitle : "Resultado",
+        resultMessage : resp.message
+      });
+    });
   }
 
   fetchCosts(){

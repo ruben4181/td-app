@@ -1,0 +1,23 @@
+{
+  "name": "router",
+  "version": "0.0.1",
+  "description": "Routing for all requests of td-app API",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"test command\""
+  },
+  "keywords": [
+    "nodejs",
+    "express",
+    "docker"
+  ],
+  "author": "ruben4181",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^8.5.1",
+    "axios": "^0.26.1"
+  }
+}

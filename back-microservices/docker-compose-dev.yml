@@ -1,0 +1,137 @@
+version: "3.9"
+services:
+  router-back:
+    build: 
+      context: ./router
+      dockerfile: Dockerfile.dev
+    ports:
+      - "5116:5116"
+    links:
+      - product-back
+      - store-back
+      - categories-back
+      - suppliers-back
+      - costs-back
+      - files-back
+      - security-back
+      - auth-back
+      - pos-back
+    volumes:
+      - ./router:/home/app
+  product-back:
+    build: 
+      context: ./products
+      dockerfile: Dockerfile.dev
+    env_file:
+      - ./products/.env
+    ports:
+      - "5117:5117"
+    links:
+      - mysqldb
+    volumes:
+      - ./products:/home/app
+  store-back:
+    build: 
+      context: ./store
+      dockerfile: Dockerfile.dev
+    env_file:
+      - ./store/.env
+    ports:
+      - "5118:5118"
+    links:
+      - mysqldb
+    volumes:
+      - ./store:/home/app
+  categories-back:
+    build: 
+      context: ./categories
+      dockerfile: Dockerfile.dev
+    env_file:
+      - ./categories/.env
+    ports:
+      - "5119:5119"
+    links:
+      - mysqldb
+    volumes:
+      - ./categories:/home/app
+  suppliers-back:
+    build: 
+      context: ./suppliers
+      dockerfile: Dockerfile.dev
+    env_file:
+      - ./suppliers/.env
+    ports:
+      - "5120:5120"
+    links:
+      - mysqldb
+    volumes:
+      - ./suppliers:/home/app
+  costs-back:
+    build: 
+      context: ./costs
+      dockerfile: Dockerfile.dev
+    env_file:
+      - ./costs/.env
+    ports:
+      - "5121:5121"
+    links:
+      - mysqldb
+    volumes:
+      - ./costs:/home/app
+  files-back:
+    build: 
+      context: ./files
+      dockerfile: Dockerfile.dev
+    env_file:
+      - ./files/.env
+    ports:
+      - "5122:5122"
+    links:
+      - mysqldb
+    volumes:
+      - ./files:/home/app
+  security-back:
+    build: 
+      context: ./security
+      dockerfile: Dockerfile.dev
+    env_file:
+      - ./security/.env
+    ports:
+      - "5123:5123"
+    links:
+      - mysqldb
+    volumes:
+      - ./security:/home/app
+  auth-back:
+    build: 
+      context: ./auth
+      dockerfile: Dockerfile.dev
+    env_file:
+      - ./auth/.env
+    environment:
+      - PORT=5124
+    ports:
+      - "5124:5124"
+    links:
+      - mysqldb
+    volumes:
+      - ./auth:/home/app
+  pos-back:
+    build: 
+      context: ./pos
+      dockerfile: Dockerfile.dev
+    env_file:
+      - ./pos/.env
+    ports:
+      - "5125:5125"
+    links:
+      - mysqldb
+    volumes:
+      - ./pos:/home/app
+  mysqldb:
+    image: mysql
+    ports:
+      - "5115:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=Bordeaux16.
+      - MYSQL_DATABASE=tiendapp

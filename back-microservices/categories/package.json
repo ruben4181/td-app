@@ -1,0 +1,22 @@
+{
+  "name": "categories",
+  "version": "0.0.1",
+  "description": "Categories microservice",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"test command\""
+  },
+  "keywords": [
+    "nodejs",
+    "express",
+    "docker"
+  ],
+  "author": "ruben4181",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "mysql": "^2.18.1"
+  }
+}

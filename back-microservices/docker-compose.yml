@@ -1,0 +1,97 @@
+version: "3.9"
+services:
+  router-back:
+    build: ./router
+    ports:
+      - "5116:5116"
+    links:
+      - product-back
+      - store-back
+      - categories-back
+      - suppliers-back
+      - costs-back
+      - files-back
+      - security-back
+      - auth-back
+      - pos-back
+  product-back:
+    build: ./products
+    env_file:
+      - ./products/.env
+    ports:
+      - "5117:5117"
+    links:
+      - mysqldb
+  store-back:
+    build: ./store
+    env_file:
+      - ./store/.env
+    ports:
+      - "5118:5118"
+    links:
+      - mysqldb
+  categories-back:
+    build: ./categories
+    env_file:
+      - ./categories/.env
+    ports:
+      - "5119:5119"
+    links:
+      - mysqldb
+  suppliers-back:
+    build: ./suppliers
+    env_file:
+      - ./suppliers/.env
+    ports:
+      - "5120:5120"
+    links:
+      - mysqldb
+  costs-back:
+    build: ./costs
+    env_file:
+      - ./costs/.env
+    ports:
+      - "5121:5121"
+    links:
+      - mysqldb
+  files-back:
+    build: ./files
+    env_file:
+      - ./files/.env
+    ports:
+      - "5122:5122"
+    links:
+      - mysqldb
+  security-back:
+    build: ./security
+    env_file:
+      - ./security/.env
+    ports:
+      - "5123:5123"
+    links:
+      - mysqldb
+  auth-back:
+    build: ./auth
+    env_file:
+      - ./auth/.env
+    environment:
+      - PORT=5124
+    ports:
+      - "5124:5124"
+    links:
+      - mysqldb
+  pos-back:
+    build: ./pos
+    env_file:
+      - ./pos/.env
+    ports:
+      - "5125:5125"
+    links:
+      - mysqldb
+  mysqldb:
+    image: mysql
+    ports:
+      - "5115:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=Bordeaux16.
+      - MYSQL_DATABASE=tiendapp

@@ -622,7 +622,7 @@ class POS extends React.Component{
         });
       }).catch((err)=>{
         console.log("Error while searching products", err);
-      })
+      });
     } else{
       this.setState({
         productsSuggested : []

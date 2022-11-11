@@ -1,0 +1,50 @@
+[
+  {
+    "port" : 5117,
+    "path" : "/api/v1/product/",
+    "name" : "ProductsService",
+    "dom" : "product-back"
+  },
+  {
+    "port" : 5118,
+    "path" : "/api/v1/store/",
+    "name" : "StoresService",
+    "dom" : "store-back"
+  },
+  {
+    "port" : 5119,
+    "path" : "/api/v1/category/",
+    "name" : "CategoriesService",
+    "dom" : "categories-back"
+  },
+  {
+    "port" : 5120,
+    "path" : "/api/v1/suppliers/",
+    "name" : "SuppliersServices",
+    "dom" : "suppliers-back"
+  },
+  {
+    "port" : 5121,
+    "path" : "/api/v1/costs/",
+    "name" : "CostsService",
+    "dom" : "costs-back"
+  },
+  {
+    "port" : 5122,
+    "path" : "/api/v1/files/",
+    "name" : "FilesServices",
+    "dom" : "files-back"
+  },
+  {
+    "port" : 5125,
+    "path" : "/api/v1/bill/",
+    "name" : "POS services",
+    "dom" : "pos-back"
+  },
+  {
+    "port" : 5124,
+    "path" : "/api/v1/",
+    "name" : "AuthenticationServices",
+    "dom" : "auth-back"
+  }
+]
