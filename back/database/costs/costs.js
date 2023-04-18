@@ -1,10 +1,10 @@
-require('dotenv').config({path:'.env'});
+require("dotenv").config({ path: ".env" });
 
-const mysql_util = require(process.env.DIR_PATH+'/database/connections/mysql_connection');
-const sql_constants = require('./constants');
-const constants = require(process.env.DIR_PATH+"/utils/constants.js");
+const mysql_util = require("../../database/connections/mysql_connection");
+const sql_constants = require("./constants");
+const constants = require("../../utils/constants.js");
 
-addCost = (payload) =>{
+addCost = (payload) => {
   let idStore = payload.idStore;
   var idCostCategory = payload.idCostCategory;
   let ammount = payload.ammount;
@@ -14,92 +14,115 @@ addCost = (payload) =>{
   let description = payload.description;
   var idStatus = payload.idStatus;
 
-
   return new Promise((resolve, reject) => {
-    mysql_util.getConnection().then((resp) => {
-      let conn = resp;
-      conn.query(sql_constants.SP_COSTS_ADD_COST, [idStore, idCostCategory, ammount,
-        refCobro, refPago, idTipoPago, description, idStatus], (err, result) => {
-          conn.end();
-          if(err){
-            resolve({
-              result : constants.ERROR,
-              message : "Error while calling "+sql_constants.SP_COSTS_ADD_COST,
-              err
-            });
-          } else{
-            if(result[0][0].ERROR == 0){
+    mysql_util
+      .getConnection()
+      .then((resp) => {
+        let conn = resp;
+        conn.query(
+          sql_constants.SP_COSTS_ADD_COST,
+          [
+            idStore,
+            idCostCategory,
+            ammount,
+            refCobro,
+            refPago,
+            idTipoPago,
+            description,
+            idStatus,
+          ],
+          (err, result) => {
+            conn.end();
+            if (err) {
               resolve({
-                result : constants.RESULT_OK,
-                message : result[0][0].MESSAGE
+                result: constants.ERROR,
+                message:
+                  "Error while calling " + sql_constants.SP_COSTS_ADD_COST,
+                err,
               });
-            } else{
-              resolve({
-                result : constants.RESULT_FAIL,
-                message : result[0][0].MESSAGE
-              });
+            } else {
+              if (result[0][0].ERROR == 0) {
+                resolve({
+                  result: constants.RESULT_OK,
+                  message: result[0][0].MESSAGE,
+                });
+              } else {
+                resolve({
+                  result: constants.RESULT_FAIL,
+                  message: result[0][0].MESSAGE,
+                });
+              }
             }
           }
-        });
-    }).catch((err) => {
-      console.log(err);
-      reject(err);
-    });
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+        reject(err);
+      });
   });
-}
+};
 
 getCategories = () => {
   return new Promise((resolve, reject) => {
-    mysql_util.getConnection().then((resp) => {
-      let conn = resp;
-      conn.query(sql_constants.SP_COSTS_CATEGORIES_GET, [], (err, result) => {
-        conn.end();
-        if(err){
-          resolve({
-            result : constants.ERROR,
-            message : "Error while calling "+sql_constants.SP_COSTS_CATEGORIES_GET,
-            err
-          });
-        } else{
-          resolve({
-            result : constants.RESULT_OK,
-            messages : "Categories fetched",
-            data : result[0]
-          });
-        }
+    mysql_util
+      .getConnection()
+      .then((resp) => {
+        let conn = resp;
+        conn.query(sql_constants.SP_COSTS_CATEGORIES_GET, [], (err, result) => {
+          conn.end();
+          if (err) {
+            resolve({
+              result: constants.ERROR,
+              message:
+                "Error while calling " + sql_constants.SP_COSTS_CATEGORIES_GET,
+              err,
+            });
+          } else {
+            resolve({
+              result: constants.RESULT_OK,
+              messages: "Categories fetched",
+              data: result[0],
+            });
+          }
+        });
+      })
+      .catch((err) => {
+        console.log(err);
       });
-    }).catch((err) => {
-      console.log(err);
-    });
   });
-}
+};
 
 getStatus = () => {
   return new Promise((resolve, reject) => {
-    mysql_util.getConnection().then((resp) => {
-      let conn = resp;
-      conn.query(sql_constants.SP_COSTS_STATUS_GET, [], (err, result) => {
-        conn.end();
-        if(err){
-          resolve({
-            result : constants.ERROR,
-            message : "Error while calling "+sql_constants.SP_COSTS_STATUS_GET,
-            err
-          });
-        } else{
-          resolve({
-            result : constants.RESULT_OK,
-            messages : "Status fetched",
-            data : result[0]
-          });
-        }
+    mysql_util
+      .getConnection()
+      .then((resp) => {
+        let conn = resp;
+        conn.query(sql_constants.SP_COSTS_STATUS_GET, [], (err, result) => {
+          conn.end();
+          if (err) {
+            resolve({
+              result: constants.ERROR,
+              message:
+                "Error while calling " + sql_constants.SP_COSTS_STATUS_GET,
+              err,
+            });
+          } else {
+            resolve({
+              result: constants.RESULT_OK,
+              messages: "Status fetched",
+              data: result[0],
+            });
+          }
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        reject(err);
       });
-    }).catch((err) => {
-      console.log(err);
-      reject(err);
-    });
   });
-}
+};
 
 getCosts = (payload) => {
   return new Promise((resolve, reject) => {
@@ -109,62 +132,73 @@ getCosts = (payload) => {
     let from = payload.from;
     let to = payload.to;
 
-    mysql_util.getConnection().then((resp) => {
-      let conn = resp;
-      conn.query(sql_constants.SP_COSTS_GET, [idStore, query, page, from, to], (err, result) => {
-        conn.end();
-        if(err){
-          resolve({
-            result : constants.ERROR,
-            message : "Error while calling "+sql_constants.SP_COSTS_GET,
-            err
-          });
-        } else{
-          resolve({
-            result : constants.RESULT_OK,
-            message : "Costs fetched",
-            data : result[0],
-            total : result[1][0].TOTAL_COUNT,
-            lastPage : result[1][0].LAST_PAGE
-          });
-        }
+    mysql_util
+      .getConnection()
+      .then((resp) => {
+        let conn = resp;
+        conn.query(
+          sql_constants.SP_COSTS_GET,
+          [idStore, query, page, from, to],
+          (err, result) => {
+            conn.end();
+            if (err) {
+              resolve({
+                result: constants.ERROR,
+                message: "Error while calling " + sql_constants.SP_COSTS_GET,
+                err,
+              });
+            } else {
+              resolve({
+                result: constants.RESULT_OK,
+                message: "Costs fetched",
+                data: result[0],
+                total: result[1][0].TOTAL_COUNT,
+                lastPage: result[1][0].LAST_PAGE,
+              });
+            }
+          }
+        );
+      })
+      .catch((err) => {
+        reject(err);
       });
-    }).catch((err) => {
-      reject(err);
-    });
   });
-}
+};
 
 getCost = (idStore, idCost) => {
   return new Promise((resolve, reject) => {
     mysql_util.getConnection().then((resp) => {
       let conn = resp;
-      conn.query(sql_constants.SP_COSTS_GET_ONE, [idStore, idCost], (err, result) => {
-        conn.end();
-        if(err){
-          resolve({
-            result : constants.ERROR,
-            message : "Error while calling "+sql_constants.SP_COSTS_GET_ONE,
-            err
-          });
-        } else{
-          if(result[0][0]){
+      conn.query(
+        sql_constants.SP_COSTS_GET_ONE,
+        [idStore, idCost],
+        (err, result) => {
+          conn.end();
+          if (err) {
             resolve({
-              result : constants.RESULT_OK,
-              message : "Cost fetched",
-              data : result[0][0]
+              result: constants.ERROR,
+              message: "Error while calling " + sql_constants.SP_COSTS_GET_ONE,
+              err,
             });
-          } else{
-            resolve({
-              result : constants.RESULT_FAIL,
-              message : "Nothing fetched"
-            });
+          } else {
+            if (result[0][0]) {
+              resolve({
+                result: constants.RESULT_OK,
+                message: "Cost fetched",
+                data: result[0][0],
+              });
+            } else {
+              resolve({
+                result: constants.RESULT_FAIL,
+                message: "Nothing fetched",
+              });
+            }
           }
         }
-      });
-    })
+      );
+    });
   });
-}
+};
 
 updateCost = (payload) => {
   return new Promise((resolve, reject) => {
@@ -179,71 +213,97 @@ updateCost = (payload) => {
     let idStatus = payload.idStatus;
     let createdAt = payload.createdAt;
 
-    mysql_util.getConnection().then((resp) => {
-      let conn = resp;
-      conn.query(sql_constants.SP_COSTS_UPDATE_COST, [idStore, idCost, idCostCategory,
-        ammount, refCobro, refPago, idTipoPago, description, idStatus, createdAt], (err, result) => {
-          console.log("Sabes donde vivo");
-          conn.end();
-          if(err){
-            resolve({
-              result : constants.ERROR,
-              message : "Error while calling "+sql_constants.SP_COSTS_UPDATE_COST,
-              err
-            });
-          } else{
-            console.log("Here dimelo mami");
-            if(result[0][0] && result[0][0].RESULT == 'OK'){
+    mysql_util
+      .getConnection()
+      .then((resp) => {
+        let conn = resp;
+        conn.query(
+          sql_constants.SP_COSTS_UPDATE_COST,
+          [
+            idStore,
+            idCost,
+            idCostCategory,
+            ammount,
+            refCobro,
+            refPago,
+            idTipoPago,
+            description,
+            idStatus,
+            createdAt,
+          ],
+          (err, result) => {
+            console.log("Sabes donde vivo");
+            conn.end();
+            if (err) {
               resolve({
-                result : constants.RESULT_OK,
-                message : result[0][0].MESSAGE
+                result: constants.ERROR,
+                message:
+                  "Error while calling " + sql_constants.SP_COSTS_UPDATE_COST,
+                err,
               });
-            } else{
-              resolve({
-                result : constants.RESULT_FAIL,
-                message : result[0][0].MESSAGE
-              });
+            } else {
+              console.log("Here dimelo mami");
+              if (result[0][0] && result[0][0].RESULT == "OK") {
+                resolve({
+                  result: constants.RESULT_OK,
+                  message: result[0][0].MESSAGE,
+                });
+              } else {
+                resolve({
+                  result: constants.RESULT_FAIL,
+                  message: result[0][0].MESSAGE,
+                });
+              }
             }
           }
-        });
-    }).catch((err) => {
-      reject(err);
-    })
+        );
+      })
+      .catch((err) => {
+        reject(err);
+      });
   });
-}
+};
 
 delCost = (idStore, idCost) => {
   return new Promise((resolve, reject) => {
-    mysql_util.getConnection().then((resp) => {
-      let conn = resp;
-      conn.query(sql_constants.SP_COSTS_DEL_COST, [idStore, idCost], (err, result) => {
-        conn.end();
-        if(err){
-          resolve({
-            result : constants.ERROR,
-            message : "Error while calling "+sql_constants.SP_COSTS_DEL_COST,
-            err
-          });
-        } else{
-          console.log(result[0][0]);
-          if(result[0][0].RESULT == 'OK'){
-            resolve({
-              result : constants.RESULT_OK,
-              message : result[0][0].MESSAGE
-            });
-          } else{
-            resolve({
-              result : constants.RESULT_FAIL,
-              message : result[0][0].MESSAGE
-            });
+    mysql_util
+      .getConnection()
+      .then((resp) => {
+        let conn = resp;
+        conn.query(
+          sql_constants.SP_COSTS_DEL_COST,
+          [idStore, idCost],
+          (err, result) => {
+            conn.end();
+            if (err) {
+              resolve({
+                result: constants.ERROR,
+                message:
+                  "Error while calling " + sql_constants.SP_COSTS_DEL_COST,
+                err,
+              });
+            } else {
+              console.log(result[0][0]);
+              if (result[0][0].RESULT == "OK") {
+                resolve({
+                  result: constants.RESULT_OK,
+                  message: result[0][0].MESSAGE,
+                });
+              } else {
+                resolve({
+                  result: constants.RESULT_FAIL,
+                  message: result[0][0].MESSAGE,
+                });
+              }
+            }
           }
-        }
+        );
+      })
+      .catch((err) => {
+        reject(err);
       });
-    }).catch((err) => {
-      reject(err);
-    });
   });
-}
+};
 
 module.exports = {
   addCost,
@@ -252,5 +312,5 @@ module.exports = {
   getCosts,
   getCost,
   updateCost,
-  delCost
-}
+  delCost,
+};
