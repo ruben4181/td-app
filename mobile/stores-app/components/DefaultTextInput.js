@@ -1,5 +1,6 @@
 import React from "react";
 import { View } from "react-native";
+import AppColors from "../styles/AppColors";
 import FloatLabelTextInput from "react-native-floating-label-text-input";
 
 const DefaultTextInput = ({ label, ...props }) => {
@@ -7,7 +8,7 @@ const DefaultTextInput = ({ label, ...props }) => {
     <View
       style={{
         height: 60,
-        backgroundColor: "#F5F5F5",
+        backgroundColor: AppColors.inputBackground,
         borderRadius: 15,
         padding: 10,
         marginBottom: 8,

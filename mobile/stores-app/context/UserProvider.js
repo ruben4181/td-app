@@ -3,9 +3,11 @@ import UserContext from "./UserContext";
 
 const UserProvider = (props) => {
   const [authToken, setAuthToken] = React.useState(null);
-
+  const [addressTmp, setAddressTmp] = React.useState(null);
   return (
-    <UserContext.Provider value={{ authToken, setAuthToken }}>
+    <UserContext.Provider
+      value={{ authToken, setAuthToken, addressTmp, setAddressTmp }}
+    >
       {props.children}
     </UserContext.Provider>
   );

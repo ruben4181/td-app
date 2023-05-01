@@ -11,6 +11,9 @@ import LoginScreen from "./screens/LoginScreen";
 import StoresScreen from "./screens/StoresScreen";
 
 import UserProvider from "./context/UserProvider";
+import CreateStoreScreen from "./screens/CreateStoreScreen";
+import GetAddressScreen from "./screens/GetAddressScreen";
+import StoreScreen from "./screens/StoreScreen";
 
 //Navigators
 const Stack = createStackNavigator();
@@ -55,6 +58,21 @@ export default function App() {
             name="StoresScreen"
             component={StoresScreen}
             options={{ headerTitle: "Tiendas", headerBackTitle: " " }}
+          />
+          <Stack.Screen
+            name="CreateStoreScreen"
+            component={CreateStoreScreen}
+            options={{ headerTitle: "Tienda", headerBackTitle: "Tiendas" }}
+          />
+          <Stack.Screen
+            name="GetAddressScreen"
+            component={GetAddressScreen}
+            options={{ headerTitle: "Dirección", headerBackTitle: " " }}
+          />
+          <Stack.Screen
+            name="StoreScreen"
+            component={StoreScreen}
+            options={{ headerTitle: "Tienda", headerBackTitle: " " }}
           />
         </Stack.Navigator>
       </NavigationContainer>

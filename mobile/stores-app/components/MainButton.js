@@ -18,12 +18,16 @@ const MainButton = ({ onPress, text, disable }) => {
       });
     } else {
       viewRef.current.setNativeProps({
-        style: { shadowOpacity: 0.4 },
+        style: { shadowOpacity: 0 },
       });
     }
   }
   return (
-    <TouchableOpacity onPress={onPress} disabled={disable}>
+    <TouchableOpacity
+      onPress={onPress}
+      disabled={disable}
+      style={{ backgroundColor: "white" }}
+    >
       <View
         ref={viewRef}
         style={[

@@ -10,7 +10,11 @@ const TextStyles = StyleSheet.create({
     fontSize: 25,
   },
   captionText: {
-    fontWeight: 22,
+    fontWeight: "bold",
+  },
+  flatListTitle: {
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });
 

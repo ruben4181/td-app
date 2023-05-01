@@ -39,7 +39,7 @@ const IconLightButton = ({ onPress, text, logo }) => {
 
 const styles = StyleSheet.create({
   buttonContainer: {
-    backgroundColor: AppColors.LightButtonColor,
+    backgroundColor: AppColors.lightButtonColor,
     padding: 16,
     margin: 12,
     marginBottom: 0,

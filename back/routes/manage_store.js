@@ -8,6 +8,8 @@ const constants = require("../utils/constants");
 
 const stores = require("../controllers/stores");
 
+const mysql_util = require("../database/connections/mysql_connection");
+
 app.post("/create", (req, res) => {
   let body = req.body.data;
   let idUser = req.idUser;
@@ -24,6 +26,27 @@ app.post("/create", (req, res) => {
       res.send(err);
     });
 });
+
+/*
+app.post("/create", (req, res) => {
+  let body = req.body.data;
+  let idUser = req.idUser;
+  body["userId"] = idUser;
+  stores
+    .createStore(body)
+    .then((resp) => {
+      console.log("Esta en el return");
+      console.log(resp);
+      //res.status(200);
+      //res.send(resp);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500);
+      res.send(err);
+    });
+});
+*/
 
 app.post("/update", (req, res) => {
   let body = req.body;

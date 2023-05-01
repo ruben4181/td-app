@@ -6,6 +6,10 @@ const AppColors = {
   lightButtonColor: "#FFFFFF",
   shadowLightColor: "#EDEDED",
   iosHighlightColor: "#2380f6",
+  placeholderBackground: "",
+  inputBackground: "#F5F5F5",
+  inputPlaceholderTextColor: "#b6b6b6",
+  inputTextColor: "#1f1f1f",
 };
 
 export default AppColors;
