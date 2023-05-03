@@ -6,7 +6,7 @@ import * as Location from "expo-location";
 import BottomSheet from "@gorhom/bottom-sheet";
 import TextStyles from "../styles/TextStyles";
 import MainButton from "../components/MainButton";
-import UserContext from "../context/UserContext";
+import UserContext from "../commons/UserContext";
 import { useNavigation } from "@react-navigation/native";
 
 Geocoding.init("AIzaSyBjnQQZcOlWiDof3HVZjZ_KfbkV-o2n6vA");

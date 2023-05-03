@@ -18,7 +18,7 @@ const MainButton = ({ onPress, text, disable }) => {
       });
     } else {
       viewRef.current.setNativeProps({
-        style: { shadowOpacity: 0 },
+        style: { shadowOpacity: 0.3 },
       });
     }
   }

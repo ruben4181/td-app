@@ -7,7 +7,8 @@ import TextStyles from "../styles/TextStyles";
 import AppColors from "../styles/AppColors";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import AuthApi from "../api/AuthAPI";
-import UserContext from "../context/UserContext";
+import UserContext from "../commons/UserContext";
+import { CommonActions } from "@react-navigation/native";
 
 const LoginScreen = (props) => {
   const [isSignInDisabled, setIsSignInDisabled] = React.useState(true);
@@ -30,7 +31,13 @@ const LoginScreen = (props) => {
       .then((resp) => {
         if (resp.result === "OK") {
           setAuthToken(resp.token);
-          navigation.navigate("StoresScreen");
+          //navigation.replace("StoresScreen");
+          navigation.dispatch(
+            CommonActions.reset({
+              index: 0,
+              routes: [{ name: "StoresScreen" }],
+            })
+          );
         } else {
           Alert.alert("Oops", resp.message);
         }

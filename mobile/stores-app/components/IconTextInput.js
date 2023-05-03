@@ -3,7 +3,7 @@ import { View, TextInput } from "react-native";
 
 import AppColors from "../styles/AppColors";
 
-const IconTextInput = ({ placeholder, icon }) => {
+const IconTextInput = ({ placeholder, icon, value, onChange }) => {
   return (
     <View
       style={{
@@ -14,7 +14,11 @@ const IconTextInput = ({ placeholder, icon }) => {
       }}
     >
       <View style={{ flex: 1 }}>
-        <TextInput placeholder={placeholder} />
+        <TextInput
+          placeholder={placeholder}
+          value={value}
+          onChangeText={onChange}
+        />
       </View>
       <View>{icon}</View>
     </View>

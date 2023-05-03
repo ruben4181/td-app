@@ -6,6 +6,7 @@ import LightButton from "../components/LightButton";
 import IconLightButton from "../components/IconLightButton";
 import SeparatorText from "../components/SeparatorText";
 import AuthApi from "../api/AuthAPI";
+import AppColors from "../styles/AppColors";
 
 const AuthModal = (props) => {
   const isVisible = props.isVisible;
@@ -66,7 +67,10 @@ const AuthModal = (props) => {
               alignItems: "center",
             }}
           >
-            <SeparatorText text="También puedes" separatorColor="#EDEDED" />
+            <SeparatorText
+              text="También puedes"
+              separatorColor={AppColors.sepeartorLight}
+            />
           </View>
           <IconLightButton
             logo="apple"

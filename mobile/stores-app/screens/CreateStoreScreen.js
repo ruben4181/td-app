@@ -5,7 +5,7 @@ import MainButton from "../components/MainButton";
 import DefaultTextInput from "../components/DefaultTextInput";
 import TextStyles from "../styles/TextStyles";
 import SelectButton from "../components/SelectButton";
-import UserContext from "../context/UserContext";
+import UserContext from "../commons/UserContext";
 import StoresApi from "../api/StoresApi";
 
 const CreateStoreScreen = (props) => {
@@ -69,7 +69,7 @@ const CreateStoreScreen = (props) => {
           />
           <DefaultTextInput label="Sitió web" value={url} onChange={setUrl} />
         </View>
-        <View>
+        <View style={{ marginBottom: 12 }}>
           <MainButton text="Crear" onPress={handleOnCreateClicked} />
         </View>
       </SafeAreaView>

@@ -10,6 +10,9 @@ const AppColors = {
   inputBackground: "#F5F5F5",
   inputPlaceholderTextColor: "#b6b6b6",
   inputTextColor: "#1f1f1f",
+  sepeartorLight: "#EDEDED",
+  secondaryTextColor: "#616a71",
+  drawerActiveBackground: "#0000000D",
 };
 
 export default AppColors;

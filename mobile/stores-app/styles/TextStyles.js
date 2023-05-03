@@ -16,6 +16,10 @@ const TextStyles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
   },
+  flatListTitleLight: {
+    fontSize: 14,
+    fontWeight: "bold",
+  },
 });
 
 export default TextStyles;
